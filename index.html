@@ -1,0 +1,5511 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="description" content="مختبر التصميم المنطقي — أحمد محمد رشاد" />
+    <meta name="theme-color" content="#0b7a6f" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20x%3D%226%22%20y%3D%227%22%20width%3D%2252%22%20height%3D%2250%22%20rx%3D%2214%22%20fill%3D%22%230b7a6f%22/%3E%3Cpath%20d%3D%22M27%2020h9a12%2012%200%200%201%200%2024h-9z%22%20fill%3D%22%23fff%22/%3E%3Ccircle%20cx%3D%2253%22%20cy%3D%2232%22%20r%3D%223%22%20fill%3D%22%23ffd166%22/%3E%3Ccircle%20cx%3D%2217%22%20cy%3D%2232%22%20r%3D%223%22%20fill%3D%22%23fff%22/%3E%3C/svg%3E"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ================================================================
+         DESIGN TOKENS
+         ================================================================ */
+      :root {
+        --bg: #eef2ef;
+        --bg2: #e3e9e6;
+        --card: #ffffff;
+        --card2: #fbfcfb;
+        --ink: #10202e;
+        --ink2: #1d3346;
+        --mut: #5b6b78;
+        --acc: #0b7a6f;
+        --acc2: #0e9c8d;
+        --acc-d: #075d54;
+        --line: #d5ded8;
+        --line2: #e7edea;
+        --wire: #0b7a6f;
+        --gate: #fff;
+        --hl: #e3f3ef;
+        --hl2: #d1ebe3;
+        --err: #b42318;
+        --ok: #0f7a3d;
+        --shadow-sm: 0 1px 2px rgba(15, 34, 51, 0.05);
+        --shadow:
+          0 6px 22px -14px rgba(15, 34, 51, 0.35),
+          0 1px 3px rgba(15, 34, 51, 0.05);
+        --shadow-lg:
+          0 24px 50px -28px rgba(15, 34, 51, 0.45),
+          0 6px 16px -8px rgba(15, 34, 51, 0.1);
+        --r-sm: 8px;
+        --r: 12px;
+        --r-lg: 16px;
+        --gf: #f3fbf8;
+        --cc: #0b7a6f;
+        --bbf: #eae5d6;
+        --bbf2: #d9d2be;
+        --bbh: #9a917b;
+      }
+
+      /* Dark theme tokens — shared by auto-detect and manual toggle */
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #0a141b;
+          --bg2: #0f1c25;
+          --card: #132531;
+          --card2: #172b38;
+          --ink: #e6eff2;
+          --ink2: #c9d6dc;
+          --mut: #8fa5b1;
+          --acc: #4fd1b8;
+          --acc2: #7ce0cb;
+          --acc-d: #2aa593;
+          --line: #21394a;
+          --line2: #1a2e3c;
+          --wire: #4fd1b8;
+          --gate: #0d1b24;
+          --hl: #173642;
+          --hl2: #1d4653;
+          --err: #ff8a7a;
+          --ok: #4ade80;
+          --gf: #10303a;
+          --bbf: #24313b;
+          --bbf2: #1c2730;
+          --bbh: #4a5b68;
+        }
+      }
+
+      :root[data-theme="dark"] {
+        --bg: #0a141b;
+        --bg2: #0f1c25;
+        --card: #132531;
+        --card2: #172b38;
+        --ink: #e6eff2;
+        --ink2: #c9d6dc;
+        --mut: #8fa5b1;
+        --acc: #4fd1b8;
+        --acc2: #7ce0cb;
+        --acc-d: #2aa593;
+        --line: #21394a;
+        --line2: #1a2e3c;
+        --wire: #4fd1b8;
+        --gate: #0d1b24;
+        --hl: #173642;
+        --hl2: #1d4653;
+        --err: #ff8a7a;
+        --ok: #4ade80;
+        --gf: #10303a;
+        --bbf: #24313b;
+        --bbf2: #1c2730;
+        --bbh: #4a5b68;
+      }
+
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+        scroll-behavior: smooth;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          400 15.5px/1.75 "IBM Plex Sans Arabic",
+          Tahoma,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        min-height: 100vh;
+        background-image:
+          radial-gradient(
+            ellipse 80% 60% at 90% -10%,
+            color-mix(in oklab, var(--acc) 9%, transparent),
+            transparent 65%
+          ),
+          radial-gradient(
+            ellipse 60% 50% at 0% 20%,
+            color-mix(in oklab, var(--acc) 5%, transparent),
+            transparent 60%
+          );
+        background-attachment: fixed;
+      }
+
+      .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 22px 18px 80px;
+      }
+
+      /* ================================================================
+         PRO UPGRADES: LOGIC PROBE, EDITABLE TRUTH TABLE, EXPORT, GLOW
+         ================================================================ */
+      #logic-probe-tip {
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        display: none;
+        background: rgba(16, 32, 46, 0.94);
+        color: #fff;
+        padding: 9px 14px;
+        border-radius: 9px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+        box-shadow:
+          0 10px 30px rgba(0, 0, 0, 0.4),
+          0 0 0 1px rgba(79, 209, 184, 0.35);
+        backdrop-filter: blur(8px);
+        transform: translate(-50%, -125%);
+        transition:
+          opacity 0.08s ease,
+          transform 0.08s ease;
+        line-height: 1.5;
+        max-width: 280px;
+        direction: rtl;
+        text-align: right;
+      }
+
+      #logic-probe-tip.high {
+        border-inline-start: 4px solid #22c55e;
+      }
+
+      #logic-probe-tip.low {
+        border-inline-start: 4px solid #94a3b8;
+      }
+
+      #logic-probe-tip .p-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 3px;
+        direction: ltr;
+      }
+
+      #logic-probe-tip .p-badge {
+        font-weight: 700;
+        font-size: 13px;
+        padding: 2px 8px;
+        border-radius: 6px;
+      }
+
+      #logic-probe-tip .p-badge.high {
+        background: #14532d;
+        color: #86efac;
+      }
+
+      #logic-probe-tip .p-badge.low {
+        background: #1e293b;
+        color: #cbd5e1;
+      }
+
+      #logic-probe-tip .p-volt {
+        color: #ffd166;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      #logic-probe-tip .p-formula {
+        font-size: 11px;
+        color: #94a3b8;
+        direction: ltr;
+        text-align: left;
+        margin-top: 4px;
+        border-top: 1px dashed rgba(255, 255, 255, 0.15);
+        padding-top: 4px;
+      }
+
+      /* Editable truth table */
+      .tt-cell {
+        cursor: pointer;
+        position: relative;
+        user-select: none;
+        font-weight: 700;
+        transition:
+          background 0.15s,
+          transform 0.12s,
+          box-shadow 0.15s;
+      }
+
+      .tt-cell:hover {
+        background: var(--hl2) !important;
+        transform: scale(1.08);
+        box-shadow: inset 0 0 0 2px var(--acc);
+      }
+
+      .tt-cell::after {
+        content: "✎";
+        position: absolute;
+        top: 2px;
+        right: 3px;
+        font-size: 8px;
+        opacity: 0.35;
+      }
+
+      /* Export and Fullscreen Buttons */
+      .exp-btn {
+        background: var(--card);
+        border: 1px solid var(--line);
+        font-size: 12.5px;
+        padding: 4px 9px;
+        border-radius: var(--r-sm);
+        cursor: pointer;
+        transition: all 0.15s ease;
+        font-weight: 600;
+        color: var(--ink);
+      }
+
+      .exp-btn:hover {
+        background: var(--hl);
+        border-color: var(--acc);
+        color: var(--acc-d);
+        transform: translateY(-1px);
+      }
+
+      .exp-btn:active {
+        transform: translateY(0);
+      }
+
+      /* Sound Button in Topbar */
+      .snd-btn {
+        font-size: 17px;
+        line-height: 1;
+        padding: 8px 11px;
+        border-radius: 50%;
+        border: 1px solid var(--line);
+        background: var(--card);
+        color: var(--ink);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-inline-start: 6px;
+      }
+
+      .snd-btn:hover {
+        background: var(--hl);
+        border-color: var(--acc);
+        transform: scale(1.08);
+      }
+
+      .snd-btn.muted {
+        opacity: 0.6;
+        filter: grayscale(1);
+      }
+
+      /* Fullscreen styles for zoom viewport */
+      .zw:fullscreen {
+        background: var(--bg);
+        padding: 16px;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .zw:fullscreen .zv {
+        max-height: calc(100vh - 80px);
+        flex: 1;
+      }
+
+      /* ================================================================
+         TYPOGRAPHY
+         ================================================================ */
+      h1 {
+        font-size: 30px;
+        margin: 8px 0 2px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+      }
+
+      h2 {
+        font-size: 20px;
+        margin: 0 0 12px;
+        font-weight: 700;
+        letter-spacing: -0.2px;
+      }
+
+      h3 {
+        font-weight: 600;
+      }
+
+      .sub {
+        color: var(--mut);
+        margin: 0 0 18px;
+        font-size: 14.5px;
+      }
+
+      .mono,
+      input,
+      td,
+      th,
+      .eq,
+      .chip,
+      .ic {
+        font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+      }
+
+      .eq {
+        direction: ltr;
+        text-align: left;
+        unicode-bidi: isolate;
+        font-size: 15.5px;
+        overflow-x: auto;
+        padding: 8px 12px;
+        background: var(--bg2);
+        border-radius: var(--r-sm);
+        border: 1px solid var(--line2);
+        margin: 6px 0;
+      }
+
+      /* ================================================================
+         HEADER
+         ================================================================ */
+      .top {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .top h1 {
+        margin: 0;
+        flex: 1;
+      }
+
+      .top svg.logo {
+        width: 62px;
+        height: 62px;
+        flex: none;
+        filter: drop-shadow(0 6px 14px rgba(11, 122, 111, 0.22));
+      }
+
+      .brand {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .by {
+        color: var(--mut);
+        font-size: 13px;
+        margin-top: 3px;
+      }
+
+      #th {
+        font-size: 20px;
+        line-height: 1;
+        padding: 8px 12px;
+        border-radius: 50%;
+        border: 1px solid var(--line);
+        background: var(--card);
+        color: var(--ink);
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      #th:hover {
+        background: var(--hl);
+        border-color: var(--acc);
+        transform: rotate(180deg);
+      }
+
+      /* ================================================================
+         INPUT PANEL
+         ================================================================ */
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        padding: 20px;
+        box-shadow: var(--shadow);
+        position: relative;
+      }
+
+      #in {
+        width: 100%;
+        font-size: 19px;
+        padding: 14px 16px;
+        border: 2px solid var(--line);
+        border-radius: var(--r);
+        background: var(--bg2);
+        color: var(--ink);
+        direction: ltr;
+        text-align: left;
+        transition: all 0.2s;
+        letter-spacing: 0.3px;
+      }
+
+      #in:hover {
+        border-color: var(--acc2);
+      }
+
+      #in:focus {
+        outline: none;
+        border-color: var(--acc);
+        background: var(--card);
+        box-shadow: 0 0 0 4px color-mix(in oklab, var(--acc) 18%, transparent);
+      }
+
+      button,
+      select {
+        font: inherit;
+        font-size: 14.5px;
+        border: 1px solid var(--line);
+        background: var(--card);
+        color: var(--ink);
+        border-radius: var(--r-sm);
+        padding: 7px 13px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        font-weight: 500;
+      }
+
+      button:hover {
+        border-color: var(--acc);
+        background: var(--hl);
+      }
+
+      button:active {
+        transform: translateY(1px);
+      }
+
+      button:focus-visible,
+      select:focus-visible {
+        outline: 3px solid var(--acc);
+        outline-offset: 2px;
+      }
+
+      button.k {
+        min-width: 40px;
+        padding: 7px 10px;
+        font-family: "IBM Plex Mono", monospace;
+        direction: ltr;
+        font-weight: 600;
+      }
+
+      button.go,
+      button.on {
+        background: linear-gradient(135deg, var(--acc), var(--acc-d));
+        color: #fff;
+        border-color: var(--acc-d);
+        font-weight: 600;
+        box-shadow: 0 2px 6px -2px
+          color-mix(in oklab, var(--acc) 60%, transparent);
+      }
+
+      button.go:hover,
+      button.on:hover {
+        background: linear-gradient(135deg, var(--acc2), var(--acc));
+        box-shadow: 0 4px 14px -3px
+          color-mix(in oklab, var(--acc) 70%, transparent);
+        transform: translateY(-1px);
+      }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+        align-items: center;
+      }
+
+      .row label {
+        font-size: 14.5px;
+        color: var(--ink2);
+      }
+
+      .chip {
+        border-style: dashed;
+        direction: ltr;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+        padding: 5px 10px;
+      }
+
+      #err {
+        color: var(--err);
+        min-height: 24px;
+        margin-top: 10px;
+        font-weight: 600;
+        font-size: 14.5px;
+      }
+
+      #err:not(:empty) {
+        background: color-mix(in oklab, var(--err) 10%, transparent);
+        padding: 10px 14px;
+        border-radius: var(--r-sm);
+        border-inline-start: 4px solid var(--err);
+      }
+
+      /* ================================================================
+         TABS
+         ================================================================ */
+      .tabs {
+        display: flex;
+        gap: 4px;
+        margin: 26px 0 8px;
+        border-bottom: 2px solid var(--line);
+        position: sticky;
+        top: env(safe-area-inset-top, 0px);
+        z-index: 5;
+        background: var(--bg);
+        padding-top: 8px;
+      }
+
+      .tabs button {
+        border: 0;
+        border-radius: var(--r-sm) var(--r-sm) 0 0;
+        background: none;
+        font-weight: 600;
+        padding: 10px 20px;
+        color: var(--mut);
+        position: relative;
+      }
+
+      .tabs button:hover {
+        color: var(--ink);
+        background: var(--hl);
+      }
+
+      .tabs button.on {
+        background: transparent;
+        color: var(--acc);
+        box-shadow: none;
+      }
+
+      .tabs button.on::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 8px;
+        right: 8px;
+        height: 3px;
+        background: var(--acc);
+        border-radius: 3px 3px 0 0;
+      }
+
+      /* ================================================================
+         SECTIONS & CARDS
+         ================================================================ */
+      section {
+        padding: 20px 0;
+        border-top: 1px solid var(--line2);
+      }
+
+      section:first-child {
+        border-top: 0;
+      }
+
+      .note {
+        background: var(--hl);
+        border-inline-start: 4px solid var(--acc);
+        padding: 12px 16px;
+        margin: 12px 0;
+        border-radius: var(--r-sm);
+        font-size: 14.5px;
+        line-height: 1.7;
+      }
+
+      .note b {
+        color: var(--acc-d);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .note b {
+          color: var(--acc2);
+        }
+      }
+
+      /* ================================================================
+         TABLES
+         ================================================================ */
+      table {
+        border-collapse: separate;
+        border-spacing: 0;
+        direction: ltr;
+        margin: 10px 0;
+        font-size: 14px;
+      }
+
+      th,
+      td {
+        border: 1px solid var(--line);
+        padding: 6px 14px;
+        text-align: center;
+      }
+
+      th {
+        background: var(--hl);
+        font-weight: 600;
+        color: var(--ink);
+      }
+
+      table tr:first-child th:first-child {
+        border-top-right-radius: var(--r-sm);
+      }
+
+      table tr:first-child th:last-child {
+        border-top-left-radius: var(--r-sm);
+      }
+
+      table tr:last-child td:first-child {
+        border-bottom-right-radius: var(--r-sm);
+      }
+
+      table tr:last-child td:last-child {
+        border-bottom-left-radius: var(--r-sm);
+      }
+
+      td {
+        background: var(--card);
+      }
+
+      tr.o td {
+        background: var(--hl);
+        font-weight: 700;
+        color: var(--acc-d);
+      }
+
+      .scroll {
+        overflow-x: auto;
+        max-width: 100%;
+        padding-bottom: 4px;
+      }
+
+      /* ================================================================
+         K-MAP
+         ================================================================ */
+      .kms {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 22px;
+      }
+
+      .km td {
+        width: 64px;
+        height: 58px;
+        position: relative;
+        padding: 2px;
+        transition:
+          background 0.15s,
+          outline-color 0.15s;
+        background: var(--card);
+      }
+
+      .km td b {
+        font-size: 19px;
+      }
+
+      .km td small {
+        position: absolute;
+        top: 2px;
+        left: 5px;
+        font-size: 10px;
+        color: var(--mut);
+        font-weight: 500;
+      }
+
+      .km td i {
+        display: flex;
+        justify-content: center;
+        gap: 3px;
+        margin-top: 2px;
+      }
+
+      .km td u {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        display: block;
+      }
+
+      .km td.f1 b {
+        color: var(--acc);
+      }
+
+      .km td.f2 b {
+        color: var(--mut);
+      }
+
+      .km td.hl {
+        background: var(--hl2);
+        outline: 3px solid var(--acc);
+        outline-offset: -3px;
+      }
+
+      .lg {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin: 4px 12px 4px 0;
+        padding: 4px 12px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        direction: ltr;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13.5px;
+        transition: all 0.15s;
+        background: var(--card);
+      }
+
+      .lg:hover {
+        border-color: var(--acc);
+        background: var(--hl);
+      }
+
+      .lg u {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+      }
+
+      .cap {
+        font-weight: 600;
+        color: var(--mut);
+        margin: 0 0 6px;
+        direction: ltr;
+        text-align: left;
+      }
+
+      /* ================================================================
+         SVG CIRCUITS
+         ================================================================ */
+      svg .w {
+        stroke: var(--wire);
+        fill: none;
+        stroke-width: 1.5;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+      }
+
+      svg .g {
+        stroke: var(--ink);
+        fill: var(--gf);
+        stroke-width: 2.1;
+        filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.22));
+      }
+
+      svg .gn {
+        stroke: var(--ink);
+        fill: none;
+        stroke-width: 1.9;
+      }
+
+      svg .d {
+        fill: var(--wire);
+      }
+
+      svg text {
+        fill: var(--ink);
+        font:
+          500 15px "IBM Plex Mono",
+          monospace;
+      }
+
+      svg .lb {
+        font-size: 12px;
+        fill: var(--mut);
+        paint-order: stroke;
+        stroke: var(--bg);
+        stroke-width: 4px;
+      }
+
+      svg .hd {
+        stroke: var(--bbh);
+        stroke-width: 4.5;
+        stroke-linecap: round;
+      }
+
+      svg .bb {
+        fill: var(--bbf);
+        stroke: var(--line);
+      }
+
+      svg .gt {
+        font-size: 11px;
+        font-weight: 600;
+        fill: var(--mut);
+        pointer-events: none;
+      }
+
+      svg [data-s] {
+        transition: opacity 0.15s;
+      }
+
+      svg .dm,
+      svg [data-v].dm {
+        opacity: 0.12;
+      }
+
+      svg [data-v="0"] {
+        opacity: 0.5;
+      }
+
+      /* ================================================================
+         LIBRARY
+         ================================================================ */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 16px;
+      }
+
+      .lib h3 {
+        margin: 0 0 6px;
+        font-size: 17px;
+      }
+
+      .lib .oc {
+        margin-top: 10px;
+        border-top: 1px dashed var(--line);
+        padding-top: 8px;
+      }
+
+      ul.laws {
+        columns: 2;
+        gap: 26px;
+        direction: ltr;
+        padding-left: 20px;
+        margin: 6px 0;
+      }
+
+      ul.laws li {
+        margin: 6px 0;
+      }
+
+      @media (max-width: 600px) {
+        ul.laws {
+          columns: 1;
+        }
+
+        h1 {
+          font-size: 24px;
+        }
+      }
+
+      /* ================================================================
+         ACCORDIONS
+         ================================================================ */
+      details.cat,
+      details.cat.gp {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--r);
+        margin: 12px 0;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        transition: box-shadow 0.2s;
+      }
+
+      details.cat:hover {
+        box-shadow: var(--shadow);
+      }
+
+      details.cat.gp {
+        background: var(--bg2);
+      }
+
+      details.cat > summary {
+        padding: 16px 18px;
+        font-weight: 700;
+        font-size: 17px;
+        border-inline-start: 6px solid var(--cc);
+        transition: background 0.15s;
+      }
+
+      details.cat.gp > summary {
+        font-size: 15.5px;
+        padding: 12px 16px;
+      }
+
+      summary {
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        user-select: none;
+      }
+
+      summary::-webkit-details-marker {
+        display: none;
+      }
+
+      summary::after {
+        content: "▾";
+        margin-inline-start: auto;
+        font-size: 16px;
+        color: var(--mut);
+        transition: transform 0.2s;
+      }
+
+      details[open] > summary::after {
+        transform: rotate(0deg);
+      }
+
+      details:not([open]) > summary::after {
+        transform: rotate(-90deg);
+      }
+
+      summary:hover {
+        background: var(--hl);
+      }
+
+      .cnt {
+        color: var(--mut);
+        font-weight: 400;
+        font-size: 13.5px;
+      }
+
+      .cbody {
+        padding: 4px 18px 16px;
+      }
+
+      details.it {
+        border: 1px solid var(--line);
+        border-radius: var(--r-sm);
+        margin: 8px 0;
+        background: var(--bg);
+        overflow: hidden;
+      }
+
+      details.it > summary {
+        padding: 12px 16px;
+        font-weight: 600;
+        font-size: 15px;
+      }
+
+      details.it[open] > summary {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .body {
+        padding: 8px 16px 16px;
+      }
+
+      .ic {
+        font:
+          500 11.5px "IBM Plex Mono",
+          monospace;
+        background: linear-gradient(135deg, var(--acc), var(--acc-d));
+        color: #fff;
+        padding: 2px 10px;
+        border-radius: 12px;
+        direction: ltr;
+        letter-spacing: 0.3px;
+      }
+
+      /* ================================================================
+         ZOOM VIEWPORT
+         ================================================================ */
+      .zw {
+        position: relative;
+      }
+
+      .zt {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
+        padding: 8px 10px;
+        background: var(--bg2);
+        border-radius: var(--r-sm);
+        border: 1px solid var(--line2);
+      }
+
+      .zt button {
+        min-width: 38px;
+        padding: 5px 10px;
+      }
+
+      .zv {
+        direction: ltr;
+        overflow: auto;
+        max-height: 72vh;
+        cursor: grab;
+        background-image: radial-gradient(var(--line) 1px, transparent 1.2px);
+        background-size: 18px 18px;
+        border: 1px solid var(--line);
+        border-radius: var(--r-sm);
+        padding: 10px;
+      }
+
+      .zv:active {
+        cursor: grabbing;
+      }
+
+      .zv svg {
+        display: block;
+      }
+
+      .fig,
+      #cv {
+        background-image: radial-gradient(var(--line) 1px, transparent 1.2px);
+        background-size: 18px 18px;
+        border: 1px solid var(--line);
+        border-radius: var(--r-sm);
+        padding: 12px;
+        margin: 8px 0;
+      }
+
+      .pb {
+        font-size: 13px;
+        padding: 6px 14px;
+        margin: 4px 0 8px;
+        background: var(--bg2);
+        border-style: dashed;
+      }
+
+      .pb:hover {
+        background: var(--hl);
+        border-style: solid;
+      }
+
+      /* ================================================================
+         HELPERS
+         ================================================================ */
+      .alg li {
+        margin: 10px 0;
+      }
+
+      .alg small {
+        color: var(--mut);
+        display: block;
+        margin-top: 2px;
+        font-size: 13px;
+      }
+
+      .bbt {
+        direction: rtl;
+      }
+
+      .bbt td {
+        text-align: start;
+        font-family: inherit;
+        font-size: 14px;
+      }
+
+      .sw {
+        display: inline-block;
+        width: 28px;
+        height: 6px;
+        border-radius: 3px;
+        vertical-align: middle;
+        margin-inline-end: 8px;
+      }
+
+      #pa {
+        display: none;
+      }
+
+      footer.credit {
+        text-align: center;
+        color: var(--mut);
+        font-size: 13px;
+        padding: 24px 12px 32px;
+        border-top: 1px solid var(--line2);
+        margin-top: 40px;
+      }
+
+      footer.credit b {
+        color: var(--acc);
+      }
+
+      kbd {
+        font:
+          500 12px "IBM Plex Mono",
+          monospace;
+        background: var(--bg2);
+        border: 1px solid var(--line);
+        border-bottom-width: 2px;
+        border-radius: 5px;
+        padding: 1px 6px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+
+      /* ================================================================
+         PRINT — PROFESSIONAL ACADEMIC REPORT  (REBUILT & FIXED)
+         ================================================================ */
+      @page {
+        size: A4 portrait;
+        margin: 12mm 14mm 14mm 14mm;
+      }
+
+      @media print {
+        /* ---------- 0. TOKENS ---------- */
+        :root {
+          --bg: #ffffff !important;
+          --bg2: #f8fafc !important;
+          --card: #ffffff !important;
+          --card2: #ffffff !important;
+          --ink: #0f172a !important;
+          --ink2: #1e293b !important;
+          --mut: #1e293b !important;
+          --line: #cbd5e1 !important;
+          --line2: #e2e8f0 !important;
+          --wire: #0b7a6f !important;
+          --gate: #ffffff !important;
+          --gf: #ffffff !important;
+          --hl: #f1f5f9 !important;
+          --hl2: #e2e8f0 !important;
+          --acc: #0b7a6f !important;
+          --acc-d: #075d54 !important;
+          --bbf: #f1ede2 !important;
+          --bbf2: #e5ded0 !important;
+          --bbh: #94a3b8 !important;
+          --shadow: none !important;
+          --shadow-sm: none !important;
+          --shadow-lg: none !important;
+        }
+
+        html,
+        body {
+          background: #ffffff !important;
+          background-image: none !important;
+          color: #0f172a !important;
+          font-size: 10pt !important;
+          line-height: 1.6 !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+
+        /* ---------- 1. إخفاء عناصر الشاشة ---------- */
+        .wrap,
+        footer.credit,
+        #logic-probe-tip,
+        .top-actions,
+        .an-btn,
+        .pb,
+        .zt,
+        .exp-btn,
+        .snd-btn,
+        .tools,
+        .tabs,
+        button,
+        input,
+        select {
+          display: none !important;
+        }
+
+        #pa {
+          display: block !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+
+        #pa * {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          text-shadow: none !important;
+          filter: none !important;
+          box-shadow: none !important;
+        }
+
+        /* لا نفرض opacity على كل حاجة (كان بيولّع هالة الـ LED) */
+        #pa .dm,
+        #pa [data-v],
+        #pa [data-s],
+        #pa svg [data-v="0"],
+        #pa svg [data-v="0"] .w {
+          opacity: 1 !important;
+        }
+
+        /* هالة الـ LED لا تُطبع أبداً */
+        #pa svg [data-lg] {
+          opacity: 0 !important;
+        }
+
+        /* ---------- 2. النصوص ---------- */
+        #pa body,
+        #pa p,
+        #pa span,
+        #pa div,
+        #pa li,
+        #pa td,
+        #pa th,
+        #pa small,
+        #pa .sub,
+        #pa .cnt,
+        #pa .by,
+        #pa .lb,
+        #pa .gt,
+        #pa .k,
+        #pa .v {
+          color: #0f172a !important;
+          -webkit-text-fill-color: #0f172a !important;
+        }
+
+        #pa small,
+        #pa .sub,
+        #pa .cnt,
+        #pa .alg small,
+        #pa p.sub {
+          color: #1e293b !important;
+          -webkit-text-fill-color: #1e293b !important;
+          font-weight: 500 !important;
+          font-size: 9.5pt !important;
+        }
+
+        /* ---------- 3. التدفّق عبر الصفحات ---------- */
+        #pa .academic-sec,
+        #pa .sec-content,
+        #pa section,
+        #pa details,
+        #pa .cbody,
+        #pa .body {
+          page-break-inside: auto !important;
+          break-inside: auto !important;
+        }
+
+        #pa {
+          overflow: visible !important;
+        }
+
+        #pa .scroll,
+        #pa .zw,
+        #pa .zv,
+        #pa .fig,
+        #pa #bb,
+        #pa #cv,
+        #pa .cbody,
+        #pa .body {
+          overflow: visible !important;
+          max-height: none !important;
+        }
+
+        /* ---------- 4. غلاف التقرير ---------- */
+        .academic-report-cover-page {
+          border: 2pt solid #0b7a6f;
+          border-radius: 4mm;
+          background: #ffffff;
+          padding: 10mm 12mm;
+          margin: 0 auto;
+          page-break-after: always !important;
+          break-after: page !important;
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          min-height: 235mm;
+          width: 100%;
+          max-width: 100%;
+          overflow: hidden;
+        }
+
+        .rep-top-banner {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 6mm;
+          padding-bottom: 3mm;
+          width: 100%;
+          box-sizing: border-box;
+        }
+
+        .rep-logo-side {
+          flex-shrink: 0;
+        }
+
+        .rep-logo-side svg {
+          width: 76px !important;
+          height: 76px !important;
+          max-width: 76px !important;
+          max-height: 76px !important;
+          display: block !important;
+          margin: 0 !important;
+        }
+
+        .rep-univ-side {
+          flex: 1;
+          min-width: 0;
+          text-align: right;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 1.5mm;
+        }
+
+        .gov-title {
+          font-size: 12pt;
+          font-weight: 800;
+          color: #0f172a;
+          line-height: 1.35;
+        }
+
+        .gov-faculty {
+          font-size: 11pt;
+          font-weight: 700;
+          color: #0b7a6f;
+          line-height: 1.3;
+        }
+
+        .gov-dept {
+          font-size: 9pt;
+          color: #475569;
+          font-weight: 600;
+          line-height: 1.4;
+        }
+
+        .rep-header-rule {
+          height: 1.2pt;
+          background: linear-gradient(90deg, #0e4f7a, #0b7a6f, #0e4f7a);
+          margin: 2mm 0 3mm;
+        }
+
+        .rep-center-title-block {
+          text-align: center;
+          margin: 4mm 0;
+        }
+
+        .rep-accred-badge {
+          display: inline-block;
+          background: #eef7f4;
+          color: #075d54;
+          border: 1pt solid #0b7a6f;
+          font-family: "IBM Plex Mono", monospace;
+          font-size: 8pt;
+          font-weight: 700;
+          letter-spacing: 0.8px;
+          padding: 0.8mm 4mm;
+          border-radius: 3mm;
+          margin-bottom: 1.5mm;
+        }
+
+        .rep-main-heading {
+          font-size: 16pt;
+          font-weight: 800;
+          color: #0f2233;
+          margin: 0 0 1mm;
+          line-height: 1.25;
+        }
+
+        .rep-sub-heading {
+          font-size: 9pt;
+          color: #475569;
+          font-weight: 500;
+          line-height: 1.5;
+          max-width: 155mm;
+          margin: 0 auto;
+        }
+
+        .rep-info-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+          gap: 4mm;
+          background: #f8fafc;
+          border: 1pt solid #cbd5e1;
+          border-radius: 2.5mm;
+          padding: 3.5mm 5mm;
+          box-sizing: border-box;
+          width: 100%;
+          max-width: 100%;
+          overflow: hidden;
+        }
+
+        .rep-info-card {
+          border-inline-end: 1pt dashed #cbd5e1;
+          padding-inline-end: 4mm;
+          text-align: right;
+          min-width: 0;
+          overflow: hidden;
+        }
+
+        .rep-card-k {
+          font-size: 8.5pt;
+          font-weight: 700;
+          color: #0b7a6f;
+          margin-bottom: 1.5mm;
+        }
+
+        .rep-card-expr {
+          font-size: 13pt;
+          font-weight: 700;
+          color: #0f172a;
+          direction: ltr;
+          text-align: right;
+          margin: 1.5mm 0;
+          word-break: break-word;
+          overflow-wrap: break-word;
+        }
+
+        .rep-card-v {
+          font-size: 9pt;
+          color: #334155;
+          font-weight: 600;
+          line-height: 1.45;
+          word-break: break-word;
+        }
+
+        .rep-meta-box {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 1.8mm;
+          font-size: 8.8pt;
+          min-width: 0;
+          overflow: hidden;
+        }
+
+        .meta-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 2.5mm;
+          border-bottom: 0.5pt solid #e2e8f0;
+          padding-bottom: 0.8mm;
+          min-width: 0;
+        }
+
+        .meta-row b {
+          color: #64748b;
+          font-weight: 600;
+          font-size: 8.5pt;
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+
+        .meta-row span {
+          color: #0f172a;
+          font-weight: 700;
+          text-align: end;
+          min-width: 0;
+          word-break: break-word;
+        }
+
+        .student-write-in {
+          display: inline-block;
+          flex: 1;
+          min-width: 25mm;
+          border-bottom: 1.2pt dotted #94a3b8;
+          height: 1em;
+          margin-inline-start: 2mm;
+        }
+
+        /* ---------- 5. أقسام التقرير ---------- */
+        .academic-sec {
+          margin-bottom: 7mm;
+          padding-bottom: 4mm;
+          border-bottom: 0.5pt solid #cbd5e1;
+        }
+
+        .sec-banner {
+          page-break-after: avoid;
+          break-after: avoid;
+          display: flex;
+          align-items: center;
+          gap: 3mm;
+          border-bottom: 1.5pt solid #0b7a6f;
+          padding-bottom: 2mm;
+          margin-bottom: 3.5mm;
+        }
+
+        .sec-num {
+          background: #0b7a6f;
+          color: #ffffff !important;
+          -webkit-text-fill-color: #ffffff !important;
+          font-family: "IBM Plex Mono", monospace;
+          font-weight: 700;
+          font-size: 11pt;
+          padding: 1mm 3mm;
+          border-radius: 2mm;
+        }
+
+        .sec-text {
+          font-size: 13pt;
+          font-weight: 800;
+          color: #0f172a;
+          margin: 0;
+        }
+
+        .academic-sub-box {
+          background: #f8fafc;
+          border: 1pt solid #cbd5e1;
+          border-radius: 2.5mm;
+          padding: 2.5mm 4mm;
+          margin: 2.5mm 0;
+        }
+
+        .academic-sub-h {
+          font-size: 10.5pt;
+          font-weight: 700;
+          color: #0b7a6f;
+          margin: 0 0 1.5mm;
+        }
+
+        /* ---------- 6. الجداول العادية (مش كارنو) ---------- */
+        #pa table {
+          border-collapse: collapse !important;
+          page-break-inside: auto !important;
+          break-inside: auto !important;
+          margin: 3mm 0 4mm !important;
+          font-size: 9.5pt !important;
+        }
+
+        #pa table:not(.km) {
+          width: 100% !important;
+        }
+
+        #pa th,
+        #pa td {
+          border: 0.8pt solid #94a3b8 !important;
+          padding: 1.6mm 2.5mm !important;
+          text-align: center !important;
+          color: #0f172a !important;
+        }
+
+        #pa th {
+          background: #eef7f4 !important;
+          color: #075d54 !important;
+          font-weight: 700 !important;
+          border-bottom: 1.2pt solid #0b7a6f !important;
+        }
+
+        #pa tr {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+        }
+
+        #pa tr.o td {
+          background: #e2f4ed !important;
+          font-weight: 700 !important;
+          color: #075d54 !important;
+        }
+
+        /* ---------- 7. خريطة كارنو (نفس شكل الشاشة بالضبط) ---------- */
+        #pa .kms {
+          display: flex !important;
+          flex-wrap: wrap !important;
+          gap: 6mm !important;
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+          margin: 3mm 0 !important;
+        }
+
+        #pa .kms > div {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+        }
+
+        #pa .km {
+          width: auto !important;
+          border-collapse: collapse !important;
+          margin: 0 0 2mm !important;
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+          direction: ltr !important;
+        }
+
+        #pa .km th,
+        #pa .km td {
+          width: 12mm !important;
+          min-width: 12mm !important;
+          height: 11mm !important;
+          padding: 0.5mm !important;
+          border: 0.8pt solid #94a3b8 !important;
+          background: #ffffff !important;
+          vertical-align: middle !important;
+          position: relative !important;
+        }
+
+        #pa .km th {
+          background: #eef7f4 !important;
+          font-size: 8pt !important;
+          font-weight: 700 !important;
+          color: #075d54 !important;
+        }
+
+        #pa .km td b {
+          display: block !important;
+          font-size: 11pt !important;
+          line-height: 1.05 !important;
+          color: #0f172a !important;
+        }
+
+        #pa .km td.f1 b {
+          color: #0b7a6f !important;
+        }
+
+        #pa .km td.f2 b {
+          color: #64748b !important;
+        }
+
+        #pa .km td small {
+          position: absolute !important;
+          top: 0.4mm !important;
+          left: 1mm !important;
+          font-size: 6pt !important;
+          line-height: 1 !important;
+          font-weight: 700 !important;
+          color: #64748b !important;
+        }
+
+        #pa .km td i {
+          display: flex !important;
+          justify-content: center !important;
+          gap: 0.8mm !important;
+          margin-top: 0.6mm !important;
+        }
+
+        #pa .km td i u {
+          display: block !important;
+          width: 2.4mm !important;
+          height: 2.4mm !important;
+          border-radius: 50% !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+
+        #pa .cap {
+          font-size: 9pt !important;
+          font-weight: 700 !important;
+          color: #0b7a6f !important;
+          margin: 0 0 1mm !important;
+          direction: ltr !important;
+          text-align: left !important;
+        }
+
+        #pa .lg {
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 1.5mm !important;
+          border: 0.8pt solid #94a3b8 !important;
+          border-radius: 3mm !important;
+          padding: 0.8mm 2.5mm !important;
+          background: #f8fafc !important;
+          color: #0f172a !important;
+          font-weight: 600 !important;
+          font-size: 9pt !important;
+          margin: 1mm 2mm 1mm 0 !important;
+        }
+
+        #pa .lg u {
+          display: inline-block !important;
+          width: 2.6mm !important;
+          height: 2.6mm !important;
+          border-radius: 50% !important;
+        }
+
+        /* ---------- 8. المعادلات والملاحظات ---------- */
+        #pa .eq {
+          background: #f8fafc !important;
+          border: 1pt solid #cbd5e1 !important;
+          border-inline-start: 3.5pt solid #0b7a6f !important;
+          padding: 2.5mm 4mm !important;
+          font-size: 10.5pt !important;
+          font-weight: 700 !important;
+          color: #0f172a !important;
+          margin: 2.5mm 0 !important;
+          page-break-inside: avoid;
+          break-inside: avoid;
+        }
+
+        #pa .note {
+          background: #eef7f4 !important;
+          border-inline-start: 3.5pt solid #0b7a6f !important;
+          padding: 2.5mm 4mm !important;
+          margin: 2.5mm 0 !important;
+          font-size: 9.5pt !important;
+          color: #0f172a !important;
+          page-break-inside: avoid;
+          break-inside: avoid;
+        }
+
+        /* ---------- 9. الرسومات المتجهة ---------- */
+        #pa .zv,
+        #pa .fig {
+          border: 1pt solid #cbd5e1 !important;
+          background: #ffffff !important;
+          padding: 3mm !important;
+          margin: 3mm 0 !important;
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+        }
+
+        #pa svg {
+          display: block !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          height: auto !important;
+          max-height: none !important;
+          margin: 3mm auto !important;
+          background: #ffffff !important;
+        }
+
+        #pa svg .w {
+          stroke: #0b7a6f !important;
+          stroke-width: 1.6pt !important;
+          stroke-opacity: 1 !important;
+        }
+
+        #pa svg .g {
+          stroke: #0f172a !important;
+          fill: #ffffff !important;
+          stroke-width: 2pt !important;
+        }
+
+        #pa svg .gn {
+          stroke: #0f172a !important;
+          stroke-width: 1.8pt !important;
+        }
+
+        #pa svg .d {
+          fill: #0b7a6f !important;
+        }
+
+        #pa svg .hd {
+          stroke: #9a917b !important;
+          stroke-width: 4pt !important;
+        }
+
+        #pa svg .bb {
+          fill: #f1ede2 !important;
+          stroke: #cbd5e1 !important;
+        }
+
+        /* لا نلمس النصوص اللي لها fill مضمّن (أرقام أرجل الشرائح الفاتحة على الجسم الغامق) */
+        #pa svg text {
+          font-weight: 600 !important;
+        }
+
+        #pa svg text:not([style*="fill"]) {
+          fill: #0f172a !important;
+        }
+
+        #pa svg .lb {
+          fill: #0f172a !important;
+          stroke: #ffffff !important;
+          stroke-width: 3pt !important;
+          paint-order: stroke fill !important;
+          font-weight: 700 !important;
+        }
+
+        #pa svg .gt {
+          fill: #1e293b !important;
+        }
+
+        /* استثناء شعار الغلاف من قاعدة الـ SVG العامة */
+        #pa .rep-logo-side svg {
+          width: 82px !important;
+          height: 82px !important;
+          max-width: 82px !important;
+          max-height: 82px !important;
+          display: block !important;
+          margin: 0 !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="top">
+        <svg
+          class="logo"
+          viewBox="0 0 64 64"
+          role="img"
+          aria-label="شعار مختبر التصميم المنطقي"
+        >
+          <defs>
+            <linearGradient id="lgG" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#0b7a6f" />
+              <stop offset="1" stop-color="#0e4f7a" />
+            </linearGradient>
+          </defs>
+          <g stroke="var(--acc)" stroke-width="3" stroke-linecap="round">
+            <path d="M18 2v6M32 2v6M46 2v6M18 56v6M32 56v6M46 56v6" />
+          </g>
+          <rect x="6" y="7" width="52" height="50" rx="14" fill="url(#lgG)" />
+          <g stroke="#fff" stroke-opacity=".7" stroke-width="1.4" fill="none">
+            <path d="M17 22L27 25M17 32H27M17 42L27 39M48 32H53" />
+          </g>
+          <g fill="#fff">
+            <circle cx="17" cy="22" r="2.6" />
+            <circle cx="17" cy="32" r="2.6" />
+            <circle cx="17" cy="42" r="2.6" />
+          </g>
+          <path d="M27 20h9a12 12 0 0 1 0 24h-9z" fill="#fff" />
+          <circle cx="53" cy="32" r="3" fill="#ffd166" />
+          <text
+            x="34"
+            y="36"
+            text-anchor="middle"
+            direction="ltr"
+            style="
+              font-size: 10.5px;
+              font-weight: 700;
+              font-family: &quot;IBM Plex Mono&quot;, monospace;
+            "
+            fill="#0b4f6f"
+          >
+            AR
+          </text>
+        </svg>
+        <div class="brand">
+          <h1>مختبر التصميم المنطقي</h1>
+          <div class="by">
+            Logic Design Lab · أحمد محمد رشاد — مهندس نظم الذكاء الاصطناعي
+          </div>
+        </div>
+        <button
+          id="snd-toggle"
+          class="snd-btn"
+          title="تفعيل / كتم المؤثر الصوتي للمفاتيح"
+          aria-label="مؤثر الصوت"
+        >
+          🔊
+        </button>
+        <button id="th" title="الوضع الليلي / النهاري" aria-label="تبديل الوضع">
+          ◐
+        </button>
+      </div>
+      <p class="sub">
+        اكتب أي دالة بوليانيه أو قائمة Minterms، وخد منها جدول الحقيقة، خريطة
+        كارنو، التبسيط، والدوائر بالبوابات.
+      </p>
+      <div class="panel">
+        <input
+          id="in"
+          placeholder="مثال: A'B + AB'   أو   Σm(1,2,4,7)   أو   (A+B)(A'+C)"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="المعادلة"
+        />
+        <details class="tools">
+          <summary>لوحة الرموز والأمثلة</summary>
+          <div class="row" id="keys"></div>
+          <div class="row"><b>أمثلة:</b><span id="ex"></span></div>
+        </details>
+        <div class="row">
+          <label
+            >عدد المتغيرات (لقائمة Minterms):
+            <select id="nv">
+              <option value="0">تلقائي</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+            </select></label
+          >
+          <button class="go" id="go">حلّل</button>
+        </div>
+        <div id="err" role="alert"></div>
+        <div
+          class="mono"
+          dir="ltr"
+          style="color: var(--mut); font-size: 12.5px; margin-top: 6px"
+        >
+          + OR &nbsp; . أو AB AND &nbsp; ' أو ! NOT &nbsp; ^ XOR &nbsp; NAND NOR
+          XNOR &nbsp; Σm(..) ΠM(..) d(..)
+        </div>
+      </div>
+      <div class="tabs">
+        <button class="on" data-t="r">التحليل</button
+        ><button data-t="l">مكتبة الدوائر</button>
+      </div>
+      <div id="r">
+        <section>
+          <p>اكتب معادلة فوق وهتظهر النتايج هنا.</p>
+        </section>
+      </div>
+      <div id="l" hidden></div>
+    </div>
+    <footer class="credit">
+      تصميم وتطوير: <b>أحمد محمد رشاد</b> — مهندس نظم الذكاء الاصطناعي
+    </footer>
+    <div id="pa" aria-hidden="true"></div>
+
+    <script>
+      "use strict";
+      /* ============================================================
+     CORE LOGIC — preserved from original (working)
+     ============================================================ */
+      const $ = (s) => document.querySelector(s);
+      const pop = (n) => n.toString(2).replace(/0/g, "").length;
+      const COL = [
+        "#0B7A6F",
+        "#C2410C",
+        "#2563EB",
+        "#9333EA",
+        "#CA8A04",
+        "#DB2777",
+        "#0891B2",
+        "#65A30D",
+      ];
+      const WORDS = new Set(["AND", "OR", "NOT", "XOR", "XNOR", "NAND", "NOR"]);
+
+      function tokenize(s) {
+        s = s
+          .replace(/[·×∧&*•]/g, ".")
+          .replace(/[∨|]/g, "+")
+          .replace(/[¬~]/g, "!")
+          .replace(/⊕/g, "^")
+          .replace(/[’‘`′]/g, "'")
+          .replace(/[\[{]/g, "(")
+          .replace(/[\]}]/g, ")");
+        const t = [];
+        let i = 0;
+        while (i < s.length) {
+          const c = s[i];
+          if (/\s/.test(c)) {
+            i++;
+            continue;
+          }
+          if (/[A-Za-z]/.test(c)) {
+            let j = i;
+            while (j < s.length && /[A-Za-z]/.test(s[j])) j++;
+            const w = s.slice(i, j).toUpperCase();
+            if (WORDS.has(w) && w.length > 1) t.push({ k: "op", v: w });
+            else for (const ch of w) t.push({ k: "var", v: ch });
+            i = j;
+            continue;
+          }
+          if (c === "0" || c === "1") {
+            t.push({ k: "const", v: +c });
+            i++;
+            continue;
+          }
+          if ("+.^!'".includes(c)) {
+            t.push({ k: "op", v: c });
+            i++;
+            continue;
+          }
+          if (c === "(" || c === ")") {
+            t.push({ k: c, v: c });
+            i++;
+            continue;
+          }
+          throw Error("رمز غير مفهوم: " + c);
+        }
+        return t;
+      }
+      function parse(s) {
+        const t = tokenize(s);
+        let p = 0;
+        const is = (v) => t[p] && t[p].k === "op" && t[p].v === v;
+        const mk = (ty, a, b) => {
+          const ch = [];
+          for (const x of [a, b]) x.t === ty ? ch.push(...x.ch) : ch.push(x);
+          return { t: ty, ch };
+        };
+        const nt = (ty, a, b) => ({ t: ty, ch: [a, b] });
+        function or() {
+          let l = xor();
+          while (is("+") || is("OR") || is("NOR")) {
+            const o = t[p++].v,
+              r = xor();
+            l = o === "NOR" ? nt("NOR", l, r) : mk("OR", l, r);
+          }
+          return l;
+        }
+        function xor() {
+          let l = and();
+          while (is("^") || is("XOR") || is("XNOR")) {
+            const o = t[p++].v,
+              r = and();
+            l = o === "XNOR" ? nt("XNOR", l, r) : mk("XOR", l, r);
+          }
+          return l;
+        }
+        function and() {
+          let l = un();
+          for (;;) {
+            if (is(".") || is("AND")) {
+              p++;
+              l = mk("AND", l, un());
+            } else if (is("NAND")) {
+              p++;
+              l = nt("NAND", l, un());
+            } else if (
+              t[p] &&
+              (["var", "(", "const"].includes(t[p].k) || is("!") || is("NOT"))
+            )
+              l = mk("AND", l, un());
+            else return l;
+          }
+        }
+        function un() {
+          if (is("!") || is("NOT")) {
+            p++;
+            return { t: "NOT", ch: [un()] };
+          }
+          let x = prim();
+          while (is("'")) {
+            p++;
+            x = { t: "NOT", ch: [x] };
+          }
+          return x;
+        }
+        function prim() {
+          const k = t[p];
+          if (!k) throw Error("المعادلة ناقصة: في متغير أو قوس ناقص في الآخر");
+          if (k.k === "var") {
+            p++;
+            return { t: "VAR", n: k.v };
+          }
+          if (k.k === "const") {
+            p++;
+            return { t: "C", v: k.v };
+          }
+          if (k.k === "(") {
+            p++;
+            const e = or();
+            if (!t[p] || t[p].k !== ")")
+              throw Error("قوس مفتوح من غير ما يتقفل");
+            p++;
+            return e;
+          }
+          throw Error("رمز في غير مكانه: " + k.v);
+        }
+        const e = or();
+        if (p < t.length) throw Error("رمز زايد في المعادلة: " + t[p].v);
+        return e;
+      }
+      function ev(n, e) {
+        if (n.t === "VAR") return e[n.n];
+        if (n.t === "C") return n.v;
+        if (n.t === "NOT") return 1 - ev(n.ch[0], e);
+        const v = n.ch.map((c) => ev(c, e)),
+          x = v.reduce((a, b) => a ^ b, 0);
+        return {
+          AND: +v.every(Boolean),
+          OR: +v.some(Boolean),
+          XOR: x,
+          NAND: +!v.every(Boolean),
+          NOR: +!v.some(Boolean),
+          XNOR: 1 - x,
+        }[n.t];
+      }
+      const vars = (n, s = new Set()) => (
+        n.t === "VAR" && s.add(n.n),
+        (n.ch || []).forEach((c) => vars(c, s)),
+        s
+      );
+      function parseList(s) {
+        let on = [],
+          dc = [],
+          off = [],
+          h = 0;
+        s.replace(/(Σ|∑|Π|∏|[mMdD])\s*\(\s*([\d\s,]*)\)/g, (_, k, a) => {
+          const l = a
+            .split(/[\s,]+/)
+            .filter(Boolean)
+            .map(Number);
+          h++;
+          ("Σ∑m".includes(k) ? on : "Π∏M".includes(k) ? off : dc).push(...l);
+          return "";
+        });
+        return h ? { on, dc, off } : null;
+      }
+      /* ============================================================
+       CIRCUIT ALIASES & SEARCH AUTO-RESOLVER
+       ============================================================ */
+      const CIRCUIT_ALIASES = {
+        // Full Adder
+        "full adder": "Sum = A^B^C ; Cout = AB+C(A^B)",
+        fulladder: "Sum = A^B^C ; Cout = AB+C(A^B)",
+        fa: "Sum = A^B^C ; Cout = AB+C(A^B)",
+        "فول ادر": "Sum = A^B^C ; Cout = AB+C(A^B)",
+        "فول أدر": "Sum = A^B^C ; Cout = AB+C(A^B)",
+        "الفول ادر": "Sum = A^B^C ; Cout = AB+C(A^B)",
+        "الفول أدر": "Sum = A^B^C ; Cout = AB+C(A^B)",
+        "جامع كامل": "Sum = A^B^C ; Cout = AB+C(A^B)",
+        "الجامع الكامل": "Sum = A^B^C ; Cout = AB+C(A^B)",
+
+        // Half Adder
+        "half adder": "Sum = A^B ; Carry = AB",
+        halfadder: "Sum = A^B ; Carry = AB",
+        ha: "Sum = A^B ; Carry = AB",
+        "هاف ادر": "Sum = A^B ; Carry = AB",
+        "هاف أدر": "Sum = A^B ; Carry = AB",
+        "الهاف ادر": "Sum = A^B ; Carry = AB",
+        "الهاف أدر": "Sum = A^B ; Carry = AB",
+        "جامع نصفي": "Sum = A^B ; Carry = AB",
+        "الجامع النصفي": "Sum = A^B ; Carry = AB",
+
+        // Full Subtractor
+        "full subtractor": "Diff = A^B^C ; Bout = A'B+(A^B)'C",
+        fullsubtractor: "Diff = A^B^C ; Bout = A'B+(A^B)'C",
+        fs: "Diff = A^B^C ; Bout = A'B+(A^B)'C",
+        "فول سبتراكتر": "Diff = A^B^C ; Bout = A'B+(A^B)'C",
+        "الفول سبتراكتر": "Diff = A^B^C ; Bout = A'B+(A^B)'C",
+        "طارح كامل": "Diff = A^B^C ; Bout = A'B+(A^B)'C",
+        "الطارح الكامل": "Diff = A^B^C ; Bout = A'B+(A^B)'C",
+
+        // Half Subtractor
+        "half subtractor": "Diff = A^B ; Borrow = A'B",
+        halfsubtractor: "Diff = A^B ; Borrow = A'B",
+        hs: "Diff = A^B ; Borrow = A'B",
+        "هاف سبتراكتر": "Diff = A^B ; Borrow = A'B",
+        "الهاف سبتراكتر": "Diff = A^B ; Borrow = A'B",
+        "طارح نصفي": "Diff = A^B ; Borrow = A'B",
+        "الطارح النصفي": "Diff = A^B ; Borrow = A'B",
+
+        // Comparator
+        comparator: "A_GT_B = AB' ; A_EQ_B = (A^B)' ; A_LT_B = A'B",
+        cmp: "A_GT_B = AB' ; A_EQ_B = (A^B)' ; A_LT_B = A'B",
+        مقارن: "A_GT_B = AB' ; A_EQ_B = (A^B)' ; A_LT_B = A'B",
+        "مقارن خانة": "A_GT_B = AB' ; A_EQ_B = (A^B)' ; A_LT_B = A'B",
+        المقارن: "A_GT_B = AB' ; A_EQ_B = (A^B)' ; A_LT_B = A'B",
+
+        // Multiplexer
+        mux: "Y = C'A+CB",
+        "2:1 mux": "Y = C'A+CB",
+        مكس: "Y = C'A+CB",
+        مجمع: "Y = C'A+CB",
+        المجمع: "Y = C'A+CB",
+
+        // Binary to Gray
+        gray: "G3 = A ; G2 = A^B ; G1 = B^C ; G0 = C^D",
+        "binary to gray": "G3 = A ; G2 = A^B ; G1 = B^C ; G0 = C^D",
+        جري: "G3 = A ; G2 = A^B ; G1 = B^C ; G0 = C^D",
+        "كود جري": "G3 = A ; G2 = A^B ; G1 = B^C ; G0 = C^D",
+      };
+
+      function resolveCircuitAlias(s) {
+        if (!s) return null;
+        const norm = s
+          .trim()
+          .toLowerCase()
+          .replace(/[إأآ]/g, "ا")
+          .replace(/[^\w\u0600-\u06FF\s:]/g, "");
+        for (const k in CIRCUIT_ALIASES) {
+          const kNorm = k.toLowerCase().replace(/[إأآ]/g, "ا");
+          if (norm === kNorm) return CIRCUIT_ALIASES[k];
+        }
+        return null;
+      }
+
+      function makeSafeIdent(name, idx, existing) {
+        let s = String(name)
+          .replace(/>=/g, "_GTE_")
+          .replace(/<=/g, "_LTE_")
+          .replace(/>/g, "_GT_")
+          .replace(/</g, "_LT_")
+          .replace(/=/g, "_EQ_")
+          .replace(/≠/g, "_NEQ_")
+          .replace(/[^A-Za-z0-9_]/g, "_")
+          .replace(/^_+|_+$/g, "");
+        if (!s || !/^[A-Za-z]/.test(s))
+          s = "Y" + (idx != null ? idx + 1 : "") + (s ? "_" + s : "");
+        if (existing && existing.has(s)) {
+          let k = 2;
+          while (existing.has(s + "_" + k)) k++;
+          s = s + "_" + k;
+        }
+        if (existing) existing.add(s);
+        return s;
+      }
+
+      function splitExpressions(src) {
+        const parts = [];
+        let cur = "";
+        let depth = 0;
+        for (let i = 0; i < src.length; i++) {
+          const c = src[i];
+          if (c === "(" || c === "[" || c === "{") depth++;
+          else if (c === ")" || c === "]" || c === "}")
+            depth = Math.max(0, depth - 1);
+
+          if (depth === 0 && (c === ";" || c === "\n")) {
+            if (cur.trim()) parts.push(cur.trim());
+            cur = "";
+          } else if (depth === 0 && c === ",") {
+            const rest = src.slice(i + 1).trim();
+            if (/^[A-Za-z0-9_><=≠\s]+\s*=\s*[A-Za-z0-9_(!~]/.test(rest)) {
+              if (cur.trim()) parts.push(cur.trim());
+              cur = "";
+            } else {
+              cur += c;
+            }
+          } else {
+            cur += c;
+          }
+        }
+        if (cur.trim()) parts.push(cur.trim());
+        return parts;
+      }
+
+      function parseMulti(src) {
+        const parts = splitExpressions(src);
+        if (parts.length < 2) return null;
+        const outputs = [];
+        const seenIdents = new Set();
+        for (let i = 0; i < parts.length; i++) {
+          const part = parts[i];
+          const m = part.match(/^(.*?)\s*=\s*([^=]+)$/);
+          let name, eq;
+          if (m) {
+            name = m[1].trim();
+            eq = m[2].trim();
+          } else {
+            name = "Y" + (i + 1);
+            eq = part;
+          }
+          const safeIdent = makeSafeIdent(name, i, seenIdents);
+          let ast = null,
+            list = parseList(eq);
+          if (!list) {
+            try {
+              ast = parse(eq);
+            } catch (e) {
+              return null;
+            }
+          }
+          outputs.push({
+            name,
+            ident: safeIdent,
+            src: eq,
+            ast,
+            list,
+          });
+        }
+        return { outputs };
+      }
+      function qm(on, dc, n) {
+        let cur = new Map();
+        [...on, ...dc].forEach((m) => cur.set("0:" + m, { m: 0, v: m }));
+        const pr = [];
+        while (cur.size) {
+          const a = [...cur.values()],
+            u = new Set(),
+            nx = new Map();
+          for (let i = 0; i < a.length; i++)
+            for (let j = i + 1; j < a.length; j++) {
+              const x = a[i],
+                y = a[j];
+              if (x.m !== y.m) continue;
+              const d = x.v ^ y.v;
+              if (d && !(d & (d - 1))) {
+                u.add(i);
+                u.add(j);
+                const m = x.m | d,
+                  v = x.v & ~d;
+                nx.set(m + ":" + v, { m, v });
+              }
+            }
+          a.forEach((x, i) => {
+            if (!u.has(i)) pr.push(x);
+          });
+          cur = nx;
+        }
+        return pr;
+      }
+      const cov = (p, n) => {
+        const r = [];
+        for (let x = 0; x < 1 << n; x++) if ((x & ~p.m) === p.v) r.push(x);
+        return r;
+      };
+      function minimize(on, dc, n) {
+        if (!on.length) return { pr: [], cv: [], ess: new Set() };
+        const pr = qm(on, dc, n);
+        pr.forEach((p) => (p.c = cov(p, n).filter((x) => on.includes(x))));
+        const rem = new Set(on),
+          cv = [],
+          ess = new Set();
+        on.forEach((m) => {
+          const c = pr.filter((p) => p.c.includes(m));
+          if (c.length === 1 && !cv.includes(c[0])) {
+            cv.push(c[0]);
+            ess.add(c[0]);
+          }
+        });
+        cv.forEach((p) => p.c.forEach((m) => rem.delete(m)));
+        if (rem.size) {
+          const rest = pr.filter(
+            (p) => !cv.includes(p) && p.c.some((m) => rem.has(m)),
+          );
+          let best = null;
+          if (rest.length <= 14) {
+            const R = [...rem];
+            for (let k = 1; k < 1 << rest.length; k++) {
+              const ch = rest.filter((_, i) => (k >> i) & 1);
+              if (!R.every((m) => ch.some((p) => p.c.includes(m)))) continue;
+              const sc =
+                ch.length * 100 + ch.reduce((a, p) => a + n - pop(p.m), 0);
+              if (!best || sc < best.sc) best = { sc, ch };
+            }
+          } else {
+            const r = new Set(rem),
+              ch = [];
+            while (r.size) {
+              rest.sort(
+                (a, b) =>
+                  b.c.filter((m) => r.has(m)).length -
+                  a.c.filter((m) => r.has(m)).length,
+              );
+              ch.push(rest[0]);
+              rest[0].c.forEach((m) => r.delete(m));
+            }
+            best = { ch };
+          }
+          cv.push(...best.ch);
+        }
+        return { pr, cv, ess };
+      }
+      function termStr(a, p, pos) {
+        const l = [];
+        for (let i = 0; i < a.n; i++) {
+          const b = a.n - 1 - i;
+          if ((p.m >> b) & 1) continue;
+          const v = (p.v >> b) & 1;
+          l.push(
+            pos
+              ? v
+                ? a.vars[i] + "'"
+                : a.vars[i]
+              : v
+                ? a.vars[i]
+                : a.vars[i] + "'",
+          );
+        }
+        return pos
+          ? l.length
+            ? l.length > 1
+              ? "(" + l.join(" + ") + ")"
+              : l[0]
+            : "0"
+          : l.join("") || "1";
+      }
+      const lit = (a, i, neg) => {
+        const v = { t: "VAR", n: a.vars[i] };
+        return neg ? { t: "NOT", ch: [v] } : v;
+      };
+      function normal(a, cv, pos) {
+        const ts = cv.map((p) => {
+          const l = [];
+          for (let i = 0; i < a.n; i++) {
+            const b = a.n - 1 - i;
+            if ((p.m >> b) & 1) continue;
+            const v = (p.v >> b) & 1;
+            l.push(lit(a, i, pos ? !!v : !v));
+          }
+          return l.length === 1
+            ? l[0]
+            : l.length
+              ? { t: pos ? "OR" : "AND", ch: l }
+              : { t: "C", v: pos ? 0 : 1 };
+        });
+        return ts.length === 1
+          ? ts[0]
+          : ts.length
+            ? { t: pos ? "AND" : "OR", ch: ts }
+            : { t: "C", v: pos ? 1 : 0 };
+      }
+      function conv(n, k) {
+        const G = k === "nand" ? "NAND" : "NOR";
+        const T = (x) =>
+          x.t === "NOT"
+            ? x.ch[0]
+            : x.t === G && x.pins === 2 && x.ch.length === 1
+              ? x.ch[0]
+              : { t: G, ch: [x], pins: 2 };
+        const c = (x) => conv(x, k),
+          g = (ch) => ({ t: G, ch });
+        const x2 = (a, b) =>
+          k === "nand"
+            ? g([g([a, T(b)]), g([T(a), b])])
+            : g([g([a, b]), g([T(a), T(b)])]);
+        if (n.t === "VAR" || n.t === "C") return n;
+        if (n.t === "NOT") return n.ch[0].t === "VAR" ? n : T(c(n.ch[0]));
+        const ch = n.ch.map(c),
+          inv = ch.map(T);
+        const AND = k === "nand" ? T(g(ch)) : g(inv),
+          OR = k === "nand" ? g(inv) : T(g(ch));
+        switch (n.t) {
+          case "AND":
+            return AND;
+          case "OR":
+            return OR;
+          case "NAND":
+            return T(AND);
+          case "NOR":
+            return T(OR);
+          case "XOR":
+            return ch.reduce(x2);
+          case "XNOR":
+            return T(ch.reduce(x2));
+          default:
+            return n;
+        }
+      }
+      function prep(n, o) {
+        if (!n.ch && n.t !== "NOT") return n;
+        if (n.t === "NOT") {
+          const c = n.ch[0];
+          if (c.t === "NOT") return prep(c.ch[0], o);
+          if (c.t === "VAR") {
+            if (!o.inv) return { t: "LIT", n: c.n + "'" };
+            return {
+              t: o.mode === "nor" ? "NOR" : o.mode === "nand" ? "NAND" : "NOT",
+              ch: [c],
+              pins: o.mode ? 2 : 1,
+            };
+          }
+          if (c.t === "C") return { t: "C", v: 1 - c.v };
+          const m = {
+            AND: "NAND",
+            OR: "NOR",
+            XOR: "XNOR",
+            NAND: "AND",
+            NOR: "OR",
+            XNOR: "XOR",
+          }[c.t];
+          return m
+            ? prep({ t: m, ch: c.ch }, o)
+            : { t: "NOT", ch: [prep(c, o)] };
+        }
+        return { ...n, ch: n.ch.map((c) => prep(c, o)) };
+      }
+      const G = (k) => (k === 1 ? [0, 1] : [0, 1, 3, 2]);
+      function kmap(a, cv, ess) {
+        const { n, f, vars: V } = a;
+        const Lm = {
+          2: { r: [0], c: [1] },
+          3: { r: [0], c: [1, 2] },
+          4: { r: [0, 1], c: [2, 3] },
+          5: { x: [0], r: [1, 2], c: [3, 4] },
+        }[n];
+        const bits = (vs, code) =>
+            vs.reduce(
+              (s, v, j) =>
+                s | (((code >> (vs.length - 1 - j)) & 1) << (n - 1 - v)),
+              0,
+            ),
+          cells = cv.map((p) => cov(p, n)),
+          bin = (c, k) => c.toString(2).padStart(k, "0");
+        const one = (xc) => {
+          let h =
+            "<table class=km><tr><th>" +
+            Lm.r.map((v) => V[v]).join("") +
+            " \\ " +
+            Lm.c.map((v) => V[v]).join("") +
+            "</th>" +
+            G(Lm.c.length)
+              .map((c) => "<th>" + bin(c, Lm.c.length) + "</th>")
+              .join("") +
+            "</tr>";
+          G(Lm.r.length).forEach((r) => {
+            h += "<tr><th>" + bin(r, Lm.r.length) + "</th>";
+            G(Lm.c.length).forEach((c) => {
+              const i =
+                (Lm.x ? bits(Lm.x, xc) : 0) | bits(Lm.r, r) | bits(Lm.c, c);
+              const g = cells
+                .map((s, k) => (s.includes(i) ? k : -1))
+                .filter((k) => k >= 0);
+              h += `<td class="kc f${f[i]}" data-g="${g.join(" ")}"><b>${f[i] === 2 ? "X" : f[i]}</b><small>${i}</small><i>${g.map((k) => `<u style="background:${COL[k % 8]}"></u>`).join("")}</i></td>`;
+            });
+            h += "</tr>";
+          });
+          return h + "</table>";
+        };
+        const maps = Lm.x
+          ? [0, 1]
+              .map(
+                (x) =>
+                  `<div><div class=cap>${V[0]} = ${x}</div>${one(x)}</div>`,
+              )
+              .join("")
+          : one(0);
+        return (
+          `<div class="kms scroll">${maps}</div><div>` +
+          cv
+            .map(
+              (p, k) =>
+                `<span class=lg data-g="${k}"><u style="background:${COL[k % 8]}"></u>${termStr(a, p)}${ess.has(p) ? " ★" : ""}</span>`,
+            )
+            .join("") +
+          `</div><p class=sub>الألوان بتبيّن المجموعات (Groups). ★ = Prime Implicant أساسي. X = Don't care. حرّك الماوس على المجموعة تتحدد خلاياها. التجميع بيلف من الحافة للحافة.</p>`
+        );
+      }
+      function detect(a) {
+        const { n, f } = a;
+        if (f.includes(2)) return [];
+        const s = f.join(""),
+          N = 1 << n,
+          o = [],
+          par = f.map((_, i) => pop(i) & 1).join(""),
+          inv = (x) => x.replace(/./g, (c) => 1 - c),
+          k = n > 2 ? ` بـ ${n} مداخل` : "";
+        if (n === 1) {
+          if (s === "10") o.push("بوابة NOT (العاكس)");
+          if (s === "01") o.push("Buffer (تمرير الإشارة)");
+        }
+        if (n >= 2) {
+          const T = {
+            AND: "0".repeat(N - 1) + "1",
+            NAND: "1".repeat(N - 1) + "0",
+            OR: "0" + "1".repeat(N - 1),
+            NOR: "1" + "0".repeat(N - 1),
+          };
+          for (const x in T) if (T[x] === s) o.push("بوابة " + x + k);
+          for (const [nm, v] of [
+            ["XOR", par],
+            ["XNOR", inv(par)],
+          ])
+            if (s === v)
+              o.push(
+                "بوابة " +
+                  nm +
+                  k +
+                  (nm === "XOR" && n === 2
+                    ? " — هي Sum في Half Adder وDifference في Half Subtractor"
+                    : n === 3
+                      ? " — هي Sum في Full Adder وDifference في Full Subtractor"
+                      : ""),
+              );
+        }
+        if (n === 2 && s === "0100")
+          o.push("ناتج Borrow في Half Subtractor (A'B)");
+        if (n === 2 && s === "0010") o.push("ناتج AB' (مقارن: A أكبر من B)");
+        if (n === 3 && s === "00010111")
+          o.push("ناتج Carry في Full Adder (دالة الأغلبية Majority)");
+        if (n === 3 && s === "01110001")
+          o.push("ناتج Borrow في Full Subtractor (A'B + A'C + BC)");
+        return o;
+      }
+
+      let cur = null,
+        ct = "orig",
+        csrc = "orig",
+        cinv = true;
+
+      function analyze() {
+        let src = $("#in").value.trim();
+        const E = $("#err");
+        E.textContent = "";
+        try {
+          if (!src)
+            throw Error("اكتب معادلة أو اسم دائرة (مثل فول أدر، هاف أدر)");
+          const alias = resolveCircuitAlias(src);
+          if (alias) {
+            src = alias;
+            $("#in").value = alias;
+          }
+          /* ---- Multi-output mode ---- */
+          const multi = parseMulti(src);
+          if (multi) {
+            const varsSet = new Set();
+            multi.outputs.forEach((o) => {
+              if (o.ast) vars(o.ast).forEach((v) => varsSet.add(v));
+            });
+            let V = [...varsSet].sort();
+            let n = V.length;
+            const sel = +$("#nv").value;
+            if (sel > n) {
+              const allVars = [..."ABCDEF"];
+              for (let i = 0; i < sel && V.length < sel; i++) {
+                if (!V.includes(allVars[i])) V.push(allVars[i]);
+              }
+              V.sort();
+              n = V.length;
+            }
+            if (!n) {
+              n = Math.max(2, sel);
+              V = [..."ABCDEF"].slice(0, n);
+            }
+            if (n > 6)
+              throw Error("الحد الأقصى 6 متغيرات لجدول الحقيقة وخريطة كارنو");
+
+            multi.outputs.forEach((o) => {
+              if (o.list) {
+                const L = o.list;
+                o.f = Array(1 << n).fill(L.off.length && !L.on.length ? 1 : 0);
+                L.on.forEach((i) => (o.f[i] = 1));
+                L.off.forEach((i) => (o.f[i] = 0));
+                L.dc.forEach((i) => (o.f[i] = 2));
+              } else {
+                o.f = [];
+                for (let i = 0; i < 1 << n; i++) {
+                  const e = {};
+                  V.forEach((v, j) => (e[v] = (i >> (n - 1 - j)) & 1));
+                  o.f.push(ev(o.ast, e));
+                }
+              }
+              o.on = o.f.flatMap((v, i) => (v === 1 ? [i] : []));
+              o.off = o.f.flatMap((v, i) => (v === 0 ? [i] : []));
+              o.dc = o.f.flatMap((v, i) => (v === 2 ? [i] : []));
+              const a0 = { n, vars: V };
+              o.s = minimize(o.on, o.dc, n);
+              o.p = minimize(o.off, o.dc, n);
+              o.sopS = o.s.cv.map((p) => termStr(a0, p)).join(" + ") || "0";
+              o.posS = o.p.cv.map((p) => termStr(a0, p, 1)).join("") || "1";
+              o.sopA = normal(a0, o.s.cv, 0);
+              o.posA = normal(a0, o.p.cv, 1);
+              if (!o.ast) o.ast = o.sopA;
+            });
+
+            cur = { multi: true, n, vars: V, outputs: multi.outputs, src };
+            renderMulti(cur);
+            return;
+          }
+          let a,
+            L = parseList(src);
+          if (L) {
+            const mx = Math.max(0, ...L.on, ...L.off, ...L.dc),
+              need = Math.max(2, mx.toString(2).length),
+              sel = +$("#nv").value,
+              n = Math.max(sel, need);
+            if (n > 6) throw Error("الحد الأقصى 6 متغيرات");
+            const f = Array(1 << n).fill(L.off.length && !L.on.length ? 1 : 0);
+            L.on.forEach((i) => (f[i] = 1));
+            L.off.forEach((i) => (f[i] = 0));
+            L.dc.forEach((i) => (f[i] = 2));
+            a = { n, f, vars: [..."ABCDEF"].slice(0, n), ast: null };
+          } else {
+            const ast = parse(
+                src.replace(/^\s*[A-Za-z]\s*(\([^)]*\))?\s*=/, ""),
+              ),
+              V = [...vars(ast)].sort(),
+              n = V.length;
+            if (!n) throw Error("المعادلة لازم يكون فيها متغير واحد على الأقل");
+            if (n > 6) throw Error("الحد الأقصى 6 متغيرات");
+            const f = [];
+            for (let i = 0; i < 1 << n; i++) {
+              const e = {};
+              V.forEach((v, j) => (e[v] = (i >> (n - 1 - j)) & 1));
+              f.push(ev(ast, e));
+            }
+            a = { n, f, vars: V, ast };
+          }
+          a.on = a.f.flatMap((v, i) => (v === 1 ? [i] : []));
+          a.dc = a.f.flatMap((v, i) => (v === 2 ? [i] : []));
+          a.off = a.f.flatMap((v, i) => (v === 0 ? [i] : []));
+          a.src = src;
+          a.s = minimize(a.on, a.dc, a.n);
+          a.p = minimize(a.off, a.dc, a.n);
+          a.sopS = a.s.cv.map((p) => termStr(a, p)).join(" + ") || "0";
+          a.posS = a.p.cv.map((p) => termStr(a, p, 1)).join("") || "1";
+          a.sopA = normal(a, a.s.cv, 0);
+          a.posA = normal(a, a.p.cv, 1);
+          if (!a.ast) a.ast = a.sopA;
+          cur = a;
+          render(a);
+        } catch (x) {
+          E.textContent = "⚠ " + x.message;
+        }
+      }
+
+      function render(a) {
+        const { n, f, vars: V } = a,
+          mt = (i, s) =>
+            s
+              ? "(" +
+                V.map((v, j) => ((i >> (n - 1 - j)) & 1 ? v + "'" : v)).join(
+                  " + ",
+                ) +
+                ")"
+              : V.map((v, j) => ((i >> (n - 1 - j)) & 1 ? v : v + "'")).join(
+                  "",
+                );
+        const d = detect(a);
+        let h = `<section><h2>الشكل القانوني (Canonical)</h2>`;
+        if (d.length)
+          h += `<div class=note>✔ الدالة دي هي: <b>${d.join(" | ")}</b></div>`;
+        h += `<p class=eq>F(${V}) = Σm(${a.on.join(", ") || "—"})${a.dc.length ? " + d(" + a.dc.join(", ") + ")" : ""}<br>F(${V}) = ΠM(${a.off.join(", ") || "—"})${a.dc.length ? " · d(" + a.dc.join(", ") + ")" : ""}</p>
+<p class=eq>SOP: ${a.on.map((i) => mt(i)).join(" + ") || "0"}</p><p class=eq>POS: ${a.off.map((i) => mt(i, 1)).join("") || "1"}</p></section>
+<section><h2>جدول الحقيقة</h2><div class=scroll><table><tr><th>#</th>${V.map((v) => `<th>${v}</th>`).join("")}<th title="اضغط على أي خلية بالأسفل لتعديلها">F ✎</th></tr>`;
+        f.forEach((v, i) => {
+          h += `<tr class="${v === 1 ? "o" : ""}"><td>${i}</td>${V.map((_, j) => `<td>${(i >> (n - 1 - j)) & 1}</td>`).join("")}<td class="tt-cell" data-tt-row="${i}" data-tt-out="0" title="اضغط لتغيير القيمة (0 ← 1 ← X)">${v === 2 ? "X" : v}</td></tr>`;
+        });
+        h +=
+          `</table></div><p class=sub style="margin:4px 0 0">💡 <b>تعديل تفاعلي:</b> اضغط على أي خلية في عمود الخرج <b>F</b> لتغيير قيمتها (0 ← 1 ← X) مع إعادة استنتاج الدائرة وتبسيطها فورياً.</p></section><section><h2>خريطة كارنو (K-map)</h2>` +
+          (n >= 2 && n <= 5
+            ? kmap(a, a.s.cv, a.s.ess)
+            : "<p>خريطة كارنو متاحة من 2 إلى 5 متغيرات.</p>") +
+          `</section>
+<section><h2>التبسيط (Quine–McCluskey)</h2><div class=note>أبسط SOP:</div><p class=eq>F = ${a.sopS}</p><div class=note>أبسط POS:</div><p class=eq>F = ${a.posS}</p>
+<p>Prime Implicants: <span class=eq>${a.s.pr.map((p) => termStr(a, p) + (a.s.ess.has(p) ? "★" : "")).join(" , ") || "—"}</span></p>
+<p class=sub>الـPOS متحسب بتبسيط F' ثم De Morgan. عدد حروف SOP: ${a.s.cv.reduce((s, p) => s + n - pop(p.m), 0)}، عدد حروف POS: ${a.p.cv.reduce((s, p) => s + n - pop(p.m), 0)}.</p></section>
+<section><h2>الحل بالجبر البولياني (خطوة خطوة)</h2>${alg(a)}</section><section><h2>الدائرة المنطقية</h2><div class=row id=ct></div><div class=row id=co></div><div class=scroll id=cv></div><p class=sub id=cs></p></section><section><h2>التوصيل على البريدبورد (Breadboard)</h2><div class=scroll id=bb></div><div id=bl></div></section>`;
+        $("#r").innerHTML =
+          "<div class=row><button class=pb data-pt=all>🖨 طباعة المسألة كاملة</button></div>" +
+          h
+            .replace(
+              /<section><h2>(.*?)<\/h2>/g,
+              (m, t) =>
+                `<details class='cat sec'${/التبسيط|الدائرة/.test(t) ? " open" : ""}><summary><span>${t}</span></summary><div class=cbody><button class=pb data-pt=sec>🖨 طباعة هذا القسم</button>`,
+            )
+            .replace(/<\/section>/g, "</div></details>");
+        circ();
+      }
+      function renderMulti(a) {
+        const { n, vars: V, outputs } = a;
+        const mt = (i, s) =>
+          s
+            ? "(" +
+              V.map((v, j) => ((i >> (n - 1 - j)) & 1 ? v + "'" : v)).join(
+                " + ",
+              ) +
+              ")"
+            : V.map((v, j) => ((i >> (n - 1 - j)) & 1 ? v : v + "'")).join("");
+
+        let h = `<section><h2>الشكل القانوني (Canonical)</h2>`;
+        h += `<div class=note>تحليل دائرة متكاملة بـ <b>${outputs.length}</b> مخارج (${outputs.map((o) => `<b>${esc(o.name)}</b>`).join(" ، ")}) على <b>${n}</b> متغيرات (${V.join(" , ")})</div>`;
+        outputs.forEach((o, k) => {
+          const det = detect({ n, f: o.f });
+          h += `<div style="margin:10px 0;padding:10px 14px;background:var(--bg2);border-radius:var(--r-sm);border:1px solid var(--line2)">`;
+          h += `<b style="font-size:15.5px;color:var(--acc-d)">المخرج ${k + 1}: ${esc(o.name)}</b>`;
+          if (det.length)
+            h += ` <span style="display:inline-block;padding:2px 10px;margin:0 8px;font-size:13px;background:var(--hl);border-radius:12px;color:var(--acc-d);font-weight:600">✔ ${det.join(" | ")}</span>`;
+          h += `<p class=eq>${esc(o.name)}(${V}) = Σm(${o.on.join(", ") || "—"})${o.dc && o.dc.length ? " + d(" + o.dc.join(", ") + ")" : ""}<br>${esc(o.name)}(${V}) = ΠM(${o.off.join(", ") || "—"})${o.dc && o.dc.length ? " · d(" + o.dc.join(", ") + ")" : ""}</p>`;
+          h += `<p class=eq>SOP: ${o.on.map((i) => mt(i)).join(" + ") || "0"}</p><p class=eq>POS: ${o.off.map((i) => mt(i, 1)).join("") || "1"}</p>`;
+          h += `</div>`;
+        });
+        h += `</section>`;
+
+        /* جدول الحقيقة الموحد */
+        h += `<section><h2>جدول الحقيقة</h2><div class=scroll><table><tr><th>#</th>${V.map((v) => `<th>${v}</th>`).join("")}${outputs.map((o) => `<th title="اضغط على أي خلية بالأسفل لتعديلها">${esc(o.name)} ✎</th>`).join("")}</tr>`;
+        for (let i = 0; i < 1 << n; i++) {
+          const anyOne = outputs.some((o) => o.f[i] === 1);
+          h += `<tr class="${anyOne ? "o" : ""}"><td>${i}</td>${V.map((_, j) => `<td>${(i >> (n - 1 - j)) & 1}</td>`).join("")}${outputs.map((o, k) => `<td class="tt-cell" data-tt-row="${i}" data-tt-out="${k}" title="اضغط لتغيير قيمة ${esc(o.name)} (0 ← 1 ← X)">${o.f[i] === 2 ? "X" : o.f[i]}</td>`).join("")}</tr>`;
+        }
+        h += `</table></div><p class=sub style="margin:4px 0 0">💡 <b>تعديل تفاعلي:</b> اضغط على أي خلية في أعمدة المخارج لتغيير قيمتها (0 ← 1 ← X) مع إعادة استنتاج الدائرة والتبسيط فورياً.</p></section>`;
+
+        /* خرائط كارنو لكل مخرج */
+        h += `<section><h2>خريطة كارنو (K-map)</h2>`;
+        if (n >= 2 && n <= 5) {
+          h += `<div class="kms" style="display:flex;flex-wrap:wrap;gap:22px">`;
+          outputs.forEach((o) => {
+            const a0 = {
+              n,
+              vars: V,
+              f: o.f,
+              on: o.on,
+              off: o.off,
+              dc: o.dc,
+              s: o.s,
+            };
+            h += `<div style="flex:1;min-width:280px;padding:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--r)">`;
+            h += `<h3 style="margin:0 0 10px;font-size:16px;color:var(--acc-d)">خريطة المخرج: ${esc(o.name)}</h3>`;
+            h += kmap(a0, o.s.cv, o.s.ess);
+            h += `</div>`;
+          });
+          h += `</div>`;
+        } else {
+          h += `<p>خريطة كارنو متاحة من 2 إلى 5 متغيرات.</p>`;
+        }
+        h += `</section>`;
+
+        /* التبسيط لكل مخرج */
+        h += `<section><h2>التبسيط (Quine–McCluskey)</h2>`;
+        outputs.forEach((o, k) => {
+          h += `<div style="margin:10px 0;padding:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm)">`;
+          h += `<h3 style="margin:0 0 8px;font-size:16px;color:var(--acc-d)">تبسيط المخرج: ${esc(o.name)}</h3>`;
+          h += `<div class=note>أبسط SOP:</div><p class=eq>${esc(o.name)} = ${o.sopS}</p>`;
+          h += `<div class=note>أبسط POS:</div><p class=eq>${esc(o.name)} = ${o.posS}</p>`;
+          h += `<p>Prime Implicants: <span class=eq>${o.s.pr.map((p) => termStr({ n, vars: V }, p) + (o.s.ess.has(p) ? "★" : "")).join(" , ") || "—"}</span></p>`;
+          h += `<p class=sub>عدد حروف SOP: ${o.s.cv.reduce((s, p) => s + n - pop(p.m), 0)}، عدد حروف POS: ${o.p.cv.reduce((s, p) => s + n - pop(p.m), 0)}.</p>`;
+          h += `</div>`;
+        });
+        h += `</section>`;
+
+        /* الحل بالجبر البولياني لكل مخرج */
+        h += `<section><h2>الحل بالجبر البولياني (خطوة خطوة)</h2>`;
+        outputs.forEach((o, k) => {
+          const a0 = {
+            n,
+            vars: V,
+            f: o.f,
+            on: o.on,
+            off: o.off,
+            dc: o.dc,
+            s: o.s,
+            p: o.p,
+            sopS: o.sopS,
+            sopA: o.sopA,
+            posA: o.posA,
+            ast: o.ast,
+            src: o.src,
+          };
+          h += `<details class="it" ${k === 0 ? "open" : ""} style="margin:10px 0"><summary><span>خطوات الجبر لمخرج: ${esc(o.name)}</span></summary><div class="body">`;
+          h += alg(a0);
+          h += `</div></details>`;
+        });
+        h += `</section>`;
+
+        /* الدائرة المنطقية الموحدة لكافة المخارج */
+        h += `<section><h2>الدائرة المنطقية</h2><div class=row id=ct></div><div class=row id=co></div><div class=scroll id=cv></div><p class=sub id=cs></p></section>`;
+
+        /* البريدبورد الموحد لكافة المخارج */
+        h += `<section><h2>التوصيل على البريدبورد (Breadboard)</h2><div class=scroll id=bb></div><div id=bl></div></section>`;
+
+        $("#r").innerHTML =
+          "<div class=row><button class=pb data-pt=all>🖨 طباعة التحليل الكامل</button></div>" +
+          h
+            .replace(
+              /<section><h2>(.*?)<\/h2>/g,
+              (m, t) =>
+                `<details class='cat sec'${/التبسيط|الدائرة/.test(t) ? " open" : ""}><summary><span>${t}</span></summary><div class=cbody><button class=pb data-pt=sec>🖨 طباعة هذا القسم</button>`,
+            )
+            .replace(/<\/section>/g, "</div></details>");
+
+        circ();
+      }
+
+      function circ() {
+        if (!cur) return;
+        const T = [
+          ["orig", "كما كتبتها"],
+          ["sop", "AND-OR مبسطة"],
+          ["pos", "OR-AND مبسطة"],
+          ["nand", "NAND فقط"],
+          ["nor", "NOR فقط"],
+        ];
+        $("#ct").innerHTML = T.map(
+          (t) =>
+            `<button data-c="${t[0]}" class="${ct === t[0] ? "on" : ""}">${t[1]}</button>`,
+        ).join("");
+        const sel = ct === "nand" || ct === "nor";
+        $("#co").innerHTML =
+          (sel
+            ? `<label>المصدر: <select id=cs2>${[
+                ["orig", "الدائرة الأصلية"],
+                ["sop", "الصورة المبسطة SOP"],
+                ["pos", "الصورة المبسطة POS"],
+              ]
+                .map(
+                  (o) =>
+                    `<option value=${o[0]} ${csrc === o[0] ? "selected" : ""}>${o[1]}</option>`,
+                )
+                .join("")}</select></label>`
+            : "") +
+          `<label><input type=checkbox id=ci ${cinv ? "checked" : ""}> إظهار العاكسات كبوابات</label>`;
+
+        let trees = [],
+          names = [];
+        if (cur.multi) {
+          cur.outputs.forEach((o) => {
+            const base =
+              { orig: o.ast, sop: o.sopA, pos: o.posA }[sel ? csrc : ct] ||
+              o.ast ||
+              o.sopA;
+            let ast = sel ? conv(base, ct) : base;
+            trees.push(prep(ast, { inv: cinv, mode: sel ? ct : null }));
+            names.push(o.name);
+          });
+        } else {
+          const base =
+            { orig: cur.ast, sop: cur.sopA, pos: cur.posA }[sel ? csrc : ct] ||
+            cur.ast ||
+            cur.sopA;
+          let ast = sel ? conv(base, ct) : base;
+          trees.push(prep(ast, { inv: cinv, mode: sel ? ct : null }));
+          names.push("F");
+        }
+
+        const st = stats(trees);
+        $("#cv").innerHTML = zw(draw(trees, names));
+        $("#bb").innerHTML =
+          "<p class=sub>اضغط على مفاتيح المداخل (المستطيلات السودا تحت اللوحة) وشوف الـLED والأسلاك بتتغيّر لحظيًا.</p>" +
+          bboard(trees, names);
+        $("#cs").textContent =
+          `عدد البوابات: ${st[0]} — عدد المداخل (Gate inputs): ${st[1]}` +
+          (!cinv
+            ? " — المتغيرات المعكوسة (مثل A') بتتحسب متاحة من برّه."
+            : "") +
+          (sel
+            ? ` — كل البوابات ${ct.toUpperCase()}، والعاكس = ${ct.toUpperCase()} موصّل مدخليه سوا.`
+            : "");
+      }
+
+      const LIB = [
+        ["AND", "بوابة AND — الضرب المنطقي", [["F", "A.B"]]],
+        ["OR", "بوابة OR — الجمع المنطقي", [["F", "A+B"]]],
+        ["NOT", "بوابة NOT — العاكس", [["F", "A'"]]],
+        ["BUF", "Buffer — بوابة التمرير", [["F", "A"]], 1],
+        ["NAND", "بوابة NAND", [["F", "(A.B)'"]]],
+        ["NOR", "بوابة NOR", [["F", "(A+B)'"]]],
+        ["XOR", "بوابة XOR — الجمع الحصري", [["F", "A^B"]]],
+        ["XNOR", "بوابة XNOR — التكافؤ", [["F", "(A^B)'"]]],
+        [
+          "HA",
+          "Half Adder — الجامع النصفي",
+          [
+            ["Sum", "A^B"],
+            ["Carry", "A.B"],
+          ],
+        ],
+        [
+          "FA",
+          "Full Adder — الجامع الكامل (C = Cin)",
+          [
+            ["Sum", "A^B^C"],
+            ["Cout", "A.B+C(A^B)"],
+          ],
+        ],
+        [
+          "HS",
+          "Half Subtractor — الطارح النصفي",
+          [
+            ["Diff", "A^B"],
+            ["Borrow", "A'B"],
+          ],
+        ],
+        [
+          "FS",
+          "Full Subtractor — الطارح الكامل (C = Bin)",
+          [
+            ["Diff", "A^B^C"],
+            ["Bout", "A'B+(A^B)'C"],
+          ],
+        ],
+        [
+          "CMP",
+          "مقارن 1-bit (Comparator)",
+          [
+            ["A>B", "AB'"],
+            ["A=B", "(A^B)'"],
+            ["A<B", "A'B"],
+          ],
+        ],
+        ["MUX", "Multiplexer 2→1 (الاختيار S = C)", [["Y", "C'A+CB"]]],
+      ];
+      const LAWS = [
+        "A + 0 = A , A · 1 = A",
+        "A + 1 = 1 , A · 0 = 0",
+        "A + A = A , A · A = A",
+        "A + A' = 1 , A · A' = 0",
+        "(A')' = A",
+        "A + B = B + A , AB = BA",
+        "A + BC = (A+B)(A+C)",
+        "A + AB = A , A(A+B) = A",
+        "A + A'B = A + B",
+        "(AB)' = A' + B' (De Morgan)",
+        "(A+B)' = A'B' (De Morgan)",
+        "AB + A'C + BC = AB + A'C (Consensus)",
+      ];
+
+      /* ============================================================
+     SVG HELPERS
+     ============================================================ */
+      const esc = (s) =>
+        String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      const NB = (vs, k) =>
+        vs
+          .map((v, j) => ((k >> (vs.length - 1 - j)) & 1 ? v : v + "'"))
+          .join("");
+      const R8 = (n, p, f) =>
+        Array.from({ length: n }, (_, k) => [p + k, f(k)]);
+      const lv = (t) => (t.ch ? t.ch.reduce((s, c) => s + lv(c), 0) : 1);
+
+      function chain(n, lbl, xr, out) {
+        out = out || "S";
+        const bw = 88,
+          gp = 44,
+          h = 78,
+          L = 60,
+          top = xr ? 78 : 44,
+          W = L * 2 + n * bw + (n - 1) * gp,
+          H = top + h + 56,
+          cy = top + h / 2;
+        let s = "";
+        if (xr)
+          s += `<path class=w d="M${L},14H${W - L + gp / 2}V${cy}H${W - L}"/><text x="${L - 8}" y="19" text-anchor="end">M</text>`;
+        for (let k = 0; k < n; k++) {
+          const i = n - 1 - k,
+            x = L + k * (bw + gp),
+            xa = x + bw * 0.3,
+            xb = x + bw * 0.7;
+          s +=
+            `<rect class=g x="${x}" y="${top}" width="${bw}" height="${h}" rx="7"/>` +
+            lbl
+              .split("\n")
+              .map(
+                (l, j, a) =>
+                  `<text x="${x + bw / 2}" y="${cy + 5 + (j - (a.length - 1) / 2) * 18}" text-anchor="middle">${l}</text>`,
+              )
+              .join("");
+          s += `<path class=w d="M${xa},${top - 30}V${top}"/><text x="${xa}" y="${top - 36}" text-anchor="middle">A${i}</text>`;
+          if (xr)
+            s += `<path class=w d="M${xb},14V${top - 52}"/><rect class=g x="${xb - 14}" y="${top - 52}" width="28" height="22" rx="4"/><text x="${xb}" y="${top - 36}" text-anchor="middle">⊕</text><path class=w d="M${xb + 14},${top - 41}H${xb + 30}"/><text x="${xb + 34}" y="${top - 37}">B${i}</text><path class=w d="M${xb},${top - 30}V${top}"/>`;
+          else
+            s += `<path class=w d="M${xb},${top - 30}V${top}"/><text x="${xb}" y="${top - 36}" text-anchor="middle">B${i}</text>`;
+          s += `<path class=w d="M${x + bw / 2},${top + h}V${top + h + 30}"/><text x="${x + bw / 2}" y="${top + h + 50}" text-anchor="middle">${out}${i}</text><path class=w d="M${x},${cy}H${x - gp}"/><text x="${x - gp / 2}" y="${cy - 8}" text-anchor="middle" style="font-size:13px">C${i + 1}</text>`;
+        }
+        s += `<path class=w d="M${W - L},${cy}H${W - L + gp / 2}"/><text x="${W - L + gp / 2 + 6}" y="${cy + 5}">C0</text>`;
+        return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">${s}</svg>`;
+      }
+      function flow(bx, ar, inL, outL) {
+        const bw = 190,
+          h = 84,
+          gp = 120,
+          L = 120,
+          W = 2 * L + bx.length * bw + (bx.length - 1) * gp,
+          cy = 70 + h / 2,
+          H = h + 130;
+        let s = "";
+        const tx = (t, x, y, a) =>
+          t
+            .split("\n")
+            .map(
+              (l, j, z) =>
+                `<text x="${x}" y="${y + (j - (z.length - 1) / 2) * 18}" text-anchor="${a || "middle"}">${esc(l)}</text>`,
+            )
+            .join("");
+        bx.forEach((b, k) => {
+          const x = L + k * (bw + gp);
+          s +=
+            `<rect class=g x="${x}" y="70" width="${bw}" height="${h}" rx="8"/>` +
+            tx(b, x + bw / 2, cy + 5);
+          if (k)
+            s +=
+              `<path class=w d="M${x - gp},${cy}H${x}"/><path class=d d="M${x},${cy}l-9,-5v10z"/>` +
+              tx(ar[k - 1], x - gp / 2, cy - 22);
+        });
+        const ex = L + bx.length * bw + (bx.length - 1) * gp;
+        s +=
+          `<path class=w d="M${L - 90},${cy}H${L}"/><path class=d d="M${L},${cy}l-9,-5v10z"/>` +
+          tx(inL, L - 45, cy - 22) +
+          `<path class=w d="M${ex},${cy}h90"/><path class=d d="M${ex + 90},${cy}l-9,-5v10z"/>` +
+          tx(outL, ex + 45, cy - 22);
+        return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">${s}</svg>`;
+      }
+
+      /* ============================================================
+     DAG DRAWING
+     ============================================================ */
+      const nm = (o) => (o.t === "C" ? String(o.v) : o.n);
+      function ex(o) {
+        if (!o.k) return nm(o);
+        if (o.t === "BUF") return ex(o.k[0]);
+        const K = o.k,
+          j = (sp, pw) =>
+            K.map((c) => {
+              const e = ex(c);
+              return c.k && c.k.length > 1 && pw.includes(c.t)
+                ? "(" + e + ")"
+                : e;
+            }).join(sp);
+        if (K.length === 1) return j("", "AND OR XOR") + `'`;
+        return {
+          AND: () => j("", "OR XOR"),
+          OR: () => j(" + ", "XOR"),
+          XOR: () => j(" ⊕ ", "OR"),
+          NAND: () => "(" + j("", "OR XOR") + `)'`,
+          NOR: () => "(" + j(" + ", "XOR") + `)'`,
+          XNOR: () => "(" + j(" ⊕ ", "OR") + `)'`,
+        }[o.t]();
+      }
+      function dagM(trees) {
+        const M = new Map();
+        let id = 0;
+        const f = (n) => {
+          const k = n.ch ? n.ch.map(f) : null,
+            key = k
+              ? n.t + (n.pins || "") + "(" + k.map((c) => c.id) + ")"
+              : n.t + (n.n || n.v);
+          if (M.has(key)) return M.get(key);
+          const o = { t: n.t, pins: n.pins, k, n: n.n, v: n.v, id: id++ };
+          M.set(key, o);
+          return o;
+        };
+        const R = trees.map(f),
+          all = [...M.values()];
+        return {
+          R,
+          G: all.filter((o) => o.k),
+          I: all.filter((o) => !o.k).sort((a, b) => nm(a).localeCompare(nm(b))),
+        };
+      }
+      function dagOf(t) {
+        const d = dagM([t]);
+        return { r: d.R[0], G: d.G, I: d.I };
+      }
+      function stats(t) {
+        const trees = Array.isArray(t) ? t : [t];
+        const d = dagM(trees);
+        return [
+          d.G.length,
+          d.G.reduce((s, g) => s + (g.pins || g.k.length), 0),
+        ];
+      }
+
+      function draw(trees, outs) {
+        if (!Array.isArray(trees)) {
+          trees = [trees];
+          outs = [outs || "F"];
+        } else {
+          outs = outs || trees.map((_, i) => "F" + (i + 1));
+        }
+        const { R, G, I } = dagM(trees),
+          RS = 34,
+          RX = 70,
+          lanes = {};
+        if (!G.length) {
+          let s = "";
+          R.forEach((r, k) => {
+            const y = 30 + k * 30;
+            s += `<path class=w d="M70,${y}H230"/><circle class=d cx="70" cy="${y}" r="3.2"/><text x="62" y="${y + 5}" text-anchor="end">${esc(nm(r))}</text><text x="238" y="${y + 5}">${esc(outs[k] || "F")}</text>`;
+          });
+          const H = Math.max(60, R.length * 30 + 30);
+          return `<svg viewBox='0 0 320 ${H}' width='320' height='${H}'><path class=w d='M70,30H230'/>${s}</svg>`;
+        }
+
+        let cy = 64,
+          wi = "",
+          ga = "",
+          tx = "",
+          Wd = 0;
+        I.forEach((o, i) => (o.rx = RX + i * RS));
+        G.forEach((g) => {
+          g.l = 1 + Math.max(0, ...g.k.filter((c) => c.k).map((c) => c.l));
+          const s = g.t === "NOT" || g.t === "BUF";
+          g.w = s ? 48 : 72;
+          g.q = g.pins || g.k.length;
+          g.h = s ? 34 : Math.max(44, g.q * 20);
+          g.cy = cy + g.h / 2;
+          cy += g.h + 26;
+          g.ln = [];
+          for (let i = 0; i < g.q; i++)
+            if (g.k[Math.min(i, g.k.length - 1)].k)
+              g.ln[i] = lanes[g.l] = (lanes[g.l] || 0) + 1;
+        });
+        const mx = Math.max(...G.map((g) => g.l)),
+          col = [];
+        let X = RX + I.length * RS + 36;
+        for (let c = 1; c <= mx; c++) {
+          col[c] = X;
+          X += 108 + 7 * (lanes[c + 1] || 0);
+        }
+        G.forEach((g) => {
+          g.x = col[g.l];
+          const { x, cy: y, h, w, q } = g,
+            top = y - h / 2,
+            bub = /^(NOT|NAND|NOR|XNOR)$/.test(g.t),
+            bw = bub ? w - 10 : w,
+            b = {
+              AND: "A",
+              NAND: "A",
+              OR: "O",
+              NOR: "O",
+              XOR: "X",
+              XNOR: "X",
+              NOT: "N",
+              BUF: "N",
+            }[g.t],
+            xs = b === "X" ? x + 8 : x,
+            ww = bw - (b === "X" ? 8 : 0);
+          let d;
+          if (b === "A")
+            d = `M${x},${top}H${x + bw / 2}A${bw / 2},${h / 2} 0 0 1 ${x + bw / 2},${top + h}H${x}Z`;
+          else if (b === "N")
+            d = `M${x},${top}L${x + bw},${y}L${x},${top + h}Z`;
+          else
+            d = `M${xs},${top}C${xs + ww * 0.45},${top} ${xs + ww * 0.8},${top + h * 0.2} ${x + bw},${y}C${xs + ww * 0.8},${top + h * 0.8} ${xs + ww * 0.45},${top + h} ${xs},${top + h}Q${xs + ww * 0.3},${y} ${xs},${top}Z`;
+          ga +=
+            `<path class=g data-s='g${g.id}' d='${d}'><title>${g.t} — ${esc(ex(g))}</title></path>` +
+            ({ AND: 1, NAND: 1, OR: 1, NOR: 1, XOR: 1, XNOR: 1 }[g.t]
+              ? `<text class=gt x='${x + bw * 0.42}' y='${y + 4}' text-anchor='middle'>${g.t}</text>`
+              : "");
+          if (b === "X")
+            ga += `<path class=gn d='M${x},${top}Q${x + ww * 0.3},${y} ${x},${top + h}'/>`;
+          if (bub) ga += `<circle class=g cx='${x + w - 5}' cy='${y}' r='5'/>`;
+          const dx = b === "O" || b === "X" ? ww * 0.3 : 0;
+          for (let i = 0; i < q; i++) {
+            const c = g.k[Math.min(i, g.k.length - 1)],
+              py = top + (h * (i + 0.5)) / q;
+            let px = x;
+            if (dx) {
+              let bt = 0,
+                bd = 1e9;
+              for (let t = 0; t <= 1; t += 0.01) {
+                const yy =
+                    (1 - t) ** 2 * top +
+                    2 * t * (1 - t) * y +
+                    t * t * (top + h),
+                  dd = Math.abs(yy - py);
+                if (dd < bd) {
+                  bd = dd;
+                  bt = t;
+                }
+              }
+              px = x + 2 * bt * (1 - bt) * dx;
+            }
+            if (c.k) {
+              const xm = x - 10 - 7 * g.ln[i];
+              wi += `<path class=w data-s='g${c.id}' d='M${c.x + c.w},${c.cy}H${xm}V${py}H${px}'><title>${esc(ex(c))}</title></path>`;
+              if (i && g.k.length < q)
+                wi += `<circle class=d cx='${xm}' cy='${c.cy}' r='3'/>`;
+            } else {
+              wi += `<path class=w data-s='i${c.id}' d='M${c.rx},${py}H${px}'><title>المدخل ${esc(nm(c))}</title></path><circle class=d cx='${c.rx}' cy='${py}' r='3.2'/>`;
+              c.bot = Math.max(c.bot || 0, py);
+            }
+          }
+          if (!R.includes(g)) {
+            const e = ex(g);
+            tx += `<text class=lb data-s='g${g.id}' x='${x + w + 6}' y='${y - 7}'>${esc(e)}</text>`;
+            Wd = Math.max(Wd, x + w + 12 + e.length * 7.4);
+          }
+        });
+
+        const maxX = Math.max(
+          ...G.map((g) => g.x + g.w),
+          RX + I.length * RS + 60,
+        );
+
+        const rootMap = new Map();
+        R.forEach((r, k) => {
+          if (!rootMap.has(r)) rootMap.set(r, []);
+          rootMap.get(r).push(outs[k] || "Y" + (k + 1));
+        });
+
+        rootMap.forEach((namesList, r) => {
+          const label = namesList.join(" = ");
+          const eo = ex(r);
+          if (r.k) {
+            wi += `<path class=w data-s='g${r.id}' d='M${r.x + r.w},${r.cy}H${maxX + 36}'/>`;
+            tx += `<text x='${maxX + 44}' y='${r.cy + 5}'>${esc(label + " = " + eo)}</text>`;
+            Wd = Math.max(Wd, maxX + 54 + (label.length + eo.length + 3) * 9.4);
+          } else {
+            cy += 30;
+            const ry = cy;
+            wi += `<path class=w data-s='i${r.id}' d='M${r.rx},${ry}H${maxX + 36}'><title>المدخل ${esc(nm(r))}</title></path><circle class=d cx='${r.rx}' cy='${ry}' r='3.2'/>`;
+            tx += `<text x='${maxX + 44}' y='${ry + 5}'>${esc(label + " = " + eo)}</text>`;
+            Wd = Math.max(Wd, maxX + 54 + (label.length + eo.length + 3) * 9.4);
+            r.bot = Math.max(r.bot || 0, ry);
+          }
+        });
+
+        I.forEach((o) => {
+          if (o.bot)
+            wi += `<path class=w data-s='i${o.id}' d='M${o.rx},36V${o.bot}'><title>المدخل ${esc(nm(o))}</title></path>`;
+          tx += `<text x='${o.rx}' y='24' text-anchor='middle'>${esc(nm(o))}</text>`;
+        });
+        return `<svg viewBox='0 0 ${Wd} ${cy + 16}' width='${Wd}' height='${cy + 16}' role='img'>${wi}${ga}${tx}</svg>`;
+      }
+
+      /* ============================================================
+     BREADBOARD
+     ============================================================ */
+      const Q4 = [
+          [1, 2, 3],
+          [4, 5, 6],
+          [9, 10, 8],
+          [12, 13, 11],
+        ],
+        T3 = [
+          [1, 2, 13, 12],
+          [3, 4, 5, 6],
+          [9, 10, 11, 8],
+        ],
+        IC = {
+          NOT: [
+            "7404",
+            [
+              [1, 2],
+              [3, 4],
+              [5, 6],
+              [9, 8],
+              [11, 10],
+              [13, 12],
+            ],
+          ],
+          AND2: ["7408", Q4],
+          OR2: ["7432", Q4],
+          XOR2: ["7486", Q4],
+          NAND2: ["7400", Q4],
+          NOR2: [
+            "7402",
+            [
+              [2, 3, 1],
+              [5, 6, 4],
+              [8, 9, 10],
+              [11, 12, 13],
+            ],
+          ],
+          AND3: ["7411", T3],
+          NAND3: ["7410", T3],
+          NAND4: [
+            "7420",
+            [
+              [1, 2, 4, 5, 6],
+              [9, 10, 12, 13, 8],
+            ],
+          ],
+        },
+        PAL = [
+          "#16a34a",
+          "#2563eb",
+          "#d97706",
+          "#9333ea",
+          "#0891b2",
+          "#db2777",
+          "#65a30d",
+          "#ea580c",
+          "#0d9488",
+          "#7c3aed",
+        ];
+      const BBS = [];
+      const PN = {
+        NOT: "Hex Inverter",
+        AND2: "Quad 2-in AND",
+        OR2: "Quad 2-in OR",
+        XOR2: "Quad 2-in XOR",
+        NAND2: "Quad 2-in NAND",
+        NOR2: "Quad 2-in NOR",
+        AND3: "Triple 3-in AND",
+        NAND3: "Triple 3-in NAND",
+        NAND4: "Dual 4-in NAND",
+      };
+      const pinNames = (ty) => {
+        const m = { 14: "VCC", 7: "GND" };
+        IC[ty][1].forEach((g, gi) =>
+          g.forEach(
+            (p, j) => (m[p] = gi + 1 + (j < g.length - 1 ? "ABCD"[j] : "Y")),
+          ),
+        );
+        return m;
+      };
+      const rp = (p, r) => {
+        p = p.filter(
+          (q, i) => !i || q[0] !== p[i - 1][0] || q[1] !== p[i - 1][1],
+        );
+        let d = `M${p[0][0]},${p[0][1]}`;
+        for (let i = 1; i < p.length - 1; i++) {
+          const a = p[i - 1],
+            b = p[i],
+            c = p[i + 1],
+            l1 = Math.hypot(b[0] - a[0], b[1] - a[1]),
+            l2 = Math.hypot(c[0] - b[0], c[1] - b[1]),
+            k1 = Math.min(r, l1 / 2),
+            k2 = Math.min(r, l2 / 2);
+          d += `L${b[0] - ((b[0] - a[0]) / l1) * k1},${b[1] - ((b[1] - a[1]) / l1) * k1}Q${b[0]},${b[1]} ${b[0] + ((c[0] - b[0]) / l2) * k2},${b[1] + ((c[1] - b[1]) / l2) * k2}`;
+        }
+        return d + `L${p[p.length - 1][0]},${p[p.length - 1][1]}`;
+      };
+      function evalNet(B) {
+        const v = { ...B.in };
+        B.P.forEach((p) => {
+          const a = p.ins.map((s) => v[s]);
+          v[p.o] = {
+            NOT: +!a[0],
+            AND2: a[0] & a[1],
+            AND3: a[0] & a[1] & a[2],
+            OR2: a[0] | a[1],
+            XOR2: a[0] ^ a[1],
+            NAND2: +!(a[0] & a[1]),
+            NAND3: +!(a[0] & a[1] & a[2]),
+            NAND4: +!(a[0] & a[1] & a[2] & a[3]),
+            NOR2: +!(a[0] | a[1]),
+          }[p.ty];
+        });
+        return v;
+      }
+      function bboard(trees, names) {
+        names = names || ["F"];
+        const { R, G, I } = dagM(trees);
+        if (!G.length)
+          return "<p class=sub>الدالة سلك مباشر، مفيش بوابات تتوصل.</p>";
+        if (G.length > 40)
+          return "<p class=sub>الدائرة كبيرة (أكتر من 40 بوابة)، فالبريدبورد مش معروض.</p>";
+        const P = [],
+          lab = {},
+          sn = {};
+        let u = 0,
+          gc = 0;
+        const sg = (o) => {
+            const s = (o.k ? "n" : "i") + o.id;
+            if (!sn[s]) {
+              sn[s] = o.k ? "N" + ++gc : nm(o);
+              lab[s] = ex(o);
+            }
+            return s;
+          },
+          mk = (ty, ins, o) => P.push({ ty, ins, o }),
+          tmp = () => {
+            const t = "t" + u++;
+            sn[t] = "T" + u;
+            lab[t] = "ناتج وسيط";
+            return t;
+          },
+          tr = (ty, ins, o) => {
+            ins = [...ins];
+            while (ins.length > 2) {
+              const t = tmp();
+              mk(ty, [ins.shift(), ins.shift()], t);
+              ins.unshift(t);
+            }
+            mk(ty, ins, o);
+          };
+        G.forEach((g) => {
+          const ins = g.k.map(sg),
+            o = sg(g),
+            n = ins.length;
+          if (n === 1 && g.pins === 2) mk(g.t + "2", [ins[0], ins[0]], o);
+          else
+            switch (g.t) {
+              case "NOT":
+              case "BUF":
+                mk("NOT", ins, o);
+                break;
+              case "AND":
+                n === 3 ? mk("AND3", ins, o) : tr("AND2", ins, o);
+                break;
+              case "OR":
+                tr("OR2", ins, o);
+                break;
+              case "XOR":
+                tr("XOR2", ins, o);
+                break;
+              case "NAND":
+                if (n < 5) mk("NAND" + n, ins, o);
+                else {
+                  const t = tmp();
+                  tr("AND2", ins, t);
+                  mk("NOT", [t], o);
+                }
+                break;
+              case "NOR":
+                if (n === 2) mk("NOR2", ins, o);
+                else {
+                  const t = tmp();
+                  tr("OR2", ins, t);
+                  mk("NOT", [t], o);
+                }
+                break;
+              default: {
+                const t = tmp();
+                tr("XOR2", ins, t);
+                mk("NOT", [t], o);
+              }
+            }
+        });
+        R.forEach((r, k) => {
+          if (r.k) sn["n" + r.id] = names[k] || "F";
+        });
+        const id = BBS.length,
+          B = { P, ins: I.map((o) => "i" + o.id), in: {} };
+        I.forEach((o) => (B.in["i" + o.id] = 0));
+        BBS.push(B);
+        const v0 = evalNet(B);
+        const ch = [];
+        P.forEach((p) => {
+          let c = ch.find((c) => c.ty === p.ty && c.n < IC[p.ty][1].length);
+          if (!c) ch.push((c = { ty: p.ty, n: 0, cn: [] }));
+          const pn = IC[p.ty][1][c.n++];
+          pn.forEach((x, j) =>
+            c.cn.push({
+              pin: x,
+              s: j < pn.length - 1 ? p.ins[j] : p.o,
+              out: j === pn.length - 1,
+            }),
+          );
+        });
+        const S = {},
+          add = (s, it, f) => {
+            (S[s] = S[s] || [])[f ? "unshift" : "push"](it);
+          };
+        ch.forEach((c, ci) =>
+          c.cn.forEach((q) => add(q.s, { c: ci, pin: q.pin }, q.out)),
+        );
+        R.forEach((r, k) => add((r.k ? "n" : "i") + r.id, { led: k }));
+        I.forEach((o, i) => {
+          const s = "i" + o.id;
+          if (S[s]) add(s, { inp: i }, 1);
+        });
+        const Pp = 22,
+          nL = R.length,
+          base = 2 * I.length + 3,
+          tot = base + ch.length * 10 + 2 * nL + 2,
+          cx = (k) => k * Pp + 22,
+          Wd = cx(tot),
+          cp = (ci, p) => {
+            const c0 = base + ci * 10;
+            return p <= 7 ? [cx(c0 + p - 1), 200] : [cx(c0 + 14 - p), 104];
+          },
+          pos = (it) =>
+            it.inp != null
+              ? [cx(1 + 2 * it.inp), 248]
+              : it.led != null
+                ? [cx(base + ch.length * 10 + 1 + 2 * it.led), 248]
+                : cp(it.c, it.pin);
+        const nmI = (ci) => {
+            const n = IC[ch[ci].ty][0],
+              same = ch.filter((c) => IC[c.ty][0] === n);
+            return same.length > 1 ? n + " #" + (same.indexOf(ch[ci]) + 1) : n;
+          },
+          ks = Object.keys(S),
+          SN = (k) => sn[k] || k;
+        let s =
+          `<svg viewBox='0 0 ${Wd} 360' width='${Wd}' height='360' role='img'><defs><linearGradient id='bg1' x1='0' y1='0' x2='0' y2='1'><stop offset='0' style='stop-color:var(--bbf)'/><stop offset='1' style='stop-color:var(--bbf2)'/></linearGradient><linearGradient id='ic1' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#3b4654'/><stop offset='1' stop-color='#1a2029'/></linearGradient><filter id='ledBloom' x='-50%' y='-50%' width='200%' height='200%'><feGaussianBlur stdDeviation='5.5' result='blur'/><feMerge><feMergeNode in='blur'/><feMergeNode in='SourceGraphic'/></feMerge></filter></defs>` +
+          `<rect x='3' y='3' width='${Wd - 6}' height='292' rx='10' fill='url(#bg1)' stroke='var(--line)' stroke-width='1.5'/><rect x='3' y='148' width='${Wd - 6}' height='8' rx='2' fill='#d8d1be' stroke='#beb59f' stroke-width='0.8'/><line x1='3' y1='152' x2='${Wd - 3}' y2='152' stroke='#a89f8c' stroke-width='0.8' stroke-dasharray='4,4'/>` +
+          `<path d='M24,14H${Wd - 14}' stroke='#dc2626' stroke-width='2' opacity='.7'/><path d='M24,26H${Wd - 14}' stroke='#2563eb' stroke-width='2' opacity='.7'/><path d='M24,270H${Wd - 14}' stroke='#dc2626' stroke-width='2' opacity='.7'/><path d='M24,282H${Wd - 14}' stroke='#2563eb' stroke-width='2' opacity='.7'/>` +
+          `<text x='9' y='18' style='fill:#dc2626;font-size:12px'>+</text><text x='9' y='30' style='fill:#2563eb;font-size:12px'>−</text><text x='9' y='274' style='fill:#dc2626;font-size:12px'>+</text><text x='9' y='286' style='fill:#2563eb;font-size:12px'>−</text><path class=hd d='`;
+        for (let c = 0; c <= tot; c++) {
+          for (const y of [56, 68, 80, 92, 104, 200, 212, 224, 236, 248])
+            s += `M${cx(c)},${y}h.1`;
+          if (c % 2 == 0)
+            for (const y of [14, 26, 270, 282]) s += `M${cx(c)},${y}h.1`;
+        }
+        s += `'/>`;
+        for (let c = 0; c <= tot; c += 5)
+          s += `<text x='${cx(c)}' y='46' text-anchor='middle' style='fill:var(--mut);font-size:8px'>${c}</text>`;
+        ch.forEach((c, ci) => {
+          const c0 = base + ci * 10,
+            x0 = cx(c0) - 12,
+            x1 = cx(c0 + 6) + 12,
+            pm = pinNames(c.ty);
+          s += `<g><title>${IC[c.ty][0]} — ${PN[c.ty]}</title><rect x='${x0}' y='120' width='${x1 - x0}' height='64' rx='4' fill='url(#ic1)' stroke='#0b0f14'/><path d='M${x0},144a9,9 0 0 1 0,18' fill='#0b0f14'/><circle cx='${x0 + 11}' cy='176' r='2.5' fill='#9ca3af'/><text x='${(x0 + x1) / 2}' y='157' text-anchor='middle' style='fill:#fff;font-size:13px;font-weight:700'>${IC[c.ty][0]}</text>`;
+          for (let p = 1; p <= 14; p++) {
+            const px = cp(ci, p)[0],
+              t = p > 7;
+            s += `<rect x='${px - 3}' y='${t ? 112 : 184}' width='6' height='8' fill='#c7ccd4' stroke='#6b7280' stroke-width='.6'><title>رجل ${p}: ${pm[p] || "NC"}</title></rect><text x='${px}' y='${t ? 131 : 180}' text-anchor='middle' style='fill:#e5e7eb;font-size:9px'>${p}</text><text x='${px}' y='${t ? 142 : 169}' text-anchor='middle' style='fill:#9ca3af;font-size:8px'>${pm[p] || ""}</text>`;
+          }
+          s += "</g>";
+          const vx = cp(ci, 14)[0],
+            gx = cp(ci, 7)[0];
+          s += `<g data-s='vcc'><title>+5V</title><path d='M${vx},104V14' stroke='#000' stroke-opacity='.25' stroke-width='6'/><path d='M${vx},104V14' stroke='#dc2626' stroke-width='3.4'/><circle cx='${vx}' cy='14' r='4' fill='#dc2626'/></g><g data-s='gnd'><title>GND</title><path d='M${gx},200V282' stroke='#000' stroke-opacity='.25' stroke-width='6'/><path d='M${gx},200V282' stroke='#374151' stroke-width='3.4'/><circle cx='${gx}' cy='282' r='4' fill='#374151'/></g>`;
+        });
+        let nt = 0,
+          nb = 0;
+        ks.forEach((k, i) => {
+          const it = S[k],
+            cl = PAL[i % PAL.length];
+          for (let q = 0; q + 1 < it.length; q++) {
+            const a = pos(it[q]),
+              b = pos(it[q + 1]),
+              ly = a[1] < 150 ? 52 + (nt++ % 8) * 6 : 206 + (nb++ % 8) * 5.5,
+              d = rp([a, [a[0], ly], [b[0], ly], b], 7);
+            s += `<g data-s='${k}' data-w='${k}' data-v='${v0[k]}'><title>${esc(SN(k) + " — " + (lab[k] || ""))}</title><path d='${d}' fill='none' stroke='#000' stroke-opacity='.25' stroke-width='6.4' stroke-linecap='round'/><path d='${d}' fill='none' stroke='${cl}' stroke-width='3.6' stroke-linecap='round'/><circle cx='${a[0]}' cy='${a[1]}' r='4.2' fill='${cl}' stroke='#0006'/><circle cx='${b[0]}' cy='${b[1]}' r='4.2' fill='${cl}' stroke='#0006'/>`;
+            if (Math.abs(a[0] - b[0]) > 44) {
+              const w = 22 + SN(k).length * 6.2,
+                mx = (a[0] + b[0]) / 2;
+              s += `<rect x='${mx - w / 2}' y='${ly - 7}' width='${w}' height='14' rx='7' fill='${cl}'/><text x='${mx}' y='${ly + 3.5}' text-anchor='middle' data-tg='${k}' data-n='${esc(SN(k))}' style='fill:#fff;font-size:10px;font-weight:700'>${esc(SN(k))}=${v0[k]}</text>`;
+            }
+            s += "</g>";
+          }
+        });
+        I.forEach((o, i) => {
+          if (!S["i" + o.id]) return;
+          const x = cx(1 + 2 * i);
+          s += `<g><title>مفتاح المدخل ${esc(nm(o))} (0/1)</title><path d='M${x},248V300' stroke='#6b7280' stroke-width='2.5'/><rect data-sw='${id}:${i}' style='cursor:pointer' x='${x - 12}' y='300' width='24' height='34' rx='3' fill='#1f2937'/><rect class=sl x='${x - 8}' y='319' width='16' height='13' rx='2' fill='#f3f4f6' pointer-events='none'/><text class=sv x='${x}' y='294' text-anchor='middle' style='font-size:10px;font-weight:700' pointer-events='none'>0</text><text x='${x}' y='352' text-anchor='middle' style='font-weight:700'>${esc(nm(o))}</text></g>`;
+        });
+        R.forEach((r, k) => {
+          const x = cx(base + ch.length * 10 + 1 + 2 * k);
+          const outSig = (r.k ? "n" : "i") + r.id;
+          s += `<g data-w='${outSig}' data-v='${v0[outSig] != null ? v0[outSig] : 0}' style='cursor:crosshair'><title>المخرج ${esc(names[k] || "F")}: مقاومة 330Ω قياسية ثم LED ضوئي ثم GND</title>`;
+          // --- Realistic 330Ω Resistor with Standard Color Bands (Orange - Orange - Brown - Gold) ---
+          s += `<line x1='${x}' y1='248' x2='${x}' y2='262' stroke='#94a3b8' stroke-width='2' stroke-linecap='round'/>`;
+          // Ceramic/Carbon film body
+          s += `<rect x='${x - 5.5}' y='262' width='11' height='36' rx='3.5' fill='#e2d9c8' stroke='#9ca3af' stroke-width='0.7'/>`;
+          // End bulges
+          s += `<rect x='${x - 6}' y='261' width='12' height='3' rx='1.5' fill='#d1c7b3'/>`;
+          s += `<rect x='${x - 6}' y='296' width='12' height='3' rx='1.5' fill='#d1c7b3'/>`;
+          // 4 Color bands: Orange (3), Orange (3), Brown (x10), Gold (5%)
+          s += `<rect x='${x - 5.5}' y='266' width='11' height='3' fill='#f97316'/><title>حلقة 1: برتقالي (3)</title>`;
+          s += `<rect x='${x - 5.5}' y='272' width='11' height='3' fill='#f97316'/><title>حلقة 2: برتقالي (3)</title>`;
+          s += `<rect x='${x - 5.5}' y='278' width='11' height='3' fill='#78350f'/><title>حلقة 3: بني (×10)</title>`;
+          s += `<rect x='${x - 5.5}' y='288' width='11' height='2.5' fill='#d97706'/><title>حلقة 4: ذهبي (±5% تفاوت)</title>`;
+          // Bottom lead to LED anode
+          s += `<line x1='${x}' y1='299' x2='${x}' y2='306' stroke='#94a3b8' stroke-width='2' stroke-linecap='round'/>`;
+          s += `<text x='${x + 9}' y='282' style='font-size:9px;font-weight:700;fill:var(--acc-d);font-family:"IBM Plex Mono",monospace'>330Ω</text>`;
+
+          // --- Photorealistic LED with Bloom & Cathode Rim ---
+          s += `<circle data-lg='${outSig}' cx='${x}' cy='316' r='20' fill='#fbbf24' opacity='0' filter='url(#ledBloom)'/>`;
+          s += `<circle data-ld='${outSig}' cx='${x}' cy='316' r='9.5' fill='#4b5563' stroke='#1f2937' stroke-width='1.2'/>`;
+          s += `<circle cx='${x}' cy='316' r='11' fill='none' stroke='#000' stroke-opacity='0.25' stroke-width='1' pointer-events='none'/>`;
+          s += `<ellipse cx='${x - 3}' cy='313' rx='3' ry='1.8' fill='#ffffff' opacity='0.55' pointer-events='none'/>`;
+          s += `<text x='${x}' y='352' text-anchor='middle' style='font-weight:700;font-size:14px;fill:var(--ink)'>${esc(names[k] || "F")}</text></g>`;
+        });
+        s += "</svg>";
+        const parts = {};
+        ch.forEach((c) => (parts[IC[c.ty][0]] = (parts[IC[c.ty][0]] || 0) + 1));
+        const free = ch.reduce((a, c) => a + IC[c.ty][1].length - c.n, 0);
+        const rows = ks
+          .map(
+            (k, i) =>
+              `<tr><td><span class=sw style='background:${PAL[i % PAL.length]}'></span><b>${esc(SN(k))}</b> — ${esc(lab[k] || "")}</td><td>${S[k].map((it) => (it.inp != null ? "المفتاح" : it.led != null ? "LED" : nmI(it.c) + " رجل " + it.pin)).join(" ← ")}</td></tr>`,
+          )
+          .join("");
+        return (
+          zw(s) +
+          `<div class=note>الشرايح المطلوبة: <b>${Object.keys(parts)
+            .map((k) => k + " ×" + parts[k])
+            .join(
+              " ، ",
+            )}</b>${free ? ` — فيه ${free} بوابة فاضية؛ وصّل مداخلها بالـGND.` : ""}</div><table class=bbt><tr><th>الإشارة (لون السلك)</th><th>بتتوصل بـ</th></tr>${rows}<tr><td><span class=sw style='background:#dc2626'></span>+5V</td><td>رجل 14 في كل شريحة</td></tr><tr><td><span class=sw style='background:#374151'></span>GND</td><td>رجل 7 في كل شريحة</td></tr></table><ol><li>ركّب الشرايح فوق الفجوة الوسطى، والشق ناحية الشمال.</li><li>وصّل +5V وGND (الأحمر والرمادي).</li><li>وصّل كل سلك بلونه من الجدول، والمفاتيح (0/1) هي المداخل.</li><li>كل مخرج بمقاومة 330Ω ثم LED ثم GND (الرجل القصيرة للأرضي).</li></ol>`
+        );
+      }
+
+      /* ============================================================
+     ZOOM
+     ============================================================ */
+      const zw = (s) =>
+        `<div class=zw><div class=zt><button data-z=in title='تكبير'>＋</button><button data-z=out title='تصغير'>－</button><button data-z=fit>ملائمة</button><button data-z=one>100%</button><button class="exp-btn" data-exp="svg" title="تصدير كملف متجهي SVG عالي الدقة">📥 SVG</button><button class="exp-btn" data-exp="png" title="تصدير كصورة PNG عالية الدقة (شفافة)">🖼 PNG</button><button class="exp-btn" data-exp="fs" title="عرض ملء الشاشة">⛶ ملء الشاشة</button><span class=cnt>🔍 فحص حي: مرّر الماوس على أي سلك أو بوابة</span><button class=pb data-pt=zw>🖨 طباعة</button></div><div class=zv>${s}</div></div>`;
+      function zoom(v, f) {
+        if (!v) return;
+        const s = v.querySelector("svg");
+        if (!s) return;
+        if (!s.dataset.w) {
+          s.dataset.w = s.getAttribute("width");
+          s.dataset.h = s.getAttribute("height");
+        }
+        const curScale = +v.dataset.scale || +v.dataset.z || 1;
+        const z =
+          f === "fit"
+            ? Math.min(1.5, (v.clientWidth - 16) / s.dataset.w)
+            : f === "one"
+              ? 1
+              : Math.max(0.2, Math.min(4, curScale * f));
+        v.dataset.scale = z;
+        delete v.dataset.z; // Ensure container never has data-z attribute
+        s.setAttribute("width", s.dataset.w * z);
+        s.setAttribute("height", s.dataset.h * z);
+      }
+      document.addEventListener("click", (e) => {
+        const b = e.target.closest("button[data-z]");
+        if (b) {
+          const zw = b.closest(".zw");
+          if (zw) {
+            const zv = zw.querySelector(".zv");
+            zoom(zv, { in: 1.25, out: 0.8 }[b.dataset.z] || b.dataset.z);
+          }
+        }
+      });
+      addEventListener(
+        "wheel",
+        (e) => {
+          const v = e.target.closest && e.target.closest(".zv");
+          if (v && e.ctrlKey) {
+            e.preventDefault();
+            zoom(v, e.deltaY < 0 ? 1.1 : 0.9);
+          }
+        },
+        { passive: false },
+      );
+      let dg = null;
+      document.addEventListener("pointerdown", (e) => {
+        const v = e.target.closest(".zv");
+        if (v && e.pointerType === "mouse")
+          dg = {
+            v,
+            x: e.clientX,
+            y: e.clientY,
+            l: v.scrollLeft,
+            t: v.scrollTop,
+          };
+      });
+      addEventListener("pointermove", (e) => {
+        if (dg) {
+          dg.v.scrollLeft = dg.l - (e.clientX - dg.x);
+          dg.v.scrollTop = dg.t - (e.clientY - dg.y);
+        }
+      });
+      addEventListener("pointerup", () => (dg = null));
+      document.addEventListener("mouseover", (e) => {
+        const t = e.target.closest(".zv [data-s]"),
+          v = e.target.closest(".zv");
+        document
+          .querySelectorAll(".zv .dm")
+          .forEach((x) => x.classList.remove("dm"));
+        if (t && v)
+          v.querySelectorAll("[data-s]").forEach((x) => {
+            if (x.dataset.s !== t.dataset.s) x.classList.add("dm");
+          });
+      });
+
+      /* ============================================================
+     BOOLEAN ALGEBRA STEPS
+     ============================================================ */
+      function nnf(n, neg) {
+        switch (n.t) {
+          case "VAR":
+            return { t: "L", v: n.n, p: neg ? 0 : 1 };
+          case "C":
+            return { t: "C", v: neg ? 1 - n.v : n.v };
+          case "NOT":
+            return nnf(n.ch[0], !neg);
+          case "AND":
+          case "OR":
+            return {
+              t: (n.t === "AND") !== neg ? "AND" : "OR",
+              k: n.ch.map((c) => nnf(c, neg)),
+            };
+          case "NAND":
+            return nnf({ t: "AND", ch: n.ch }, !neg);
+          case "NOR":
+            return nnf({ t: "OR", ch: n.ch }, !neg);
+          default: {
+            const x = (n.t === "XNOR") !== neg;
+            let a = n.ch[0];
+            for (let i = 1; i < n.ch.length; i++) {
+              const b = n.ch[i];
+              a = {
+                t: "OR",
+                ch: [
+                  { t: "AND", ch: [a, { t: "NOT", ch: [b] }] },
+                  { t: "AND", ch: [{ t: "NOT", ch: [a] }, b] },
+                ],
+              };
+            }
+            return nnf(a, x);
+          }
+        }
+      }
+      function sopOf(x) {
+        if (x.t === "C") return x.v ? [[]] : [];
+        if (x.t === "L") return [[x.v + (x.p ? "" : `'`)]];
+        const ps = x.k.map(sopOf);
+        if (x.t === "OR") return ps.flat();
+        let r = [[]];
+        for (const p of ps) {
+          const n = [];
+          for (const a of r)
+            for (const b of p) {
+              const m = [...new Set([...a, ...b])];
+              if (
+                !m.some((l) =>
+                  m.includes(l.endsWith(`'`) ? l.slice(0, -1) : l + `'`),
+                )
+              )
+                n.push(m);
+            }
+          r = n;
+        }
+        return r;
+      }
+      function alg(a) {
+        const sm = (p) => (p.length ? [...p].sort().join("") : "1"),
+          str = (P) => P.map(sm).join(" + ") || "0",
+          comp = (l) => (l.endsWith(`'`) ? l.slice(0, -1) : l + `'`),
+          norm = (P) => {
+            const seen = new Set(),
+              o = [];
+            for (const p of P) {
+              const q = [...new Set(p)].sort(),
+                k = q.join("|");
+              if (!seen.has(k)) {
+                seen.add(k);
+                o.push(q);
+              }
+            }
+            return o;
+          },
+          sub = (x, y) => x.every((l) => y.includes(l));
+        function rule(P) {
+          for (let i = 0; i < P.length; i++)
+            for (let j = 0; j < P.length; j++)
+              if (i !== j && sub(P[i], P[j]) && P[i].length < P[j].length)
+                return [
+                  P.filter((_, k) => k !== j),
+                  `قانون الامتصاص: ${sm(P[i])} + ${sm(P[j])} = ${sm(P[i])}`,
+                ];
+          for (let i = 0; i < P.length; i++)
+            for (let j = i + 1; j < P.length; j++)
+              if (P[i].length === P[j].length) {
+                const d = P[i].filter((l) => !P[j].includes(l)),
+                  e = P[j].filter((l) => !P[i].includes(l));
+                if (d.length === 1 && e.length === 1 && e[0] === comp(d[0])) {
+                  const c = P[i].filter((l) => P[j].includes(l));
+                  return [
+                    [...P.filter((_, k) => k !== i && k !== j), c],
+                    `قانون التجاور: ${sm(P[i])} + ${sm(P[j])} = ${sm(c)}·(${d[0]} + ${e[0]}) = ${sm(c)}`,
+                  ];
+                }
+              }
+          for (let i = 0; i < P.length; i++)
+            if (P[i].length === 1) {
+              const l = P[i][0],
+                c = comp(l);
+              for (let j = 0; j < P.length; j++)
+                if (j !== i && P[j].includes(c))
+                  return [
+                    P.map((p, k) => (k === j ? p.filter((x) => x !== c) : p)),
+                    `قانون ${l} + ${c}·X = ${l} + X: الحد ${sm(P[j])} صار ${sm(P[j].filter((x) => x !== c))}`,
+                  ];
+            }
+          return null;
+        }
+        const fl = a.ast === a.sopA,
+          steps = [];
+        let P;
+        if (fl) {
+          P = norm(
+            a.on.map((i) =>
+              a.vars.map((v, j) => ((i >> (a.n - 1 - j)) & 1 ? v : v + `'`)),
+            ),
+          );
+          steps.push([str(P), "الصيغة القانونية Σm (كل حد فيه كل المتغيرات)"]);
+        } else {
+          steps.push([a.src || "", "المعادلة الأصلية"]);
+          P = norm(sopOf(nnf(a.ast, false)));
+          steps.push([
+            str(P),
+            `فرد الأقواس وتحويلها لصيغة SOP (توزيع + دي مورجان + تعريف XOR عند الحاجة، وحذف الحدود المتناقضة X·X' = 0 والمكررة X + X = X)`,
+          ]);
+        }
+        for (let g = 0; g < 40; g++) {
+          if (P.length > 1 && P.some((p) => !p.length)) {
+            P = [[]];
+            steps.push(["1", "X + 1 = 1"]);
+            break;
+          }
+          const r = rule(P);
+          if (!r) break;
+          P = norm(r[0]);
+          steps.push([str(P), r[1]]);
+        }
+        const lits = P.reduce((s, p) => s + p.length, 0),
+          best = a.s.cv.reduce((s, p) => s + a.n - pop(p.m), 0);
+        return (
+          `<p class=sub>اختياري — بيطبّق قوانين الجبر البولياني واحد واحد من المعادلة للناتج.</p><ol class=alg>${steps.map(([e, w]) => `<li><div class=eq>${esc(e)}</div><small>${esc(w)}</small></li>`).join("")}</ol>` +
+          (lits > best
+            ? `<div class=note>الناتج بالجبر هنا مش أبسط صيغة ممكنة (ممكن تحتاج قانون Consensus). الأبسط بالـK-map: <span class=eq>F = ${esc(a.sopS)}</span></div>`
+            : `<div class=note>وصلنا لأبسط صيغة SOP: <span class=eq>F = ${esc(str(P))}</span></div>`) +
+          (a.dc.length
+            ? "<p class=sub>الـDon't care مش مستخدمة في خطوات الجبر.</p>"
+            : "")
+        );
+      }
+
+      /* ============================================================
+     LIBRARY RENDERING
+     ============================================================ */
+      let ITEMS = [];
+      function item(it) {
+        let R, V, n;
+        if (it.tt) {
+          const t = it.tt,
+            N = 1 << (n = t.v),
+            all = [...Array(N).keys()];
+          V = [..."ABCDEF"].slice(0, n);
+          const dcf = t.dc || (() => 0),
+            dcl = all.filter(dcf);
+          R = t.o.map(([nm, fn]) => {
+            const on = all.filter((i) => !dcf(i) && fn(i)),
+              a = { n, vars: V },
+              c = minimize(on, dcl, n).cv;
+            return {
+              nm,
+              ast: normal(a, c, 0),
+              s: c.map((p) => termStr(a, p)).join(" + ") || "0",
+              val: (i) => (dcf(i) ? "X" : +!!fn(i)),
+              btn: `Σm(${on})+d(${dcl})`,
+              bn: n,
+            };
+          });
+        } else if (it.o) {
+          const as = it.o.map((o) => parse(o[1]));
+          V = [...new Set(as.flatMap((x) => [...vars(x)]))].sort();
+          n = V.length;
+          R = it.o.map((o, i) => ({
+            nm: o[0],
+            ast: as[i],
+            s: o[1],
+            val: (j) => {
+              const e = {};
+              V.forEach((v, q) => (e[v] = (j >> (n - 1 - q)) & 1));
+              return ev(as[i], e);
+            },
+            btn: o[1],
+          }));
+        }
+
+        /* ===== شريط الأزرار العلوي (تحليل + حلّل الكل + طباعة) ===== */
+        let topBar = "";
+        if (R && R.length) {
+          const sanitize = (s) => String(s).replace(/"/g, "&quot;");
+          let analyzeBtns = "";
+
+          if (R.length > 1 && n <= 6) {
+            /* زر "حلّل الدائرة كاملة" — تحليل موحد متكامل للدائرة بكل مخارجها */
+            const seenIdents = new Set();
+            const multiExpr = R.map((r, idx) => {
+              const safeIdent = makeSafeIdent(r.nm, idx, seenIdents);
+              return `${safeIdent} = ${r.s}`;
+            }).join(" ; ");
+            const outNamesLabel = R.map((r) => r.nm).join(" + ");
+            analyzeBtns += `<button class="pb an-btn an-all" data-a="${sanitize(multiExpr)}" data-n="${R[0].bn || 0}" title="تحليل الدائرة بالكامل بكافة مخارجها (جدول موحد + K-map + دائرة واحدة لكل المخارج + بريدبورد موحد بـ ${R.length} ليدات)">📊 حلّل الدائرة كاملة (${outNamesLabel})</button>`;
+          }
+
+          analyzeBtns += R.map((r) => {
+            if (!r.btn) return "";
+            return `<button class="pb an-btn" data-a="${sanitize(r.btn)}" data-n="${r.bn || 0}" title="حلّل مخرج ${esc(r.nm)} منفصلًا">📊 ${esc(r.nm)}</button>`;
+          }).join("");
+
+          topBar = `<div class="top-actions">${analyzeBtns}<button class="pb" data-pt="it">🖨 طباعة هذه الدائرة</button></div>`;
+        }
+
+        let h =
+          topBar +
+          (it.d ? `<p>${it.d}</p>` : "") +
+          (it.lg ? `<div class=note>${esc(it.lg)}</div>` : "") +
+          (it.blk ? `<div class="fig">${zw(it.blk())}</div>` : "");
+
+        if (R) {
+          if (n <= 5) {
+            h += `<div class=scroll><table><tr>${V.map((v) => `<th>${v}</th>`).join("")}${R.map((r) => `<th>${esc(r.nm)}</th>`).join("")}</tr>`;
+            for (let i = 0; i < 1 << n; i++)
+              h += `<tr>${V.map((_, j) => `<td>${(i >> (n - 1 - j)) & 1}</td>`).join("")}${R.map((r) => `<td>${r.val(i)}</td>`).join("")}</tr>`;
+            h += "</table></div>";
+          }
+          R.forEach((r) => {
+            let tr = prep(r.ast, { inv: 1 });
+            if (it.buf) tr = { t: "BUF", ch: [tr] };
+            const st = stats(tr);
+            h +=
+              `<div class=oc><div class=eq><b>${esc(r.nm)}</b> = ${esc(r.s).replace(/\^/g, " ⊕ ")}</div>` +
+              (lv(tr) > 45
+                ? "<p class=sub>الدايجرام كبير جدًا للعرض هنا.</p>"
+                : `<div class="fig">${zw(draw(tr, r.nm))}</div><p class=sub>عدد البوابات: ${st[0]} — المداخل: ${st[1]}</p>`) +
+              (n <= 6
+                ? `<button class="an-btn" data-a="${String(r.btn).replace(/"/g, "&quot;")}" data-n="${r.bn || 0}">📊 حلّل ${esc(r.nm)} (K-map وتبسيط وNAND/NOR)</button>`
+                : "") +
+              "</div>";
+          });
+        }
+        if (R && !it.buf)
+          h +=
+            "<div class=oc><b>التوصيل على البريدبورد</b>" +
+            bboard(
+              R.map((r) => prep(r.ast, { inv: 1 })),
+              R.map((r) => r.nm),
+            ) +
+            "</div>";
+        return h;
+      }
+
+      function lib() {
+        ITEMS = [];
+        const ICmap = {
+          AND: "7408",
+          OR: "7432",
+          NOT: "7404",
+          NAND: "7400",
+          NOR: "7402",
+          XOR: "7486",
+        };
+        const basics = LIB.slice(0, 8).map(([id, n, o, b]) => ({
+          n,
+          o,
+          buf: b,
+          ic: ICmap[id],
+        }));
+        const SEG = {
+          a: [0, 2, 3, 5, 6, 7, 8, 9],
+          b: [0, 1, 2, 3, 4, 7, 8, 9],
+          c: [0, 1, 3, 4, 5, 6, 7, 8, 9],
+          d: [0, 2, 3, 5, 6, 8, 9],
+          e: [0, 2, 6, 8],
+          f: [0, 4, 5, 6, 8, 9],
+          g: [2, 3, 4, 5, 6, 8, 9],
+        };
+        const bit = (f, k) => (i) => (f(i) >> k) & 1;
+        const dec = (n, t, dc) => ({
+          tt: { v: n, dc, o: R8(t, "Y", (k) => (i) => +(i === k)) },
+        });
+        const ar = [
+          {
+            n: "Half Adder (HA) — الجامع النصفي",
+            d: "يجمع خانتين A وB من غير Carry سابق، وبيطلع Sum وCarry.",
+            o: [
+              ["Sum", "A^B"],
+              ["Carry", "AB"],
+            ],
+          },
+          {
+            n: "Full Adder (FA) — الجامع الكلي",
+            d: "يجمع خانتين مع Carry In. الـSum = A⊕B⊕Cin والـCout = AB + Cin(A⊕B).",
+            lg: "C = Cin",
+            o: [
+              ["Sum", "A^B^C"],
+              ["Cout", "AB+C(A^B)"],
+            ],
+          },
+          {
+            n: "Half Subtractor (HS) — الطارح النصفي",
+            d: "يطرح B من A وبيطلع Difference وBorrow.",
+            o: [
+              ["Diff", "A^B"],
+              ["Borrow", "A'B"],
+            ],
+          },
+          {
+            n: "Full Subtractor (FS) — الطارح الكلي",
+            d: "يطرح خانتين مع Borrow In.",
+            lg: "C = Bin",
+            o: [
+              ["Diff", "A^B^C"],
+              ["Bout", "A'B+(A^B)'C"],
+            ],
+          },
+          {
+            n: "Ripple Carry Adder — جامع التوازي (4-Bit)",
+            ic: "7483 / 74283",
+            d: "4 Full Adders ورا بعض؛ الـCarry الخارج من كل خانة بيدخل اللي بعدها.",
+            blk: () => chain(4, "FA"),
+          },
+          {
+            n: "Binary Adder-Subtractor — الجمع والطرح",
+            ic: "7483 + 7486",
+            d: "نفس الـParallel Adder مع XOR على مداخل B. M=0 بيجمع، M=1 بيعكس B ويضيف C0=1 فيطرح بطريقة 2's Complement.",
+            blk: () => chain(4, "FA", 1),
+          },
+          {
+            n: "BCD Adder — جامع BCD",
+            ic: "7483 ×2",
+            d: "بعد الجمع لو الناتج > 9 أو طلع Carry (K) بنضيف 6 عن طريق Z = K + S3S2 + S3S1.",
+            blk: () =>
+              flow(
+                [
+                  "4-bit Adder #1\nA + B + Cin",
+                  "Correction\nZ = K + S3S2 + S3S1",
+                  "4-bit Adder #2\nS + 0ZZ0",
+                ],
+                ["S3..S0 , K", "Z"],
+                "A , B , Cin",
+                "Cout = Z\nSum (BCD)",
+              ),
+          },
+          {
+            n: "Carry Lookahead Adder (CLA)",
+            d: "Pi = Ai⊕Bi, Gi = AiBi, C(i+1) = Gi + PiCi.",
+            lg: "A..D = P0..P3 — E..H = G0..G3 — I = C0",
+            blk: () =>
+              flow(
+                [
+                  "Generate / Propagate\nPi = Ai ⊕ Bi\nGi = Ai·Bi",
+                  "Lookahead Logic\nC(i+1) = Gi + Pi·Ci",
+                  "Sum XORs\nSi = Pi ⊕ Ci",
+                ],
+                ["Pi , Gi", "Ci"],
+                "Ai , Bi , C0",
+                "Si , C4",
+              ),
+            o: [
+              ["C1", "E+AI"],
+              ["C2", "F+BE+BAI"],
+              ["C3", "G+CF+CBE+CBAI"],
+              ["C4", "H+DG+DCF+DCBE+DCBAI"],
+            ],
+          },
+        ];
+        const cmp = [
+          {
+            n: "1-Bit Comparator — مقارن خانة",
+            d: "يقارن A مع B ويطلع واحدة من ثلاث إشارات.",
+            o: [
+              ["A>B", "AB'"],
+              ["A=B", "(A^B)'"],
+              ["A<B", "A'B"],
+            ],
+          },
+          {
+            n: "2-Bit Magnitude Comparator",
+            d: "بيقارن رقمين كل واحد خانتين.",
+            lg: "A,B = A1,A0 — C,D = B1,B0",
+            o: [
+              ["A>B", "AC'+(A^C)'BD'"],
+              ["A=B", "(A^C)'(B^D)'"],
+              ["A<B", "A'C+(A^C)'B'D"],
+            ],
+          },
+          {
+            n: "4-Bit Magnitude Comparator",
+            ic: "7485",
+            d: "بيقارن من الخانة الأعلى للأقل؛ أول خانة مختلفة بتحدد الناتج.",
+            lg: "A..D = A3..A0 — E..H = B3..B0",
+            o: [
+              ["A>B", "AE'+(A^E)'BF'+(A^E)'(B^F)'CG'+(A^E)'(B^F)'(C^G)'DH'"],
+              ["A=B", "(A^E)'(B^F)'(C^G)'(D^H)'"],
+              ["A<B", "A'E+(A^E)'B'F+(A^E)'(B^F)'C'G+(A^E)'(B^F)'(C^G)'D'H"],
+            ],
+          },
+        ];
+        const mux8 = "ABCDEFGH"
+          .split("")
+          .map((d, k) => NB(["I", "J", "K"], k) + d)
+          .join("+");
+        const route = [
+          {
+            n: "2:1 Multiplexer",
+            d: "يختار واحد من مدخلين حسب S.",
+            lg: "A,B = D0,D1 — C = S",
+            o: [["Y", "C'A+CB"]],
+          },
+          {
+            n: "4:1 Multiplexer",
+            ic: "74153",
+            d: "يختار واحد من 4 مداخل حسب S1 وS0.",
+            lg: "A..D = D0..D3 — E,F = S1,S0",
+            o: [["Y", "E'F'A+E'FB+EF'C+EFD"]],
+          },
+          {
+            n: "8:1 Multiplexer",
+            ic: "74151",
+            d: "يختار واحد من 8 مداخل.",
+            lg: "A..H = D0..D7 — I,J,K = S2,S1,S0",
+            o: [["Y", mux8]],
+          },
+          {
+            n: "16:1 Multiplexer",
+            d: "بيتبني من 5 مضاعفات 4:1 على مستويين.",
+            blk: () =>
+              flow(
+                ["4 × MUX 4:1\nselect: S1 S0", "MUX 4:1\nselect: S3 S2"],
+                ["Y0..Y3"],
+                "D0..D15",
+                "Y",
+              ),
+          },
+          {
+            n: "1:2 Demultiplexer",
+            d: "يوزع D على مخرجين حسب S.",
+            lg: "A = D — B = S",
+            o: [
+              ["Y0", "AB'"],
+              ["Y1", "AB"],
+            ],
+          },
+          {
+            n: "1:4 Demultiplexer",
+            d: "يوزع D على 4 مخارج.",
+            lg: "A = D — B,C = S1,S0",
+            o: R8(4, "Y", (k) => "A" + NB(["B", "C"], k)),
+          },
+          {
+            n: "1:8 Demultiplexer",
+            ic: "74138 (Line Demux)",
+            d: "يوزع D على 8 مخارج.",
+            lg: "A = D — B,C,D = S2,S1,S0",
+            o: R8(8, "Y", (k) => "A" + NB(["B", "C", "D"], k)),
+          },
+        ];
+        const ed = [
+          {
+            n: "4-to-2 Binary Encoder",
+            d: "يحوّل مدخل واحد نشط من 4 إلى كود من خانتين.",
+            lg: "A..D = D0..D3",
+            o: [
+              ["Y1", "C+D"],
+              ["Y0", "B+D"],
+            ],
+          },
+          {
+            n: "8-to-3 Octal Encoder",
+            d: "يحوّل مدخل واحد نشط من 8 إلى كود من 3 خانات.",
+            lg: "A..G = D1..D7",
+            o: [
+              ["Y2", "D+E+F+G"],
+              ["Y1", "B+C+F+G"],
+              ["Y0", "A+C+E+G"],
+            ],
+          },
+          {
+            n: "Priority Encoder — مشفر الأسبقية",
+            ic: "74148 (8-to-3)",
+            d: "لو أكتر من مدخل نشط بياخد الأعلى أسبقية.",
+            lg: "A..D = D0..D3 (D3 أعلى)",
+            o: [
+              ["Y1", "C+D"],
+              ["Y0", "D+C'B"],
+              ["V", "A+B+C+D"],
+            ],
+          },
+          {
+            n: "Decimal-to-BCD Priority Encoder",
+            ic: "74147",
+            d: "يحوّل أعلى مدخل نشط من 1 إلى 9 لكود BCD.",
+            lg: "A..I = I1..I9",
+            o: [
+              ["Y3", "H+I"],
+              ["Y2", "I'H'(G+F+E+D)"],
+              ["Y1", "I'H'(G+F+E'D'(C+B))"],
+              ["Y0", "I+H'G+H'F'E+H'F'D'C+H'F'D'B'A"],
+            ],
+          },
+          {
+            n: "2-to-4 Decoder",
+            d: "كل كود إدخال بيفعّل مخرج واحد.",
+            lg: "A,B = A1,A0",
+            ...dec(2, 4),
+          },
+          {
+            n: "3-to-8 Decoder",
+            ic: "74138",
+            d: "3 مداخل → 8 مخارج.",
+            lg: "A,B,C = A2,A1,A0",
+            ...dec(3, 8),
+          },
+          {
+            n: "4-to-16 Decoder",
+            ic: "74154",
+            d: "4 مداخل → 16 مخرج.",
+            lg: "A..D = A3..A0",
+            ...dec(4, 16),
+          },
+          {
+            n: "BCD-to-Decimal Decoder",
+            ic: "7442",
+            d: "كود BCD → 10 مخارج.",
+            lg: "A..D = BCD (A = MSB)",
+            ...dec(4, 10, (i) => i > 9),
+          },
+          {
+            n: "BCD-to-7-Segment Decoder",
+            ic: "7447 / 7448",
+            d: "يحوّل رقم BCD لمقاطع الشاشة a..g.",
+            lg: "A..D = BCD (A = MSB)",
+            tt: {
+              v: 4,
+              dc: (i) => i > 9,
+              o: Object.keys(SEG).map((k) => [k, (i) => +SEG[k].includes(i)]),
+            },
+          },
+        ];
+        const par = [
+          {
+            n: "Even Parity Generator",
+            d: "بيولّد بت P يخلّي عدد الوحدات زوجي.",
+            lg: "A..D = بيانات",
+            o: [["P", "A^B^C^D"]],
+          },
+          {
+            n: "Odd Parity Generator",
+            d: "بيولّد بت P يخلّي عدد الوحدات فردي.",
+            lg: "A..D = بيانات",
+            o: [["P", "(A^B^C^D)'"]],
+          },
+          {
+            n: "Even / Odd Parity Checker",
+            ic: "74180",
+            d: "بيفحص الكلمة المستلمة مع بت التكافؤ.",
+            lg: "A..D = بيانات — E = Parity bit",
+            o: [
+              ["ErrEven", "A^B^C^D^E"],
+              ["ErrOdd", "(A^B^C^D^E)'"],
+            ],
+          },
+        ];
+        const cc = [
+          {
+            n: "Binary to Gray Converter",
+            d: "أعلى خانة زي ما هي، وباقي الخانات XOR مع اللي قبلها.",
+            lg: "A..D = B3..B0",
+            o: [
+              ["G3", "A"],
+              ["G2", "A^B"],
+              ["G1", "B^C"],
+              ["G0", "C^D"],
+            ],
+          },
+          {
+            n: "Gray to Binary Converter",
+            d: "كل خانة = XOR لكل خانات Gray من الأعلى.",
+            lg: "A..D = G3..G0",
+            o: [
+              ["B3", "A"],
+              ["B2", "A^B"],
+              ["B1", "A^B^C"],
+              ["B0", "A^B^C^D"],
+            ],
+          },
+          {
+            n: "BCD to Excess-3 Converter",
+            d: "Excess-3 = BCD + 3.",
+            lg: "A..D = BCD (A = MSB)",
+            tt: {
+              v: 4,
+              dc: (i) => i > 9,
+              o: [
+                ["W", bit((i) => i + 3, 3)],
+                ["X", bit((i) => i + 3, 2)],
+                ["Y", bit((i) => i + 3, 1)],
+                ["Z", bit((i) => i + 3, 0)],
+              ],
+            },
+          },
+          {
+            n: "Excess-3 to BCD Converter",
+            d: "BCD = Excess-3 − 3.",
+            lg: "A..D = Excess-3 (A = MSB)",
+            tt: {
+              v: 4,
+              dc: (i) => i < 3 || i > 12,
+              o: [
+                ["W", bit((i) => i - 3, 3)],
+                ["X", bit((i) => i - 3, 2)],
+                ["Y", bit((i) => i - 3, 1)],
+                ["Z", bit((i) => i - 3, 0)],
+              ],
+            },
+          },
+        ];
+        const alu = [
+          {
+            n: "4-Bit ALU — وحدة الحساب والمنطق",
+            ic: "74181",
+            d: "4 شرايح متوصلة بالـCarry. S1S0: 00 AND، 01 OR، 10 XOR، 11 جمع.",
+            lg: "A,B = المدخلات — C = Cin — D,E = S1,S0",
+            blk: () => chain(4, "ALU\nslice", 0, "F"),
+            o: [
+              ["F", "D'E'AB+D'E(A+B)+DE'(A^B)+DE(A^B^C)"],
+              ["Cout", "DE(AB+C(A^B))"],
+            ],
+          },
+        ];
+        const ICS = [
+          ["7404", "Hex Inverter (NOT)", 6, "NOT", 1],
+          ["7408", "Quad 2-Input AND", 4, "AND", 2],
+          ["7432", "Quad 2-Input OR", 4, "OR", 2],
+          ["7486", "Quad 2-Input XOR", 4, "XOR", 2],
+          ["7400", "Quad 2-Input NAND", 4, "NAND", 2],
+          ["7402", "Quad 2-Input NOR", 4, "NOR", 2],
+          ["7410", "Triple 3-Input NAND", 3, "NAND", 3],
+          ["7420", "Dual 4-Input NAND", 2, "NAND", 4],
+          ["7411", "Triple 3-Input AND", 3, "AND", 3],
+        ];
+        const icH =
+          "<div class=grid>" +
+          ICS.map(
+            ([p, nm, c, t, k]) =>
+              `<div class=panel><b class=ic>${p}</b> <b>${nm}</b><div class="fig scroll">${draw(
+                {
+                  t,
+                  ch: "ABCD"
+                    .slice(0, k)
+                    .split("")
+                    .map((v) => ({ t: "VAR", n: v })),
+                },
+                "Y",
+              )}</div><p class=sub>${c} بوابات في الشريحة</p></div>`,
+          ).join("") +
+          "</div><div class=note>كل الشرايح DIP-14: الـVCC على الرجل 14 والـGND على الرجل 7.</div>";
+        const P = (a, re) => a.filter((x) => re.test(x.n));
+        const pld = [
+          {
+            n: "PROM — ذاكرة القراءة القابلة للبرمجة (Full Adder 8×2)",
+            d: "مصفوفة AND ثابتة ومصفوفة OR قابلة للبرمجة. هنا بننفّذ الجامع الكامل: 3 مداخل و2 مخرج.",
+            lg: "A,B,C = المداخل",
+            tt: {
+              v: 3,
+              o: [
+                ["Sum", (i) => pop(i) & 1],
+                ["Cout", (i) => +(pop(i) >= 2)],
+              ],
+            },
+          },
+          {
+            n: "PLA — Programmable Logic Array",
+            d: "مصفوفتا AND وOR قابلتين للبرمجة، فممكن مخرجين يتشاركوا نفس الـProduct term.",
+            lg: "F1 و F2 بيتشاركوا الحد AB'",
+            o: [
+              ["F1", "AB'+A'C"],
+              ["F2", "AB'+BC"],
+            ],
+          },
+          {
+            n: "PAL — Programmable Array Logic",
+            d: "مصفوفة AND قابلة للبرمجة ومصفوفة OR ثابتة.",
+            lg: "كل مخرج بحدوده الخاصة",
+            o: [
+              ["F1", "AB+A'C"],
+              ["F2", "A'B'+BC'"],
+            ],
+          },
+        ];
+        const C = [
+          {
+            nm: "البوابات المنطقية الأساسية (Logic Gates)",
+            sub: "8 بوابات",
+            items: basics,
+          },
+          {
+            nm: "Arithmetic & Logical Functions — الدوائر الحسابية والمنطقية",
+            groups: [
+              [
+                "Adders — الجوامع",
+                P(ar, /^(Half Adder|Full Adder|Ripple|BCD Adder|Carry)/),
+              ],
+              ["Subtractors — الطوارح", P(ar, /Subtractor/)],
+              ["Comparators — المقارنات", cmp],
+              ["PLD's — الدوائر المنطقية القابلة للبرمجة", pld],
+              ["Parity Circuits — فحص وتوليد التكافؤ", par],
+              ["ALU — وحدة الحساب والمنطق", alu],
+            ],
+          },
+          {
+            nm: "Data Transmission — نقل وتوزيع البيانات",
+            groups: [
+              ["Multiplexers — المُجمِّعات", P(route, /^\d+:\d+ Multiplexer/)],
+              ["Demultiplexers — الموزِّعات", P(route, /Demultiplexer/)],
+              ["Encoders — المشفِّرات", P(ed, /Encoder/)],
+              [
+                "Decoders — فاكّات التشفير",
+                P(ed, /Decoder/).filter((x) => !/7-Segment/.test(x.n)),
+              ],
+            ],
+          },
+          {
+            nm: "Code Converters — محوّلات الأكواد",
+            groups: [
+              ["Binary — Binary ↔ Gray", P(cc, /Gray/)],
+              ["BCD — BCD ↔ Excess-3", P(cc, /Excess/)],
+              ["7-Segment — شاشة السبع مقاطع", P(ed, /7-Segment/)],
+            ],
+          },
+          { nm: "الآيسيهات الأساسية (TTL 74xx)", sub: "9 شرايح", html: icH },
+          {
+            nm: "قوانين الجبر البولياني",
+            sub: "12 قانون",
+            html:
+              "<ul class=laws>" +
+              LAWS.map((l) => `<li class=eq>${l}</li>`).join("") +
+              "</ul>",
+          },
+        ];
+        const sum = (c) =>
+          c.items
+            ? c.items.length
+            : c.groups.reduce((n, g) => n + g[1].length, 0);
+        const its = (a) =>
+          a
+            .map((it) => {
+              ITEMS.push(it);
+              return `<details class=it data-i="${ITEMS.length - 1}"><summary><span>${it.n}</span>${it.ic ? `<span class=ic>IC ${it.ic}</span>` : ""}</summary><div class=body></div></details>`;
+            })
+            .join("");
+        const cat = (nm, sub, inner, k, g) =>
+          `<details class="cat${g ? " gp" : ""}" style="--cc:${COL[k % 8]}"><summary><span>${nm}</span><span class=cnt>${sub}</span></summary><div class=cbody>${inner}</div></details>`;
+        let h =
+          '<div class=row><input id=ls type=search placeholder="ابحث عن دائرة أو رقم IC (مثل 7483 أو MUX)" style="flex:1;min-width:220px;padding:10px 12px;font-size:16px;border:2px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)"><button class=pb data-pt=lib>🖨 طباعة المكتبة كاملة</button></div>';
+        C.forEach((c, k) => {
+          const inner =
+            c.html ??
+            (c.items
+              ? its(c.items)
+              : c.groups
+                  .map(([t, a]) => cat(t, a.length + " دوائر", its(a), k, 1))
+                  .join(""));
+          h += cat(c.nm, c.sub || sum(c) + " دوائر", inner, k);
+        });
+        $("#l").innerHTML = h;
+        $("#ls").oninput = (e) => {
+          const q = e.target.value.trim().toLowerCase();
+          document.querySelectorAll("#l .cat").forEach((c) => {
+            let v = 0;
+            c.querySelectorAll(".it").forEach((i) => {
+              const m =
+                !q || i.firstElementChild.textContent.toLowerCase().includes(q);
+              i.hidden = !m;
+              v += m;
+            });
+            c.hidden = !!q && !v;
+            if (q && v) c.open = true;
+          });
+        };
+        document
+          .querySelectorAll("#l .cbody")
+          .forEach((b) =>
+            b.insertAdjacentHTML(
+              "afterbegin",
+              "<button class=pb data-pt=cat>🖨 طباعة هذا القسم</button>",
+            ),
+          );
+      }
+      document.addEventListener(
+        "toggle",
+        (e) => {
+          const d = e.target;
+          if (d.open && d.dataset && d.dataset.i && !d.dataset.done) {
+            d.dataset.done = 1;
+            d.querySelector(".body").innerHTML = item(ITEMS[d.dataset.i]);
+          }
+        },
+        true,
+      );
+
+      /* ============================================================
+     THEME
+     ============================================================ */
+      $("#th").onclick = () => {
+        const r = document.documentElement,
+          dk = r.dataset.theme
+            ? r.dataset.theme === "dark"
+            : matchMedia("(prefers-color-scheme:dark)").matches;
+        r.dataset.theme = dk ? "light" : "dark";
+      };
+
+      /* ============================================================
+     WIRING / EVENTS
+     ============================================================ */
+      const KEYS = [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "'",
+        "+",
+        ".",
+        "^",
+        "(",
+        ")",
+        "NAND",
+        "NOR",
+        "Σm()",
+      ];
+      $("#keys").innerHTML =
+        KEYS.map(
+          (k) =>
+            `<button class=k data-k="${k}">${k === "^" ? "⊕" : k === "." ? "·" : k}</button>`,
+        ).join("") +
+        '<button data-k="⌫">مسح حرف</button><button data-k="C!">مسح الكل</button>';
+      const EXAMPLES = [
+        {
+          label: "⚡ فول أدر (Full Adder)",
+          val: "Sum = A^B^C ; Cout = AB+C(A^B)",
+        },
+        { label: "⚡ هاف أدر (Half Adder)", val: "Sum = A^B ; Carry = AB" },
+        {
+          label: "⚡ فول سبتراكتر (Full Subtractor)",
+          val: "Diff = A^B^C ; Bout = A'B+(A^B)'C",
+        },
+        {
+          label: "⚡ هاف سبتراكتر (Half Subtractor)",
+          val: "Diff = A^B ; Borrow = A'B",
+        },
+        {
+          label: "⚡ مقارن 1-Bit",
+          val: "A_GT_B = AB' ; A_EQ_B = (A^B)' ; A_LT_B = A'B",
+        },
+        { label: "⚡ مكس 2:1 (MUX)", val: "Y = C'A+CB" },
+        { label: "A'B+AB'", val: "A'B+AB'" },
+        { label: "AB+A'C+BC", val: "AB+A'C+BC" },
+        { label: "(A+B)(A'+C)", val: "(A+B)(A'+C)" },
+        { label: "A^B^C", val: "A^B^C" },
+        {
+          label: "Σm(0,2,5,7,8,10)+d(13,15)",
+          val: "Σm(0,2,5,7,8,10)+d(13,15)",
+        },
+      ];
+      $("#ex").innerHTML = EXAMPLES.map(
+        (x) =>
+          `<button class="chip" data-formula="${x.val.replace(/"/g, "&quot;")}">${x.label}</button>`,
+      ).join(" ");
+
+      let tm;
+      const inp = $("#in");
+      inp.oninput = () => {
+        clearTimeout(tm);
+        tm = setTimeout(analyze, 450);
+      };
+      inp.onkeydown = (e) => {
+        if (e.key === "Enter") {
+          clearTimeout(tm);
+          analyze();
+        }
+      };
+      $("#go").onclick = analyze;
+      $("#nv").onchange = analyze;
+
+      document.addEventListener("click", (e) => {
+        const b = e.target.closest("button");
+        if (!b) return;
+        if (b.dataset.k) {
+          const k = b.dataset.k;
+          inp.focus();
+          if (k === "C!") inp.value = "";
+          else if (k === "⌫") inp.value = inp.value.slice(0, -1);
+          else {
+            const s = inp.selectionStart ?? inp.value.length,
+              v = inp.value;
+            inp.value = v.slice(0, s) + k + v.slice(inp.selectionEnd ?? s);
+            const c = s + (k === "Σm()" ? k.length - 1 : k.length);
+            inp.setSelectionRange(c, c);
+          }
+          analyze();
+        } else if (b.classList.contains("chip")) {
+          inp.value = b.dataset.formula || b.textContent;
+          analyze();
+        } else if (b.dataset.t) {
+          document
+            .querySelectorAll(".tabs button")
+            .forEach((x) => x.classList.toggle("on", x === b));
+          $("#r").hidden = b.dataset.t !== "r";
+          $("#l").hidden = b.dataset.t !== "l";
+        } else if (b.dataset.c) {
+          ct = b.dataset.c;
+          circ();
+        } else if (b.dataset.a) {
+          /* ---- الانتقال إلى الصفحة الرئيسية + تشغيل التحليل ---- */
+          inp.value = b.dataset.a;
+          $("#nv").value = b.dataset.n || 0;
+
+          /* 1) فعّل تبويب التحليل */
+          const mainTabBtn = document.querySelector('.tabs button[data-t="r"]');
+          if (mainTabBtn) mainTabBtn.click();
+
+          /* 2) شغّل التحليل */
+          analyze();
+
+          /* 3) رجّع المستخدم لأعلى الصفحة + فلّت التركيز على خانة الإدخال */
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            try {
+              inp.focus({ preventScroll: true });
+            } catch (_) {}
+          }, 40);
+        }
+      });
+      document.addEventListener("change", (e) => {
+        if (e.target.id === "cs2") {
+          csrc = e.target.value;
+          circ();
+        }
+        if (e.target.id === "ci") {
+          cinv = e.target.checked;
+          circ();
+        }
+      });
+      document.addEventListener("mouseover", (e) => {
+        const g = e.target.closest(".lg");
+        document
+          .querySelectorAll(".kc.hl")
+          .forEach((c) => c.classList.remove("hl"));
+        if (g)
+          document
+            .querySelectorAll(`.kc[data-g~="${g.dataset.g}"]`)
+            .forEach((c) => c.classList.add("hl"));
+      });
+      document.addEventListener("click", (e) => {
+        const sw = e.target.closest("[data-sw]");
+        if (!sw) return;
+        const [id, i] = sw.dataset.sw.split(":"),
+          B = BBS[id],
+          k = B.ins[+i];
+        B.in[k] ^= 1;
+        playSwitchSound(B.in[k]);
+        const v = evalNet(B),
+          svg = sw.closest("svg");
+        svg
+          .querySelectorAll("[data-w]")
+          .forEach((g) => g.setAttribute("data-v", v[g.dataset.w]));
+        svg
+          .querySelectorAll("[data-tg]")
+          .forEach(
+            (t) => (t.textContent = t.dataset.n + "=" + v[t.dataset.tg]),
+          );
+        svg
+          .querySelectorAll("[data-ld]")
+          .forEach((c) =>
+            c.setAttribute("fill", v[c.dataset.ld] ? "#fbbf24" : "#4b5563"),
+          );
+        svg
+          .querySelectorAll("[data-lg]")
+          .forEach((c) =>
+            c.setAttribute("opacity", v[c.dataset.lg] ? 0.55 : 0),
+          );
+        const g = sw.parentNode;
+        g.querySelector(".sl").setAttribute("y", B.in[k] ? 304 : 319);
+        g.querySelector(".sv").textContent = B.in[k];
+      });
+
+      /* ============================================================
+       PRO UPGRADES: AUDIO, LOGIC PROBE, TRUTH TABLE EDIT, EXPORTS
+       ============================================================ */
+      let audioCtx = null;
+      let soundEnabled = true;
+
+      function playSwitchSound(state) {
+        if (!soundEnabled) return;
+        try {
+          if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          }
+          if (audioCtx.state === "suspended") {
+            audioCtx.resume();
+          }
+          const t = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          const filter = audioCtx.createBiquadFilter();
+
+          osc.type = "triangle";
+          const startFreq = state ? 1350 : 850;
+          const endFreq = state ? 380 : 220;
+          osc.frequency.setValueAtTime(startFreq, t);
+          osc.frequency.exponentialRampToValueAtTime(endFreq, t + 0.035);
+
+          filter.type = "lowpass";
+          filter.frequency.setValueAtTime(2600, t);
+          filter.frequency.linearRampToValueAtTime(700, t + 0.04);
+
+          gain.gain.setValueAtTime(0.28, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(t);
+          osc.stop(t + 0.042);
+        } catch (_) {}
+      }
+
+      // Sound toggle button
+      const sndBtn = $("#snd-toggle");
+      if (sndBtn) {
+        sndBtn.onclick = () => {
+          soundEnabled = !soundEnabled;
+          sndBtn.textContent = soundEnabled ? "🔊" : "🔇";
+          sndBtn.classList.toggle("muted", !soundEnabled);
+          sndBtn.title = soundEnabled
+            ? "المؤثر الصوتي للمفاتيح مفعّل"
+            : "المؤثر الصوتي للمفاتيح مكتوم";
+          if (soundEnabled) playSwitchSound(1);
+        };
+      }
+
+      // --- Interactive Truth Table Editing ---
+      document.addEventListener("click", (e) => {
+        const cell = e.target.closest(".tt-cell");
+        if (!cell || !cur) return;
+        const row = +cell.dataset.ttRow;
+        const outIdx = +cell.dataset.ttOut || 0;
+
+        if (cur.multi) {
+          const o = cur.outputs[outIdx];
+          if (!o) return;
+          const curVal = o.f[row];
+          const nextVal = curVal === 0 ? 1 : curVal === 1 ? 2 : 0;
+          o.f[row] = nextVal;
+          playSwitchSound(nextVal === 1);
+
+          o.on = o.f.flatMap((v, i) => (v === 1 ? [i] : []));
+          o.off = o.f.flatMap((v, i) => (v === 0 ? [i] : []));
+          o.dc = o.f.flatMap((v, i) => (v === 2 ? [i] : []));
+          const a0 = { n: cur.n, vars: cur.vars };
+          o.s = minimize(o.on, o.dc, cur.n);
+          o.p = minimize(o.off, o.dc, cur.n);
+          o.sopS = o.s.cv.map((p) => termStr(a0, p)).join(" + ") || "0";
+          o.posS = o.p.cv.map((p) => termStr(a0, p, 1)).join("") || "1";
+          o.sopA = normal(a0, o.s.cv, 0);
+          o.posA = normal(a0, o.p.cv, 1);
+          o.ast = o.sopA;
+
+          $("#in").value = cur.outputs
+            .map(
+              (out) =>
+                `${out.name} = Σm(${out.on.join(",")})${out.dc.length ? "+d(" + out.dc.join(",") + ")" : ""}`,
+            )
+            .join(" ; ");
+          renderMulti(cur);
+        } else {
+          const curVal = cur.f[row];
+          const nextVal = curVal === 0 ? 1 : curVal === 1 ? 2 : 0;
+          cur.f[row] = nextVal;
+          playSwitchSound(nextVal === 1);
+
+          cur.on = cur.f.flatMap((v, i) => (v === 1 ? [i] : []));
+          cur.off = cur.f.flatMap((v, i) => (v === 0 ? [i] : []));
+          cur.dc = cur.f.flatMap((v, i) => (v === 2 ? [i] : []));
+          cur.s = minimize(cur.on, cur.dc, cur.n);
+          cur.p = minimize(cur.off, cur.dc, cur.n);
+          cur.sopS = cur.s.cv.map((p) => termStr(cur, p)).join(" + ") || "0";
+          cur.posS = cur.p.cv.map((p) => termStr(cur, p, 1)).join("") || "1";
+          cur.sopA = normal(cur, cur.s.cv, 0);
+          cur.posA = normal(cur, cur.p.cv, 1);
+          cur.ast = cur.sopA;
+
+          $("#in").value =
+            `Σm(${cur.on.join(",")})${cur.dc.length ? "+d(" + cur.dc.join(",") + ")" : ""}`;
+          render(cur);
+        }
+      });
+
+      // --- High-DPI Vector (SVG) & Transparent PNG Export & Fullscreen ---
+      function downloadFile(blob, filename) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+      }
+
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest("button[data-exp]");
+        if (!btn) return;
+        const type = btn.dataset.exp;
+        const zw = btn.closest(".zw");
+        if (!zw) return;
+
+        if (type === "fs") {
+          if (!document.fullscreenElement) {
+            zw.requestFullscreen().catch(() => {});
+            btn.textContent = "⛶ خروج";
+          } else {
+            document.exitFullscreen().catch(() => {});
+            btn.textContent = "⛶ ملء الشاشة";
+          }
+          return;
+        }
+
+        const svg = zw.querySelector("svg");
+        if (!svg) return;
+
+        const clone = svg.cloneNode(true);
+        clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        const styleEl = document.createElement("style");
+        styleEl.textContent = `
+          .w { stroke: #0b7a6f; fill: none; stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; }
+          .g { stroke: #10202e; fill: #f3fbf8; stroke-width: 2.1; }
+          .gn { stroke: #10202e; fill: none; stroke-width: 1.9; }
+          .d { fill: #0b7a6f; }
+          text { fill: #10202e; font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; }
+          .lb { font-size: 12px; fill: #5b6b78; }
+          .gt { font-size: 11px; font-weight: 600; fill: #5b6b78; }
+          .hd { stroke: #9a917b; stroke-width: 4.5; stroke-linecap: round; }
+          .bb { fill: #eae5d6; stroke: #d5ded8; }
+        `;
+        clone.insertBefore(styleEl, clone.firstChild);
+
+        const vb = clone.viewBox.baseVal;
+        const width = (vb && vb.width) || +clone.getAttribute("width") || 900;
+        const height =
+          (vb && vb.height) || +clone.getAttribute("height") || 450;
+        clone.setAttribute("width", width);
+        clone.setAttribute("height", height);
+
+        const xml = new XMLSerializer().serializeToString(clone);
+        const namePart =
+          (cur && cur.multi
+            ? cur.outputs.map((o) => o.name).join("_")
+            : cur && cur.src
+              ? cur.src.replace(/[^A-Za-z0-9]/g, "_")
+              : "logic_lab") || "circuit";
+
+        if (type === "svg") {
+          const blob = new Blob(
+            ['<?xml version="1.0" standalone="no"?>\r\n' + xml],
+            { type: "image/svg+xml;charset=utf-8" },
+          );
+          downloadFile(blob, `${namePart}_diagram.svg`);
+          playSwitchSound(1);
+        } else if (type === "png") {
+          const scale = 2.5; // High-DPI 300dpi crisp rendering
+          const img = new Image();
+          const svgBlob = new Blob([xml], {
+            type: "image/svg+xml;charset=utf-8",
+          });
+          const url = URL.createObjectURL(svgBlob);
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.round(width * scale);
+            canvas.height = Math.round(height * scale);
+            const ctx = canvas.getContext("2d");
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+            ctx.scale(scale, scale);
+            ctx.drawImage(img, 0, 0);
+            URL.revokeObjectURL(url);
+            canvas.toBlob((blob) => {
+              if (blob) downloadFile(blob, `${namePart}_diagram.png`);
+              playSwitchSound(1);
+            }, "image/png");
+          };
+          img.src = url;
+        }
+      });
+
+      // --- Live Logic Probe Tooltip & Hover Engine ---
+      const probeTip = $("#logic-probe-tip");
+
+      document.addEventListener("mousemove", (e) => {
+        if (!probeTip) return;
+        const wireEl =
+          e.target.closest &&
+          (e.target.closest(".zv [data-w]") ||
+            e.target.closest(".zv [data-s]") ||
+            e.target.closest(".zv path.g") ||
+            e.target.closest(".zv circle.d"));
+        if (!wireEl) {
+          probeTip.style.display = "none";
+          return;
+        }
+
+        const titleEl = wireEl.querySelector && wireEl.querySelector("title");
+        const titleText = titleEl
+          ? titleEl.textContent
+          : wireEl.getAttribute("title") || "";
+        const valAttr = wireEl.getAttribute("data-v");
+        const netAttr =
+          wireEl.getAttribute("data-w") || wireEl.getAttribute("data-s") || "";
+
+        let val = valAttr != null ? +valAttr : null;
+        let isHigh = val === 1;
+
+        let label = "إشارة منطقية (Net)";
+        if (titleText) {
+          label = titleText.split("—")[0].trim();
+        } else if (netAttr) {
+          label = `Net ${netAttr}`;
+        }
+
+        let voltStr =
+          val === 1 ? "+5.0 V" : val === 0 ? "0.0 V (GND)" : "تعريف عائم";
+        let stateStr = val === 1 ? "HIGH (1)" : val === 0 ? "LOW (0)" : "إشارة";
+
+        probeTip.className = isHigh ? "high" : "low";
+        probeTip.innerHTML = `
+          <div class="p-row">
+            <span class="p-badge ${isHigh ? "high" : "low"}">⚡ ${stateStr}</span>
+            <span class="p-volt">${voltStr}</span>
+          </div>
+          <div style="font-weight:700;color:#fff">${esc(label)}</div>
+          ${titleText && titleText.includes("—") ? `<div class="p-formula">${esc(titleText.split("—")[1].trim())}</div>` : ""}
+        `;
+
+        probeTip.style.display = "block";
+        probeTip.style.left = `${e.clientX}px`;
+        probeTip.style.top = `${e.clientY}px`;
+      });
+
+      document.addEventListener("mouseleave", () => {
+        if (probeTip) probeTip.style.display = "none";
+      });
+
+      /* ============================================================
+     PROFESSIONAL PRINT REPORT
+     ============================================================ */
+      const STAMP_SVG = `
+      <svg viewBox="0 0 100 100" width="52" height="52" role="img" aria-label="ختم معمل موثق" style="display:inline-block;vertical-align:middle">
+        <defs>
+          <path id="stArcT" d="M 13,50 A 37,37 0 0,1 87,50" fill="none"/>
+          <path id="stArcB" d="M 87,50 A 37,37 0 0,1 13,50" fill="none"/>
+        </defs>
+        <circle cx="50" cy="50" r="48" fill="none" stroke="#0b4f8a" stroke-width="1.6"/>
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#0b4f8a" stroke-width="0.7"/>
+        <circle cx="50" cy="50" r="29" fill="none" stroke="#0b4f8a" stroke-width="0.9"/>
+        <text font-family="'IBM Plex Sans Arabic', Tahoma, sans-serif" font-weight="700" font-size="5" fill="#0b4f8a">
+          <textPath href="#stArcT" startOffset="50%" text-anchor="middle">مختبر التصميم المنطقي الرقمي</textPath>
+        </text>
+        <text font-family="'IBM Plex Mono', monospace" font-weight="700" font-size="4.5" fill="#0b4f8a" letter-spacing="0.5">
+          <textPath href="#stArcB" startOffset="50%" text-anchor="middle">DIGITAL LOGIC LAB · VERIFIED</textPath>
+        </text>
+        <text x="12" y="52" font-size="5.5" font-weight="700" text-anchor="middle" fill="#0b4f8a">★</text>
+        <text x="88" y="52" font-size="5.5" font-weight="700" text-anchor="middle" fill="#0b4f8a">★</text>
+        <g transform="translate(50, 40) scale(0.42)" stroke="#0b4f8a" stroke-width="2" fill="none">
+          <path d="M-18,-11 H0 A11,11 0 0 1 0,11 H-18 Z"/>
+          <path d="M-22,-6 H-18 M-22,6 H-18 M11,0 H16"/>
+        </g>
+        <text x="50" y="55" text-anchor="middle" font-family="'IBM Plex Sans Arabic', Tahoma, sans-serif" font-weight="800" font-size="8.5" fill="#0b4f8a">معمل موثّق</text>
+        <text x="50" y="63" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-weight="700" font-size="4.2" letter-spacing="0.8" fill="#075d54">VERIFIED</text>
+      </svg>`;
+
+      const COVER_LOGO = `
+      <svg viewBox="0 0 64 64" role="img" style="color:#0b7a6f">
+        <defs>
+          <linearGradient id="coverGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#0b7a6f"/>
+            <stop offset="1" stop-color="#0e4f7a"/>
+          </linearGradient>
+        </defs>
+        <g stroke="#0b7a6f" stroke-width="3" stroke-linecap="round">
+          <path d="M18 2v6M32 2v6M46 2v6M18 56v6M32 56v6M46 56v6"/>
+        </g>
+        <rect x="6" y="7" width="52" height="50" rx="14" fill="url(#coverGrad)"/>
+        <g stroke="#fff" stroke-opacity=".7" stroke-width="1.4" fill="none">
+          <path d="M17 22L27 25M17 32H27M17 42L27 39M48 32H53"/>
+        </g>
+        <g fill="#fff">
+          <circle cx="17" cy="22" r="2.6"/>
+          <circle cx="17" cy="32" r="2.6"/>
+          <circle cx="17" cy="42" r="2.6"/>
+        </g>
+        <path d="M27 20h9a12 12 0 0 1 0 24h-9z" fill="#fff"/>
+        <circle cx="53" cy="32" r="3" fill="#ffd166"/>
+        <text x="34" y="36" text-anchor="middle" direction="ltr" style="font-size:10.5px;font-weight:700;font-family:'IBM Plex Mono',monospace" fill="#0b4f6f">AR</text>
+      </svg>`;
+
+      function formatAcademicDate() {
+        const d = new Date();
+        const monthsAr = [
+          "يناير",
+          "فبراير",
+          "مارس",
+          "أبريل",
+          "مايو",
+          "يونيو",
+          "يوليو",
+          "أغسطس",
+          "سبتمبر",
+          "أكتوبر",
+          "نوفمبر",
+          "ديسمبر",
+        ];
+        return `${d.getDate()} ${monthsAr[d.getMonth()]} ${d.getFullYear()} م`;
+      }
+
+      function cleanContentForAcademicPrint(container) {
+        if (!container) return "";
+        let htmlStr =
+          typeof container === "string" ? container : container.innerHTML || "";
+
+        const temp = document.createElement("div");
+        temp.innerHTML = htmlStr;
+
+        // 1. Remove all interactive buttons, toolbars, inputs, sound toggles, and probe elements
+        temp
+          .querySelectorAll(
+            ".pb, .zt, .exp-btn, .snd-btn, .tools, .tabs, button, input, select, #logic-probe-tip",
+          )
+          .forEach((el) => el.remove());
+
+        // 2. Unpack any <details> tags (like algebra steps or sub-circuits) into clean academic boxes
+        temp.querySelectorAll("details").forEach((d) => {
+          const wrapper = document.createElement("div");
+          wrapper.className = "academic-sub-box";
+          const summary = d.querySelector("summary");
+          if (summary) {
+            const h = document.createElement("h4");
+            h.className = "academic-sub-h";
+            h.textContent = summary.textContent
+              .replace(/✎|▾|🖨.*$/g, "")
+              .trim();
+            wrapper.appendChild(h);
+            summary.remove();
+          }
+          while (d.firstChild) {
+            wrapper.appendChild(d.firstChild);
+          }
+          d.replaceWith(wrapper);
+        });
+
+        // 3. Clean up interactive markers (pencil icons, tt-cell class, tooltips)
+        // 3. نظّف العلامات التفاعلية (قلم ✎ والـ tooltips) من غير ما نمسح محتوى الخلية
+        //    (الطريقة القديمة كانت بتستخدم textContent فبتمسح الـ <b> والـ <small> ونقاط مجموعات الكارنو)
+        temp.querySelectorAll("th, td").forEach((cell) => {
+          cell.classList.remove("tt-cell");
+          cell.removeAttribute("title");
+          cell
+            .querySelectorAll("[title]")
+            .forEach((el) => el.removeAttribute("title"));
+
+          // نعدّل نصوص الخلية فقط (Text Nodes) بدون المساس بالعناصر
+          const walker = document.createTreeWalker(
+            cell,
+            NodeFilter.SHOW_TEXT,
+            null,
+          );
+          const nodes = [];
+          while (walker.nextNode()) nodes.push(walker.currentNode);
+          nodes.forEach((n) => {
+            n.nodeValue = n.nodeValue.replace(/✎/g, "");
+          });
+        });
+
+        // 4. Clean SVGs: Ensure viewBox is kept, remove hardcoded pixel widths that overflow A4, remove dim classes
+        temp.querySelectorAll("svg").forEach((svg) => {
+          svg.style.maxWidth = "100%";
+          svg.style.height = "auto";
+          svg.style.display = "block";
+          svg.style.margin = "3mm auto";
+          svg
+            .querySelectorAll(".dm")
+            .forEach((el) => el.classList.remove("dm"));
+          svg.querySelectorAll("[data-v]").forEach((el) => {
+            el.style.opacity = "1";
+          });
+          svg.querySelectorAll("[data-w]").forEach((el) => {
+            el.style.opacity = "1";
+          });
+        });
+
+        return temp.innerHTML;
+      }
+
+      /* ============================================================
+       COMPREHENSIVE MULTI-SCOPE ACADEMIC PRINT SYSTEM
+       ============================================================ */
+      function makeAcademicCoverHTML(info) {
+        return `
+        <div class="academic-report-cover-page">
+          <!-- 1. University & Faculty Hierarchy on Right, Logo on Left -->
+          <div class="rep-top-banner">
+            <div class="rep-univ-side">
+              <div class="gov-title">جمهورية مصر العربية — وزارة التعليم العالي والبحث العلمي</div>
+              <div class="gov-faculty">كلية الهندسة — قسم هندسة نظم الذكاء الاصطناعي</div>
+              <div class="gov-dept">مختبر التصميم والتنظيم المنطقي الرقمي · Digital Logic Design Laboratory</div>
+            </div>
+            <div class="rep-logo-side">
+              ${COVER_LOGO}
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="rep-header-rule"></div>
+
+          <!-- Center Title Block -->
+          <div class="rep-center-title-block">
+            <div class="rep-accred-badge">OFFICIAL LABORATORY DESIGN REPORT · مختبر التصميم المنطقي الرقمي</div>
+            <h1 class="rep-main-heading">${esc(info.title || "تقرير حل وتصميم الدائرة المنطقية المعملية")}</h1>
+            <div class="rep-sub-heading">${esc(info.subtitle || "تحليل رياضي كامل، خريطة كارنو، التبسيط الأمثل، المخطط الهندسي، والتوصيل المعملي على لوحة التجارب (Breadboard)")}</div>
+          </div>
+
+          <!-- Two-Column Information Ticket Card -->
+          <div class="rep-info-grid">
+            <div class="rep-info-card">
+              <div class="rep-card-k">${esc(info.targetLabel || "الدائرة قيد الاختبار والتحليل:")}</div>
+              <div class="rep-card-expr mono">${esc(info.expr || "")}</div>
+              <div class="rep-card-v">${esc(info.desc || "")}</div>
+            </div>
+            <div class="rep-meta-box">
+              <div class="meta-row"><b>إعداد المهندس / الطالب:</b> <span class="student-write-in"></span></div>
+              <div class="meta-row"><b>المقرر الدراسي:</b> <span>هندسة التصميم المنطقي (Logic Design)</span></div>
+              <div class="meta-row"><b>تاريخ التوثيق المعملي:</b> <span>${formatAcademicDate()}</span></div>
+              <div class="meta-row"><b>الاعتماد المعملي:</b> <span style="color:#0b7a6f;font-weight:700">✔ موثّق ومعتمد معملياً</span></div>
+            </div>
+          </div>
+        </div>`;
+      }
+
+      function buildCustomReport(scope, triggerBtn) {
+        const pa = $("#pa");
+        if (!pa) return;
+
+        let coverHTML = "";
+        let bodySectionsHTML = "";
+
+        // ==================== CASE A: PRINT SPECIFIC CIRCUIT FROM LIBRARY (data-pt="it") ====================
+        if (scope === "it" && triggerBtn) {
+          const itEl =
+            triggerBtn.closest("details.it") || triggerBtn.closest(".it");
+          let itObj = null;
+          if (itEl && itEl.dataset.i != null) {
+            itObj = ITEMS[+itEl.dataset.i];
+            if (!itEl.dataset.done) {
+              itEl.dataset.done = "1";
+              const bEl = itEl.querySelector(".body") || itEl;
+              bEl.innerHTML = item(itObj);
+            }
+          }
+
+          const circuitName = itObj
+            ? itObj.n
+            : itEl.querySelector("summary span:first-child")?.textContent ||
+              "دائرة منطقية";
+          const bodyEl = itEl.querySelector(".body") || itEl;
+          const cleanHTML = cleanContentForAcademicPrint(bodyEl);
+
+          coverHTML = makeAcademicCoverHTML({
+            title: `تقرير التوصيل والتصميم المعملي: ${circuitName}`,
+            subtitle:
+              "توثيق هندسي عملي يشمل جدول الحقيقة، مخطط البوابات، وتوصيلات لوحة التجارب (Breadboard)",
+            targetLabel: "اسم الدائرة الهندسية:",
+            expr: circuitName,
+            desc:
+              itObj && itObj.d
+                ? itObj.d
+                : "دائرة منطقية متكاملة من مكتبة المختبر",
+          });
+
+          bodySectionsHTML = `
+          <div class="academic-sec">
+            <div class="sec-banner">
+              <span class="sec-num">01</span>
+              <h2 class="sec-text">التصميم والتوصيل المعملي لدائرة ${esc(circuitName)}</h2>
+            </div>
+            <div class="sec-content">
+              ${cleanHTML}
+            </div>
+          </div>`;
+        }
+
+        // ==================== CASE B: PRINT SPECIFIC LIBRARY CATEGORY (data-pt="cat") ====================
+        else if (scope === "cat" && triggerBtn) {
+          const catEl =
+            triggerBtn.closest("details.cat") || triggerBtn.closest(".cat");
+          const catName =
+            catEl.querySelector("summary span:first-child")?.textContent ||
+            "قسم من مكتبة الدوائر";
+
+          // Pre-render all items inside this category
+          catEl.querySelectorAll("details.it").forEach((d) => {
+            if (!d.dataset.done && d.dataset.i != null) {
+              d.dataset.done = "1";
+              d.querySelector(".body").innerHTML = item(ITEMS[+d.dataset.i]);
+            }
+          });
+
+          const bodyEl = catEl.querySelector(".cbody") || catEl;
+          const cleanHTML = cleanContentForAcademicPrint(bodyEl);
+
+          coverHTML = makeAcademicCoverHTML({
+            title: `مرجع الدوائر الهندسية — ${catName}`,
+            subtitle: "توثيق شامل لكافة دوائر وتطبيقات هذا القسم المعملي",
+            targetLabel: "القسم المعملي:",
+            expr: catName,
+            desc: "مجموعة دوائر وتطبيقات منطقية متكاملة",
+          });
+
+          bodySectionsHTML = `
+          <div class="academic-sec">
+            <div class="sec-banner">
+              <span class="sec-num">01</span>
+              <h2 class="sec-text">${esc(catName)}</h2>
+            </div>
+            <div class="sec-content">
+              ${cleanHTML}
+            </div>
+          </div>`;
+        }
+
+        // ==================== CASE C: PRINT SINGLE SECTION FROM ANALYSIS (data-pt="sec") ====================
+        else if (scope === "sec" && triggerBtn) {
+          const secEl =
+            triggerBtn.closest("details.sec") ||
+            triggerBtn.closest(".cat.sec") ||
+            triggerBtn.closest("section");
+          const secTitle =
+            secEl
+              .querySelector("summary span:first-child, h2")
+              ?.textContent.replace(/✎|▾|🖨.*$/g, "")
+              .trim() || "قسم تحليلي";
+          const bodyEl = secEl.querySelector(".cbody") || secEl;
+          const cleanHTML = cleanContentForAcademicPrint(bodyEl);
+          const src = ($("#in") && $("#in").value.trim()) || "دائرة منطقية";
+
+          coverHTML = makeAcademicCoverHTML({
+            title: `توثيق معملي: ${secTitle}`,
+            subtitle: `مستخرج رسمي لقسم ${secTitle} من نتائج التحليل المعملي الكامل`,
+            targetLabel: "الدائرة قيد التحليل:",
+            expr: src,
+            desc: secTitle,
+          });
+
+          bodySectionsHTML = `
+          <div class="academic-sec">
+            <div class="sec-banner">
+              <span class="sec-num">01</span>
+              <h2 class="sec-text">${esc(secTitle)}</h2>
+            </div>
+            <div class="sec-content">
+              ${cleanHTML}
+            </div>
+          </div>`;
+        }
+
+        // ==================== CASE D: PRINT SINGLE DIAGRAM (data-pt="zw") ====================
+        else if (scope === "zw" && triggerBtn) {
+          const zwEl = triggerBtn.closest(".zw");
+          const cleanHTML = cleanContentForAcademicPrint(zwEl);
+          const src = ($("#in") && $("#in").value.trim()) || "مخطط هندسي";
+
+          coverHTML = makeAcademicCoverHTML({
+            title: "المخطط الهندسي المعملي المعتمد",
+            subtitle:
+              "رسم متجهي عالي النقاء للدائرة المنطقية وتوصيلاتها المعملية",
+            targetLabel: "الدائرة قيد الرسم:",
+            expr: src,
+            desc: "مخطط البوابات والتوصيل المعملي",
+          });
+
+          bodySectionsHTML = `
+          <div class="academic-sec">
+            <div class="sec-banner">
+              <span class="sec-num">01</span>
+              <h2 class="sec-text">المخطط الهندسي المعتمد</h2>
+            </div>
+            <div class="sec-content">
+              ${cleanHTML}
+            </div>
+          </div>`;
+        }
+        // ==================== CASE F: PRINT FULL LIBRARY ====================
+        else if (scope === "lib") {
+          const libEl = $("#l");
+          // فكّ كل العناصر المخزّنة (lazy) وارسمها
+          libEl.querySelectorAll("details.it").forEach((d) => {
+            d.hidden = false;
+            if (!d.dataset.done && d.dataset.i != null) {
+              d.dataset.done = "1";
+              d.querySelector(".body").innerHTML = item(ITEMS[+d.dataset.i]);
+            }
+          });
+          libEl.querySelectorAll(".cat").forEach((c) => (c.hidden = false));
+
+          const cleanHTML = cleanContentForAcademicPrint(libEl);
+
+          coverHTML = makeAcademicCoverHTML({
+            title: "مرجع مكتبة الدوائر المنطقية الكامل",
+            subtitle:
+              "توثيق هندسي شامل لكافة الدوائر الحسابية والناقلة للبيانات ومحوّلات الأكواد والشرائح والقوانين البوليانية",
+            targetLabel: "المرجع:",
+            expr: "Digital Logic Library",
+            desc: "مكتبة معملية متكاملة",
+          });
+
+          bodySectionsHTML = `
+          <div class="academic-sec">
+            <div class="sec-banner">
+              <span class="sec-num">01</span>
+              <h2 class="sec-text">مكتبة الدوائر المنطقية</h2>
+            </div>
+            <div class="sec-content">${cleanHTML}</div>
+          </div>`;
+        }
+
+        // ==================== CASE E: PRINT ENTIRE PROBLEM ANALYSIS (scope === "all" / Default / Ctrl+P) ====================
+        else {
+          const src = ($("#in") && $("#in").value.trim()) || "دائرة منطقية";
+          let circuitTitle = "تحليل وتصميم دالة منطقية رقمية";
+          let circuitType = "دائرة منطقية توافقية (Combinational Logic)";
+          let totalOutputs = 1;
+
+          if (cur && cur.multi) {
+            totalOutputs = cur.outputs.length;
+            circuitTitle = `دائرة متكاملة متعددة المخارج (${totalOutputs} مخارج)`;
+            circuitType = `دائرة توافقية متكاملة (${cur.outputs.map((o) => o.name).join(" ، ")})`;
+          } else if (cur && cur.det && cur.det.length) {
+            circuitTitle = cur.det[0];
+          }
+
+          const rEl = $("#r");
+          const reportSections = [];
+          if (rEl) {
+            const secElements = rEl.querySelectorAll(
+              "details.cat.sec, section",
+            );
+            secElements.forEach((sec) => {
+              const summarySpan = sec.querySelector(
+                "summary span:first-child, h2",
+              );
+              const title = summarySpan
+                ? summarySpan.textContent.replace(/✎|▾|🖨.*$/g, "").trim()
+                : "";
+              if (!title) return;
+              const bodyEl = sec.querySelector(".cbody") || sec;
+              const cleanHTML = cleanContentForAcademicPrint(bodyEl);
+              reportSections.push({ title, html: cleanHTML });
+            });
+          }
+
+          if (!reportSections.length) {
+            reportSections.push({
+              title: "نتائج التحليل المنطقي والمعملي",
+              html: cleanContentForAcademicPrint($("#r") || document.body),
+            });
+          }
+
+          coverHTML = makeAcademicCoverHTML({
+            title: "تقرير حل وتصميم الدائرة المنطقية المعملية",
+            subtitle:
+              "تحليل رياضي كامل، خريطة كارنو، التبسيط الأمثل، المخطط الهندسي، والتوصيل المعملي على لوحة التجارب (Breadboard)",
+            targetLabel: "الدائرة قيد الاختبار والتحليل:",
+            expr: src,
+            desc: `${circuitTitle} — ${circuitType}`,
+          });
+
+          reportSections.forEach((sec, idx) => {
+            bodySectionsHTML += `
+            <div class="academic-sec">
+              <div class="sec-banner">
+                <span class="sec-num">${String(idx + 1).padStart(2, "0")}</span>
+                <h2 class="sec-text">${esc(sec.title)}</h2>
+              </div>
+              <div class="sec-content">
+                ${sec.html}
+              </div>
+            </div>`;
+          });
+        }
+
+        pa.innerHTML = coverHTML + bodySectionsHTML;
+      }
+
+      let isPrinting = false;
+
+      function prepareReport(scope, triggerBtn) {
+        if (scope === "all" || !scope || scope === "sec") {
+          document.querySelectorAll("#r details, details.sec").forEach((d) => {
+            if (!d.hasAttribute("data-was-open")) {
+              d.dataset.wasOpen = d.open ? "1" : "0";
+            }
+            d.open = true;
+          });
+          if (typeof circ === "function") circ();
+        }
+
+        buildCustomReport(scope, triggerBtn);
+        document.body.classList.add("pp");
+      }
+
+      function printReport(scope, triggerBtn) {
+        if (isPrinting) return;
+        isPrinting = true;
+
+        prepareReport(scope, triggerBtn);
+
+        setTimeout(() => {
+          try {
+            window.print();
+          } catch (e) {
+            console.error("Print error:", e);
+            isPrinting = false;
+          }
+        }, 100);
+      }
+
+      window.addEventListener("beforeprint", () => {
+        if (!isPrinting) {
+          isPrinting = true;
+          const isLibActive = $("#l") && !$("#l").hidden;
+          prepareReport(isLibActive ? "lib" : "all", null);
+        }
+      });
+
+      window.addEventListener("afterprint", () => {
+        isPrinting = false;
+        document.body.classList.remove("pp");
+        document.querySelectorAll("details[data-was-open]").forEach((d) => {
+          d.open = d.dataset.wasOpen === "1";
+          delete d.dataset.wasOpen;
+        });
+      });
+
+      document.addEventListener("click", (e) => {
+        const b = e.target.closest(".pb");
+        if (!b) return;
+        const k = b.dataset.pt;
+        printReport(k, b);
+      });
+
+      /* ============================================================
+     INIT
+     ============================================================ */
+      lib();
+      inp.value = "A'B + AB' + C";
+      analyze();
+    </script>
+    <div id="logic-probe-tip"></div>
+  </body>
+</html>
