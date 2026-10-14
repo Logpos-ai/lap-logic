@@ -305,18 +305,45 @@
         filter: grayscale(1);
       }
 
-      /* Fullscreen styles for zoom viewport */
-      .zw:fullscreen {
+      /* Fullscreen styles for zoom viewport (including Step-by-Step Wiring Assistant) */
+      .zw:fullscreen,
+      .zw:-webkit-full-screen,
+      .zw.pseudo-fs {
         background: var(--bg);
-        padding: 16px;
+        padding: 14px 18px;
+        width: 100vw;
+        height: 100vh;
+        box-sizing: border-box;
         overflow: auto;
         display: flex;
         flex-direction: column;
+        gap: 10px;
       }
-
-      .zw:fullscreen .zv {
-        max-height: calc(100vh - 80px);
+      .zw.pseudo-fs {
+        position: fixed;
+        inset: 0;
+        z-index: 99990;
+      }
+      .zw:fullscreen .bb-stepper,
+      .zw:-webkit-full-screen .bb-stepper,
+      .zw.pseudo-fs .bb-stepper {
+        margin: 0;
+        flex-shrink: 0;
+        padding: 10px 14px;
+      }
+      .zw:fullscreen .zt,
+      .zw:-webkit-full-screen .zt,
+      .zw.pseudo-fs .zt {
+        margin-bottom: 0;
+        flex-shrink: 0;
+      }
+      .zw:fullscreen .zv,
+      .zw:-webkit-full-screen .zv,
+      .zw.pseudo-fs .zv {
+        max-height: none;
+        min-height: 280px;
         flex: 1;
+        overflow: auto;
       }
 
       /* ================================================================
@@ -1143,6 +1170,1025 @@
       /* ================================================================
          PRINT — PROFESSIONAL ACADEMIC REPORT  (REBUILT & FIXED)
          ================================================================ */
+
+      /* ================================================================
+         ULTRA-PRO LAB UPGRADES: DASHBOARD, QUICK NAV, STEP-BY-STEP WIRING
+         ================================================================ */
+      /* 1. Executive Summary Dashboard Cards */
+      .lab-dash {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+        margin: 14px 0;
+      }
+      .dash-card {
+        background: linear-gradient(145deg, var(--card), var(--bg2));
+        border: 1px solid var(--line);
+        border-inline-start: 4px solid var(--acc);
+        border-radius: var(--r);
+        padding: 12px 16px;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+      .dash-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+      }
+      .dash-lbl {
+        font-size: 12.5px;
+        color: var(--mut);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .dash-val {
+        font-size: 16.5px;
+        font-weight: 700;
+        color: var(--ink);
+        font-family: "IBM Plex Mono", "IBM Plex Sans Arabic", sans-serif;
+      }
+      .dash-sub {
+        font-size: 12px;
+        color: var(--acc-d);
+        font-weight: 600;
+      }
+
+      /* 2. Quick Section Navigation Bar */
+      .quick-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        align-items: center;
+        padding: 10px 14px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--r);
+        margin: 10px 0 16px;
+        box-shadow: var(--shadow-sm);
+      }
+      .quick-nav .qn-label {
+        font-weight: 700;
+        font-size: 13.5px;
+        color: var(--acc-d);
+        margin-inline-end: 4px;
+      }
+      .qn-btn {
+        font-size: 13px;
+        padding: 5px 11px;
+        border-radius: 20px;
+        background: var(--bg2);
+        border: 1px solid var(--line);
+        color: var(--ink2);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .qn-btn:hover {
+        background: var(--hl);
+        border-color: var(--acc);
+        color: var(--acc-d);
+        transform: translateY(-1px);
+      }
+      .qn-spacer {
+        flex: 1;
+      }
+      .qn-act {
+        font-size: 12.5px;
+        padding: 5px 10px;
+        border-radius: var(--r-sm);
+        background: var(--card2);
+        border: 1px dashed var(--line);
+        font-weight: 600;
+      }
+
+      /* ================================================================
+         UNIFIED ZERO-SCROLL BREADBOARD BOX (مربع البريدبورد الموحد المتكامل)
+         ================================================================ */
+      .zw.bb-card {
+        border: 2px solid var(--acc);
+        border-radius: var(--r);
+        background: var(--card);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        margin: 4px 0 10px;
+      }
+      .zw.bb-card .zt.bb-unified-bar {
+        margin: 0;
+        border: none;
+        border-bottom: 1px solid var(--line);
+        border-radius: 0;
+        padding: 7px 12px;
+        background: linear-gradient(180deg, var(--card), var(--bg2));
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        direction: rtl;
+      }
+      .bb-bar-right,
+      .bb-bar-left {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 5px;
+      }
+      .zw.bb-card .bb-progress-track {
+        margin: 0;
+        height: 4px;
+        border-radius: 0;
+        background: var(--line);
+      }
+      /* Fixed-Height Horizontal HUD Strip — ZERO vertical jump when stepping! */
+      .zw.bb-card .bb-step-info {
+        margin: 0;
+        border: none;
+        border-bottom: 1px solid var(--line);
+        border-inline-start: 4px solid var(--acc);
+        border-radius: 0;
+        padding: 7px 12px;
+        background: var(--bg2);
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+        font-size: 13.2px;
+        line-height: 1.45;
+        direction: rtl;
+      }
+      .hud-step-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 7px;
+        width: 100%;
+        justify-content: space-between;
+      }
+      .hud-endpoints {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        flex: 1;
+      }
+      .hud-ep-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 10px;
+        border-radius: 6px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        font-size: 12.8px;
+        color: var(--ink);
+      }
+      .hud-ep-pill.ep-from {
+        border-inline-start: 3px solid #16a34a;
+      }
+      .hud-ep-pill.ep-to {
+        border-inline-start: 3px solid #dc2626;
+      }
+      .hud-ep-pill b.ep-loc {
+        color: var(--acc-d);
+        font-family: "IBM Plex Mono", "IBM Plex Sans Arabic", sans-serif;
+      }
+      .hud-arrow {
+        color: var(--acc);
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      /* Auto-fit Breadboard SVG inside the unified box so no vertical scrolling is needed */
+      .zw.bb-card .zv {
+        border: none;
+        border-radius: 0;
+        padding: 6px 10px;
+        max-height: 54vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: auto;
+      }
+      .zw.bb-card .zv:not([data-scale]) svg {
+        width: auto !important;
+        height: auto !important;
+        max-width: 100%;
+        max-height: 50vh;
+      }
+
+      /* ================================================================
+         CLEAN SPLIT-SCREEN FULLSCREEN STUDIO (شاشة واحدة مقسومة بدون تمرير)
+         ================================================================ */
+      body.bb-studio-fs .wrap {
+        padding: 8px 12px !important;
+        height: 100vh !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+      body.bb-studio-fs #r {
+        flex: 1 !important;
+        min-height: 0 !important;
+        height: 100% !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto 1fr !important;
+        gap: 8px !important;
+        overflow: hidden !important;
+      }
+      body.bb-studio-fs.has-side-drawer #r {
+        grid-template-columns: 420px 1fr !important;
+      }
+      body.bb-studio-fs .fs-studio-bar {
+        grid-column: 1 / -1 !important;
+        grid-row: 1 !important;
+        padding: 8px 12px !important;
+        gap: 0 !important;
+        position: static !important;
+        flex-shrink: 0;
+      }
+      /* Side Drawer in Column 1 (Right side in RTL) */
+      body.bb-studio-fs #r > details.sec.fs-show-sec {
+        grid-column: 1 / 2 !important;
+        grid-row: 2 !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        overflow-y: auto !important;
+        border: 2px solid var(--acc) !important;
+        border-radius: var(--r) !important;
+        background: var(--card) !important;
+      }
+      /* Main Breadboard Box in Column 2 (or full width when no drawer is open) */
+      body.bb-studio-fs #r > details.sec[data-sec-idx="6"] {
+        grid-column: -2 / -1 !important;
+        grid-row: 2 !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+      }
+      body.bb-studio-fs #r > details.sec[data-sec-idx="6"] > summary,
+      body.bb-studio-fs #r > details.sec[data-sec-idx="6"] > .cbody > button.pb,
+      body.bb-studio-fs #r > details.sec[data-sec-idx="6"] #bb > p.sub {
+        display: none !important;
+      }
+      body.bb-studio-fs #r > details.sec[data-sec-idx="6"] > .cbody {
+        padding: 0 !important;
+        flex: 1 !important;
+        min-height: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+      }
+      body.bb-studio-fs #r > details.sec[data-sec-idx="6"] #bb {
+        flex: 1 !important;
+        min-height: 0 !important;
+        display: flex !important;
+        gap: 8px !important;
+        overflow: hidden !important;
+      }
+      body.bb-studio-fs #bb > .zw.bb-card {
+        flex: 1 !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+      }
+      body.bb-studio-fs #bb > .zw.bb-card .zv {
+        flex: 1 !important;
+        max-height: none !important;
+        min-height: 0 !important;
+      }
+      body.bb-studio-fs #bb > .zw.bb-card .zv:not([data-scale]) svg {
+        max-height: calc(100vh - 185px) !important;
+      }
+      /* Wiring Table / IC Pinout Drawer inside #bb in Fullscreen */
+      body.bb-studio-fs #bb > .bb-sub-accordions {
+        display: none !important;
+      }
+      body.bb-studio-fs.has-bb-drawer #bb > .bb-sub-accordions {
+        display: block !important;
+        width: 450px !important;
+        max-width: 45vw !important;
+        height: 100% !important;
+        margin: 0 !important;
+        overflow-y: auto !important;
+        padding-inline-end: 4px;
+        order: -1;
+      }
+
+      /* ================================================================
+         FULLSCREEN BREADBOARD LAB STUDIO (استوديو البريدبورد بملء الشاشة الشامل)
+         ================================================================ */
+      .go-bb-fs {
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        color: #facc15;
+        border: 1.5px solid #facc15;
+        font-weight: 700;
+        padding: 8px 15px;
+        border-radius: var(--r-sm);
+        cursor: pointer;
+        box-shadow: 0 3px 10px -2px rgba(15, 23, 42, 0.35);
+        transition: all 0.18s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .go-bb-fs:hover {
+        background: linear-gradient(135deg, var(--acc), var(--acc-d));
+        color: #fff;
+        border-color: var(--acc-d);
+        transform: translateY(-1px);
+      }
+
+      /* Hidden in normal mode, visible in Studio Fullscreen mode */
+      .fs-studio-bar {
+        display: none;
+      }
+
+      body.bb-studio-fs {
+        overflow: hidden !important;
+        background: var(--bg) !important;
+      }
+      body.bb-studio-fs .wrap {
+        max-width: 100vw !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        padding: 10px 16px 24px !important;
+        box-sizing: border-box !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      body.bb-studio-fs .top,
+      body.bb-studio-fs .wrap > p.sub,
+      body.bb-studio-fs .wrap > .panel,
+      body.bb-studio-fs .wrap > .tabs,
+      body.bb-studio-fs #l,
+      body.bb-studio-fs footer.credit,
+      body.bb-studio-fs .calm-summary-bar {
+        display: none !important;
+      }
+
+      body.bb-studio-fs #r {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+      }
+
+      body.bb-studio-fs .fs-studio-bar {
+        display: flex !important;
+        flex-direction: column;
+        gap: 9px;
+        position: sticky;
+        top: 0;
+        z-index: 950;
+        background: linear-gradient(180deg, var(--card), var(--bg2));
+        border: 2px solid var(--acc);
+        border-radius: var(--r);
+        padding: 11px 15px;
+        box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.22);
+        order: -20;
+      }
+
+      .fs-studio-row1 {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .fs-studio-brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        font-size: 15.5px;
+        color: var(--acc-d);
+        white-space: nowrap;
+      }
+      .fs-eq-box {
+        display: flex;
+        flex: 1;
+        min-width: 280px;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .fs-eq-input {
+        flex: 1;
+        min-width: 190px;
+        padding: 6px 11px;
+        font-size: 14.5px;
+        font-family: "IBM Plex Mono", "IBM Plex Sans Arabic", monospace;
+        border: 1.5px solid var(--acc);
+        border-radius: var(--r-sm);
+        background: var(--card);
+        color: var(--ink);
+        direction: ltr;
+      }
+      .fs-sym-strip {
+        display: inline-flex;
+        gap: 3px;
+        align-items: center;
+        direction: ltr;
+      }
+      .fs-sym-btn {
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12.5px;
+        padding: 4px 7px;
+        border-radius: 5px;
+        background: var(--bg2);
+        border: 1px solid var(--line);
+        cursor: pointer;
+        font-weight: 700;
+      }
+      .fs-sym-btn:hover {
+        background: var(--hl);
+        border-color: var(--acc);
+      }
+      .fs-studio-row2 {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        padding-top: 7px;
+        border-top: 1px dashed var(--line);
+      }
+      .fs-drawers-group {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+      }
+      .fs-tab-btn {
+        font-size: 12.8px;
+        padding: 5px 11px;
+        border-radius: 20px;
+        background: var(--bg2);
+        border: 1px solid var(--line);
+        color: var(--ink2);
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .fs-tab-btn:hover {
+        background: var(--hl);
+        border-color: var(--acc);
+        color: var(--acc-d);
+      }
+      .fs-tab-btn.active {
+        background: var(--acc);
+        color: #fff;
+        border-color: var(--acc-d);
+        box-shadow: 0 2px 8px -2px
+          color-mix(in oklab, var(--acc) 65%, transparent);
+      }
+      .fs-exit-btn {
+        background: #dc2626 !important;
+        color: #fff !important;
+        border-color: #b91c1c !important;
+        font-weight: 700 !important;
+        padding: 6px 13px !important;
+        border-radius: var(--r-sm) !important;
+        cursor: pointer;
+      }
+      .fs-exit-btn:hover {
+        background: #b91c1c !important;
+      }
+
+      /* In Studio Fullscreen: hide sections 0..5 unless toggled via .fs-show-sec */
+      body.bb-studio-fs #r > details.sec {
+        display: none;
+      }
+      body.bb-studio-fs #r > details.sec[data-sec-idx="6"] {
+        display: block !important;
+        order: -5;
+        border: 2px solid var(--acc);
+      }
+      body.bb-studio-fs #r > details.sec.fs-show-sec {
+        display: block !important;
+        order: -10;
+        border: 2px solid var(--acc2);
+        background: var(--card);
+        box-shadow: var(--shadow);
+      }
+      body.bb-studio-fs #r > details.sec[data-sec-idx="6"] .zv {
+        max-height: none !important;
+      }
+
+      /* ================================================================
+         CALM PROGRESSIVE DISCLOSURE UX (قوائم منسدلة مريحة ومنظمة)
+         ================================================================ */
+      .calm-summary-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 12px 16px;
+        margin: 12px 0 14px;
+        background: linear-gradient(145deg, var(--card), var(--bg2));
+        border: 1px solid var(--line);
+        border-inline-start: 4px solid var(--acc);
+        border-radius: var(--r);
+        box-shadow: var(--shadow-sm);
+      }
+      .calm-pills {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+      }
+      .calm-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 11px;
+        border-radius: 20px;
+        background: var(--bg2);
+        border: 1px solid var(--line);
+        font-size: 13px;
+        color: var(--ink2);
+      }
+      .calm-pill b {
+        color: var(--acc-d);
+      }
+      .calm-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 7px;
+      }
+      .calm-jump-select {
+        font-size: 13px;
+        padding: 5px 10px;
+        border-radius: var(--r-sm);
+        border: 1px solid var(--line);
+        background: var(--card);
+        color: var(--ink);
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      /* Nested Collapsible Sub-Accordions inside Breadboard & Library */
+      details.bb-sub-acc {
+        margin: 10px 0;
+        border: 1px solid var(--line);
+        border-radius: var(--r-sm);
+        background: var(--card);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+        transition: border-color 0.2s ease;
+      }
+      details.bb-sub-acc[open] {
+        border-color: var(--acc);
+      }
+      details.bb-sub-acc > summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 11px 15px;
+        font-weight: 700;
+        font-size: 14.5px;
+        color: var(--ink);
+        background: linear-gradient(180deg, var(--card), var(--bg2));
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        user-select: none;
+        transition: background 0.15s ease;
+      }
+      details.bb-sub-acc > summary::-webkit-details-marker {
+        display: none;
+      }
+      details.bb-sub-acc > summary:hover {
+        background: var(--hl);
+      }
+      details.bb-sub-acc > summary .sub-acc-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      details.bb-sub-acc > summary .sub-acc-badge {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 2px 10px;
+        border-radius: 20px;
+        background: var(--hl);
+        color: var(--acc-d);
+        border: 1px solid color-mix(in oklab, var(--acc) 30%, var(--line));
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      details.bb-sub-acc > summary .sub-acc-badge::after {
+        content: "▾";
+        font-size: 13px;
+        transition: transform 0.2s ease;
+      }
+      details.bb-sub-acc[open] > summary {
+        border-bottom: 1px solid var(--line);
+        background: var(--hl);
+        color: var(--acc-d);
+      }
+      details.bb-sub-acc[open] > summary .sub-acc-badge::after {
+        transform: rotate(180deg);
+      }
+      .bb-sub-body {
+        padding: 12px 14px;
+        background: var(--card);
+      }
+
+      /* Compact Export Dropdown inside Diagram Toolbar (.zt) */
+      details.zt-drop {
+        position: relative;
+        display: inline-block;
+      }
+      details.zt-drop > summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 4px 10px;
+        font-size: 12.5px;
+        font-weight: 600;
+        border-radius: var(--r-sm);
+        border: 1px solid var(--line);
+        background: var(--card);
+        color: var(--ink);
+        user-select: none;
+      }
+      details.zt-drop > summary::-webkit-details-marker {
+        display: none;
+      }
+      details.zt-drop > summary:hover {
+        background: var(--hl);
+        border-color: var(--acc);
+      }
+      .zt-drop-menu {
+        position: absolute;
+        top: calc(100% + 4px);
+        inset-inline-start: 0;
+        z-index: 50;
+        background: var(--card);
+        border: 1px solid var(--acc);
+        border-radius: var(--r-sm);
+        box-shadow: var(--shadow);
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 155px;
+      }
+      .zt-drop-menu button {
+        width: 100%;
+        text-align: right;
+        justify-content: flex-start;
+        font-size: 12.5px;
+        padding: 5px 9px;
+      }
+
+      /* 3. Interactive Step-by-Step Breadboard Wiring Player */
+      .bb-stepper {
+        background: linear-gradient(180deg, var(--card), var(--bg2));
+        border: 2px solid var(--acc);
+        border-radius: var(--r);
+        padding: 14px 16px;
+        margin: 10px 0 14px;
+        box-shadow: var(--shadow);
+        direction: rtl;
+      }
+      .bb-stepper-top {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .bb-stepper-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        font-size: 16px;
+        color: var(--ink);
+      }
+      .bb-step-badge {
+        background: var(--acc);
+        color: #fff;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12.5px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-weight: 700;
+      }
+      .bb-stepper-btns {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+      }
+      .st-btn {
+        font-size: 13.5px;
+        padding: 6px 12px;
+        border-radius: var(--r-sm);
+        font-weight: 700;
+        border: 1px solid var(--line);
+        background: var(--card);
+        color: var(--ink);
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .st-btn:hover {
+        background: var(--hl);
+        border-color: var(--acc);
+      }
+      .st-btn.st-next {
+        background: linear-gradient(135deg, var(--acc), var(--acc-d));
+        color: #fff;
+        border-color: var(--acc-d);
+        box-shadow: 0 3px 10px -2px
+          color-mix(in oklab, var(--acc) 60%, transparent);
+      }
+      .st-btn.st-next:hover {
+        background: linear-gradient(135deg, var(--acc2), var(--acc));
+        transform: translateY(-1px);
+      }
+      .st-btn.st-play.playing {
+        background: #dc2626;
+        color: #fff;
+        border-color: #b91c1c;
+      }
+      .bb-progress-track {
+        width: 100%;
+        height: 7px;
+        background: var(--line);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 12px;
+      }
+      .bb-progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--acc), #22c55e);
+        border-radius: 4px;
+        transition: width 0.25s ease;
+      }
+      .bb-step-info {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-inline-start: 4px solid var(--acc);
+        border-radius: var(--r-sm);
+        padding: 12px 14px;
+        font-size: 14.5px;
+        line-height: 1.7;
+      }
+      .step-detail-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 10px;
+        margin-top: 8px;
+      }
+      .step-endpoint-box {
+        background: var(--bg2);
+        border: 1px solid var(--line2);
+        border-radius: var(--r-sm);
+        padding: 8px 12px;
+      }
+      .step-endpoint-box .ep-tag {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--acc-d);
+        display: block;
+        margin-bottom: 2px;
+      }
+      .step-endpoint-box .ep-main {
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--ink);
+      }
+      .step-endpoint-box .ep-sub {
+        font-size: 12.5px;
+        color: var(--mut);
+        font-family: "IBM Plex Mono", sans-serif;
+      }
+
+      /* Animated Active Wire on Breadboard SVG */
+      @keyframes wirePulseGlow {
+        0%,
+        100% {
+          filter: drop-shadow(0 0 5px rgba(250, 204, 21, 0.95))
+            drop-shadow(0 0 12px rgba(11, 122, 111, 0.8));
+        }
+        50% {
+          filter: drop-shadow(0 0 12px rgba(250, 204, 21, 1))
+            drop-shadow(0 0 22px rgba(34, 197, 94, 0.95));
+        }
+      }
+      @keyframes wireDrawDash {
+        from {
+          stroke-dashoffset: 300;
+        }
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+      @keyframes pinRingPulse {
+        0% {
+          r: 6px;
+          stroke-width: 3px;
+          opacity: 1;
+        }
+        100% {
+          r: 18px;
+          stroke-width: 1px;
+          opacity: 0;
+        }
+      }
+      svg .bb-wire-step.wire-current {
+        animation: wirePulseGlow 1.2s infinite ease-in-out;
+      }
+      svg .bb-wire-step.wire-current path {
+        stroke-dasharray: 300;
+        animation: wireDrawDash 0.45s ease-out forwards;
+      }
+      svg .pin-pulse-ring {
+        animation: pinRingPulse 1.1s infinite ease-out;
+      }
+
+      /* 4. Ultra-Detailed Engineering Wiring Table */
+      .bbt-detailed {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        direction: rtl;
+        font-size: 13.5px;
+        margin: 14px 0;
+      }
+      .bbt-detailed th {
+        background: var(--hl);
+        color: var(--ink);
+        font-weight: 700;
+        padding: 9px 10px;
+        text-align: right;
+        border-bottom: 2px solid var(--acc);
+      }
+      .bbt-detailed td {
+        padding: 9px 10px;
+        text-align: right;
+        vertical-align: middle;
+        transition: background 0.15s ease;
+      }
+      .bbt-detailed tr[data-step-row] {
+        cursor: pointer;
+      }
+      .bbt-detailed tr[data-step-row]:hover td {
+        background: var(--hl) !important;
+      }
+      .bbt-detailed tr.active-wire-row td {
+        background: var(--hl2) !important;
+        outline: 2px solid var(--acc);
+      }
+      .bbt-detailed tr.checked-wire-row td {
+        opacity: 0.65;
+        background: color-mix(in oklab, var(--ok) 8%, var(--card)) !important;
+      }
+      .step-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: var(--bg2);
+        border: 1px solid var(--line);
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 700;
+        font-size: 12.5px;
+        color: var(--ink);
+      }
+      .pin-tag {
+        display: inline-block;
+        padding: 2px 7px;
+        border-radius: 5px;
+        background: var(--bg2);
+        border: 1px solid var(--line);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--acc-d);
+        margin-top: 2px;
+      }
+      .col-tag {
+        display: inline-block;
+        padding: 1px 6px;
+        border-radius: 4px;
+        background: var(--hl);
+        color: var(--ink2);
+        font-size: 11.5px;
+        font-weight: 600;
+        margin-inline-start: 4px;
+      }
+      .wire-locate-btn {
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 6px;
+        background: var(--bg2);
+        border: 1px solid var(--line);
+        cursor: pointer;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .wire-locate-btn:hover {
+        background: var(--acc);
+        color: #fff;
+        border-color: var(--acc);
+      }
+
+      /* IC Pinout Summary Cards */
+      .ic-pinout-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 12px;
+        margin: 12px 0;
+        direction: rtl;
+      }
+      .ic-pin-card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--r-sm);
+        padding: 10px 14px;
+        box-shadow: var(--shadow-sm);
+      }
+      .ic-pin-card h4 {
+        margin: 0 0 8px;
+        font-size: 14.5px;
+        color: var(--acc-d);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .ic-pin-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px 10px;
+        font-size: 12px;
+        font-family: "IBM Plex Mono", sans-serif;
+        direction: ltr;
+        text-align: left;
+      }
+      .ic-pin-item {
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: var(--bg2);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .ic-pin-item.used {
+        background: var(--hl);
+        font-weight: 700;
+        color: var(--acc-d);
+        border-left: 3px solid var(--acc);
+      }
+
+      /* Truth Table Row Sync Button */
+      .sim-row-btn {
+        font-size: 11.5px;
+        padding: 2px 8px;
+        border-radius: 12px;
+        background: var(--bg2);
+        border: 1px solid var(--line);
+        color: var(--ink2);
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.15s;
+      }
+      .sim-row-btn:hover {
+        background: var(--acc);
+        color: #fff;
+        border-color: var(--acc);
+      }
+      tr.tt-active-sim td {
+        outline: 2px solid #f59e0b;
+        background: color-mix(in oklab, #f59e0b 15%, var(--card)) !important;
+      }
+
       @page {
         size: A4 portrait;
         margin: 12mm 14mm 14mm 14mm;
@@ -1200,10 +2246,19 @@
         .snd-btn,
         .tools,
         .tabs,
+        .bb-stepper,
+        .quick-nav,
+        .sim-col,
+        .wire-locate-btn,
+        .bb-step-overlay,
         button,
         input,
         select {
           display: none !important;
+        }
+        #pa svg .bb-wire-step {
+          display: block !important;
+          opacity: 1 !important;
         }
 
         #pa {
@@ -1891,14 +2946,43 @@
           spellcheck="false"
           aria-label="المعادلة"
         />
-        <details class="tools">
-          <summary>لوحة الرموز والأمثلة</summary>
-          <div class="row" id="keys"></div>
-          <div class="row"><b>أمثلة:</b><span id="ex"></span></div>
-        </details>
-        <div class="row">
-          <label
-            >عدد المتغيرات (لقائمة Minterms):
+        <div
+          class="row"
+          style="margin-top: 8px; justify-content: space-between"
+        >
+          <div
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              gap: 8px;
+              align-items: center;
+            "
+          >
+            <button class="go" id="go">⚡ حلّل الدائرة</button>
+            <button
+              type="button"
+              class="go-bb-fs"
+              id="go-bb-fs"
+              title="افتح استوديو التوصيل على البريدبورد بملء الشاشة (يشمل التوصيل خطوة بخطوة + تعديل المعادلة + جدول الحقيقة + خريطة الشرايح)"
+            >
+              🔌 التوصيل على البريدبورد بملء الشاشة ⛶
+            </button>
+            <button
+              type="button"
+              id="rand-eq"
+              title="تجربة مسألة أو دائرة عشوائية"
+            >
+              🎲 مثال عشوائي
+            </button>
+            <button type="button" id="clear-eq" title="مسح الخانة">
+              🧹 مسح
+            </button>
+            <button type="button" id="copy-eq" title="نسخ المعادلة الحالية">
+              📋 نسخ
+            </button>
+          </div>
+          <label style="font-size: 13px; color: var(--mut)"
+            >عدد المتغيرات:
             <select id="nv">
               <option value="0">تلقائي</option>
               <option>2</option>
@@ -1908,17 +2992,26 @@
               <option>6</option>
             </select></label
           >
-          <button class="go" id="go">حلّل</button>
         </div>
+        <details class="tools" style="margin-top: 8px">
+          <summary>
+            🧰 لوحة الرموز والدوائر الجاهزة (فول أدر، هاف أدر، مقارن، أمثلة...)
+            — اضغط للفتح عند الحاجة
+          </summary>
+          <div class="row" id="keys" style="margin-top: 8px"></div>
+          <div class="row">
+            <b>دوائر وأمثلة جاهزة بضغطة واحدة:</b><span id="ex"></span>
+          </div>
+          <div
+            class="mono"
+            dir="ltr"
+            style="color: var(--mut); font-size: 12px; margin-top: 6px"
+          >
+            + OR &nbsp; . أو AB AND &nbsp; ' أو ! NOT &nbsp; ^ XOR &nbsp; NAND
+            NOR XNOR &nbsp; Σm(..) ΠM(..) d(..)
+          </div>
+        </details>
         <div id="err" role="alert"></div>
-        <div
-          class="mono"
-          dir="ltr"
-          style="color: var(--mut); font-size: 12.5px; margin-top: 6px"
-        >
-          + OR &nbsp; . أو AB AND &nbsp; ' أو ! NOT &nbsp; ^ XOR &nbsp; NAND NOR
-          XNOR &nbsp; Σm(..) ΠM(..) d(..)
-        </div>
       </div>
       <div class="tabs">
         <button class="on" data-t="r">التحليل</button
@@ -2707,6 +3800,122 @@
         }
       }
 
+      function buildQuickNavAndDash(a, isMulti) {
+        const V = a.vars;
+        const n = a.n;
+        let outLabel = "مخرج واحد (F)",
+          detLabel = "",
+          gateSummary = "";
+        if (isMulti) {
+          outLabel = `${a.outputs.length} مخارج (${a.outputs.map((o) => esc(o.name)).join(" ، ")})`;
+          const trees = a.outputs.map((o) => prep(o.sopA, { inv: true }));
+          const st = stats(trees);
+          gateSummary = `${st[0]} بوابة (${st[1]} مدخل)`;
+          detLabel = "دائرة متعددة المخارج";
+        } else {
+          const d = detect(a);
+          if (d.length) detLabel = d[0];
+          const st = stats(prep(a.sopA, { inv: true }));
+          gateSummary = `${st[0]} بوابة (${st[1]} مدخل)`;
+        }
+
+        const curEqVal = esc(($("#in") && $("#in").value) || a.src || "");
+        const simpPreview = isMulti
+          ? a.outputs.map((o) => `${esc(o.name)} = ${o.sopS}`).join("  |  ")
+          : `F = ${a.sopS}`;
+
+        return `
+        <div class="fs-studio-bar" id="bb-studio-bar">
+          <div class="fs-studio-row1">
+            <div class="fs-eq-box" style="flex:1;min-width:260px">
+              <span style="font-weight:700;color:var(--acc-d);font-size:14px;white-space:nowrap">🔌 المعادلة:</span>
+              <input type="text" id="fs-in" class="fs-eq-input" value="${curEqVal}" placeholder="اكتب معادلة أو اسم دائرة (مثال: فول أدر)..." aria-label="تعديل المعادلة" />
+              <button type="button" class="go" id="fs-go-btn" style="padding:5px 11px;font-size:13px">⚡ تحديث</button>
+              <select id="fs-ex-sel" class="calm-jump-select" style="font-size:12.5px;padding:4px 7px" aria-label="دوائر جاهزة">
+                <option value="">✨ دائرة جاهزة...</option>
+                <option value="Sum = A^B ; Carry = AB">Half Adder (جامع نصفي)</option>
+                <option value="Sum = A^B^C ; Cout = AB + C(A^B)">Full Adder (جامع كامل)</option>
+                <option value="Diff = A^B ; Borrow = A'B">Half Subtractor (طارح نصفي)</option>
+                <option value="Diff = A^B^C ; Bout = A'B + (A^B)'C">Full Subtractor (طارح كامل)</option>
+                <option value="G = AB' ; E = (A^B)' ; L = A'B">Comparator (مقارن)</option>
+                <option value="Y = S'A + SB">Multiplexer 2×1</option>
+                <option value="A'B + AB'">XOR (A ⊕ B)</option>
+                <option value="__RAND__">🎲 مسألة عشوائية</option>
+              </select>
+              <select id="fs-ct-sel" class="calm-jump-select" style="padding:4px 7px;font-size:12.5px" title="تغيير نوع البوابات المستخدمة">
+                <option value="orig" ${ct === "orig" ? "selected" : ""}>البوابات: كما كتبتها</option>
+                <option value="sop" ${ct === "sop" ? "selected" : ""}>البوابات: AND-OR مبسطة</option>
+                <option value="pos" ${ct === "pos" ? "selected" : ""}>البوابات: OR-AND مبسطة</option>
+                <option value="nand" ${ct === "nand" ? "selected" : ""}>البوابات: NAND فقط (7400)</option>
+                <option value="nor" ${ct === "nor" ? "selected" : ""}>البوابات: NOR فقط (7402)</option>
+              </select>
+              <span id="fs-err-msg" style="color:var(--bad);font-size:12px;font-weight:700"></span>
+            </div>
+            <div class="fs-drawers-group">
+              <button type="button" class="fs-tab-btn" data-studio-panel="tt" title="فتح جدول الحقيقة والتبسيط في لوحة جانبية بجوار البريدبورد">📊 جدول الحقيقة والتبسيط</button>
+              <button type="button" class="fs-tab-btn" data-studio-panel="kmap" title="فتح خريطة كارنو والجبر بجوار البريدبورد">🗺️ كارنو والجبر</button>
+              <button type="button" class="fs-tab-btn" data-studio-panel="gate" title="فتح رسم البوابات المنطقية بجوار البريدبورد">📐 رسم البوابات</button>
+              <button type="button" class="fs-tab-btn" data-studio-panel="tbl" title="فتح جدول خطوات التوصيل وخريطة الشرايح بجوار البريدبورد">📋 جدول الأسلاك والشرايح</button>
+              <button type="button" class="pb" data-pt="all" style="margin:0;padding:4px 10px;font-size:12.5px;font-weight:700">🖨 طباعة</button>
+              <button type="button" class="fs-exit-btn" id="fs-exit-studio" style="padding:4px 11px !important;font-size:12.5px">✕ إغلاق</button>
+            </div>
+          </div>
+        </div>
+        <div class="calm-summary-bar">
+          <div class="calm-pills">
+            <span class="calm-pill">🔢 <b>${n} مداخل</b> (${V.join(" , ")})</span>
+            <span class="calm-pill">🎯 <b>${outLabel}</b>${detLabel ? ` — ${esc(detLabel)}` : ""}</span>
+            <span class="calm-pill">⚡ <b>${gateSummary}</b></span>
+          </div>
+          <div class="calm-actions">
+            <button type="button" class="go-bb-fs" data-open-studio="1" style="padding:5px 12px;font-size:13px">🔌 البريدبورد بملء الشاشة ⛶</button>
+            <select class="calm-jump-select" id="calm-sec-jump" aria-label="انتقال سريع لقسم">
+              <option value="">📍 افتح قسماً محدداً...</option>
+              <option value="0">01 — الشكل القانوني (Canonical)</option>
+              <option value="1">02 — جدول الحقيقة (${1 << n} صفوف)</option>
+              <option value="2">03 — خريطة كارنو (K-map)</option>
+              <option value="3">04 — التبسيط والمعادلة النهائية</option>
+              <option value="4">05 — خطوات الجبر البولياني</option>
+              <option value="5">06 — رسم الدائرة المنطقية</option>
+              <option value="6">07 — التوصيل العملي على البريدبورد</option>
+            </select>
+            <button type="button" class="qn-act" data-qn-all="open" title="فتح جميع القوائم المنسدلة">📂 فتح الكل</button>
+            <button type="button" class="qn-act" data-qn-all="close" title="طي جميع القوائم المنسدلة لراحة العين">📁 طي الكل</button>
+            <button type="button" class="pb" data-pt="all" style="margin:0;font-weight:700;background:var(--hl);border-color:var(--acc)">🖨 طباعة التقرير</button>
+          </div>
+        </div>`;
+      }
+
+      function getSectionMetaBadge(title, a, isMulti) {
+        const n = a.n;
+        if (title.includes("الشكل القانوني")) {
+          return isMulti
+            ? `Σm / ΠM لـ ${a.outputs.length} مخارج — اضغط للعرض`
+            : `Σm(${a.on.length}) — اضغط للعرض`;
+        }
+        if (title.includes("جدول الحقيقة")) {
+          return `${1 << n} احتمالات قابلة للتعديل والمحاكاة — اضغط للعرض`;
+        }
+        if (title.includes("خريطة كارنو")) {
+          return n >= 2 && n <= 5
+            ? `حلقات التجميع البصري — اضغط للعرض`
+            : `غير متاحة لأكثر من 5 متغيرات`;
+        }
+        if (title.includes("التبسيط")) {
+          return isMulti ? `أبسط معادلات SOP و POS لكل مخرج` : `F = ${a.sopS}`;
+        }
+        if (title.includes("الجبر")) {
+          return `اشتقاق القوانين خطوة بخطوة — اضغط للعرض`;
+        }
+        if (title.includes("الدائرة المنطقية")) {
+          return `مخطط البوابات التفاعلي (AND-OR / NAND / NOR) — اضغط للعرض`;
+        }
+        if (title.includes("البريدبورد")) {
+          return `مساعد التوصيل سلكاً بسلك + جدول الأرجل — اضغط للعرض`;
+        }
+        return "اضغط للعرض";
+      }
+
       function render(a) {
         const { n, f, vars: V } = a,
           mt = (i, s) =>
@@ -2720,17 +3929,18 @@
                   "",
                 );
         const d = detect(a);
+        a.det = d;
         let h = `<section><h2>الشكل القانوني (Canonical)</h2>`;
         if (d.length)
           h += `<div class=note>✔ الدالة دي هي: <b>${d.join(" | ")}</b></div>`;
         h += `<p class=eq>F(${V}) = Σm(${a.on.join(", ") || "—"})${a.dc.length ? " + d(" + a.dc.join(", ") + ")" : ""}<br>F(${V}) = ΠM(${a.off.join(", ") || "—"})${a.dc.length ? " · d(" + a.dc.join(", ") + ")" : ""}</p>
 <p class=eq>SOP: ${a.on.map((i) => mt(i)).join(" + ") || "0"}</p><p class=eq>POS: ${a.off.map((i) => mt(i, 1)).join("") || "1"}</p></section>
-<section><h2>جدول الحقيقة</h2><div class=scroll><table><tr><th>#</th>${V.map((v) => `<th>${v}</th>`).join("")}<th title="اضغط على أي خلية بالأسفل لتعديلها">F ✎</th></tr>`;
+<section><h2>جدول الحقيقة</h2><div class=scroll><table><tr><th>#</th>${V.map((v) => `<th>${v}</th>`).join("")}<th title="اضغط على أي خلية بالأسفل لتعديلها">F ✎</th><th class="sim-col">محاكاة البريدبورد</th></tr>`;
         f.forEach((v, i) => {
-          h += `<tr class="${v === 1 ? "o" : ""}"><td>${i}</td>${V.map((_, j) => `<td>${(i >> (n - 1 - j)) & 1}</td>`).join("")}<td class="tt-cell" data-tt-row="${i}" data-tt-out="0" title="اضغط لتغيير القيمة (0 ← 1 ← X)">${v === 2 ? "X" : v}</td></tr>`;
+          h += `<tr class="${v === 1 ? "o" : ""} ${i === 0 ? "tt-active-sim" : ""}" data-tt-r="${i}"><td>${i}</td>${V.map((_, j) => `<td>${(i >> (n - 1 - j)) & 1}</td>`).join("")}<td class="tt-cell" data-tt-row="${i}" data-tt-out="0" title="اضغط لتغيير القيمة (0 ← 1 ← X)">${v === 2 ? "X" : v}</td><td class="sim-col"><button type="button" class="sim-row-btn" data-sim-row="${i}" title="اضبط مفاتيح البريدبورد على هذه الحالة وشاهد النتيجة عملياً">⚡ طبّق على اللوحة</button></td></tr>`;
         });
         h +=
-          `</table></div><p class=sub style="margin:4px 0 0">💡 <b>تعديل تفاعلي:</b> اضغط على أي خلية في عمود الخرج <b>F</b> لتغيير قيمتها (0 ← 1 ← X) مع إعادة استنتاج الدائرة وتبسيطها فورياً.</p></section><section><h2>خريطة كارنو (K-map)</h2>` +
+          `</table></div><p class=sub style="margin:4px 0 0">💡 <b>تفاعل مزدوج:</b> اضغط على خلية الخرج <b>F ✎</b> لتعديلها (0 ← 1 ← X)، أو اضغط <b>"⚡ طبّق على اللوحة"</b> لتجربة الصف مباشرة على مفاتيح وليدات البريدبورد بالأسفل.</p></section><section><h2>خريطة كارنو (K-map)</h2>` +
           (n >= 2 && n <= 5
             ? kmap(a, a.s.cv, a.s.ess)
             : "<p>خريطة كارنو متاحة من 2 إلى 5 متغيرات.</p>") +
@@ -2739,17 +3949,19 @@
 <p>Prime Implicants: <span class=eq>${a.s.pr.map((p) => termStr(a, p) + (a.s.ess.has(p) ? "★" : "")).join(" , ") || "—"}</span></p>
 <p class=sub>الـPOS متحسب بتبسيط F' ثم De Morgan. عدد حروف SOP: ${a.s.cv.reduce((s, p) => s + n - pop(p.m), 0)}، عدد حروف POS: ${a.p.cv.reduce((s, p) => s + n - pop(p.m), 0)}.</p></section>
 <section><h2>الحل بالجبر البولياني (خطوة خطوة)</h2>${alg(a)}</section><section><h2>الدائرة المنطقية</h2><div class=row id=ct></div><div class=row id=co></div><div class=scroll id=cv></div><p class=sub id=cs></p></section><section><h2>التوصيل على البريدبورد (Breadboard)</h2><div class=scroll id=bb></div><div id=bl></div></section>`;
+        let secIdx = 0;
         $("#r").innerHTML =
-          "<div class=row><button class=pb data-pt=all>🖨 طباعة المسألة كاملة</button></div>" +
+          buildQuickNavAndDash(a, false) +
           h
             .replace(
               /<section><h2>(.*?)<\/h2>/g,
               (m, t) =>
-                `<details class='cat sec'${/التبسيط|الدائرة/.test(t) ? " open" : ""}><summary><span>${t}</span></summary><div class=cbody><button class=pb data-pt=sec>🖨 طباعة هذا القسم</button>`,
+                `<details class='cat sec' data-sec-idx='${secIdx++}'${/التبسيط|البريدبورد/.test(t) ? " open" : ""}><summary><span>${t}</span><span class='cnt'>${getSectionMetaBadge(t, a, false)}</span></summary><div class=cbody><button class=pb data-pt=sec>🖨 طباعة هذا القسم</button>`,
             )
             .replace(/<\/section>/g, "</div></details>");
         circ();
       }
+
       function renderMulti(a) {
         const { n, vars: V, outputs } = a;
         const mt = (i, s) =>
@@ -2776,12 +3988,12 @@
         h += `</section>`;
 
         /* جدول الحقيقة الموحد */
-        h += `<section><h2>جدول الحقيقة</h2><div class=scroll><table><tr><th>#</th>${V.map((v) => `<th>${v}</th>`).join("")}${outputs.map((o) => `<th title="اضغط على أي خلية بالأسفل لتعديلها">${esc(o.name)} ✎</th>`).join("")}</tr>`;
+        h += `<section><h2>جدول الحقيقة</h2><div class=scroll><table><tr><th>#</th>${V.map((v) => `<th>${v}</th>`).join("")}${outputs.map((o) => `<th title="اضغط على أي خلية بالأسفل لتعديلها">${esc(o.name)} ✎</th>`).join("")}<th class="sim-col">محاكاة البريدبورد</th></tr>`;
         for (let i = 0; i < 1 << n; i++) {
           const anyOne = outputs.some((o) => o.f[i] === 1);
-          h += `<tr class="${anyOne ? "o" : ""}"><td>${i}</td>${V.map((_, j) => `<td>${(i >> (n - 1 - j)) & 1}</td>`).join("")}${outputs.map((o, k) => `<td class="tt-cell" data-tt-row="${i}" data-tt-out="${k}" title="اضغط لتغيير قيمة ${esc(o.name)} (0 ← 1 ← X)">${o.f[i] === 2 ? "X" : o.f[i]}</td>`).join("")}</tr>`;
+          h += `<tr class="${anyOne ? "o" : ""} ${i === 0 ? "tt-active-sim" : ""}" data-tt-r="${i}"><td>${i}</td>${V.map((_, j) => `<td>${(i >> (n - 1 - j)) & 1}</td>`).join("")}${outputs.map((o, k) => `<td class="tt-cell" data-tt-row="${i}" data-tt-out="${k}" title="اضغط لتغيير قيمة ${esc(o.name)} (0 ← 1 ← X)">${o.f[i] === 2 ? "X" : o.f[i]}</td>`).join("")}<td class="sim-col"><button type="button" class="sim-row-btn" data-sim-row="${i}" title="اضبط مفاتيح البريدبورد على هذه الحالة وشاهد الليدات">⚡ طبّق على اللوحة</button></td></tr>`;
         }
-        h += `</table></div><p class=sub style="margin:4px 0 0">💡 <b>تعديل تفاعلي:</b> اضغط على أي خلية في أعمدة المخارج لتغيير قيمتها (0 ← 1 ← X) مع إعادة استنتاج الدائرة والتبسيط فورياً.</p></section>`;
+        h += `</table></div><p class=sub style="margin:4px 0 0">💡 <b>تفاعل مزدوج:</b> اضغط على أي خلية في أعمدة المخارج لتغيير قيمتها (0 ← 1 ← X)، أو اضغط <b>"⚡ طبّق على اللوحة"</b> لتجربة الصف مباشرة على البريدبورد.</p></section>`;
 
         /* خرائط كارنو لكل مخرج */
         h += `<section><h2>خريطة كارنو (K-map)</h2>`;
@@ -2851,13 +4063,14 @@
         /* البريدبورد الموحد لكافة المخارج */
         h += `<section><h2>التوصيل على البريدبورد (Breadboard)</h2><div class=scroll id=bb></div><div id=bl></div></section>`;
 
+        let secIdx = 0;
         $("#r").innerHTML =
-          "<div class=row><button class=pb data-pt=all>🖨 طباعة التحليل الكامل</button></div>" +
+          buildQuickNavAndDash(a, true) +
           h
             .replace(
               /<section><h2>(.*?)<\/h2>/g,
               (m, t) =>
-                `<details class='cat sec'${/التبسيط|الدائرة/.test(t) ? " open" : ""}><summary><span>${t}</span></summary><div class=cbody><button class=pb data-pt=sec>🖨 طباعة هذا القسم</button>`,
+                `<details class='cat sec' data-sec-idx='${secIdx++}'${/التبسيط|البريدبورد/.test(t) ? " open" : ""}><summary><span>${t}</span><span class='cnt'>${getSectionMetaBadge(t, a, true)}</span></summary><div class=cbody><button class=pb data-pt=sec>🖨 طباعة هذا القسم</button>`,
             )
             .replace(/<\/section>/g, "</div></details>");
 
@@ -2917,9 +4130,7 @@
 
         const st = stats(trees);
         $("#cv").innerHTML = zw(draw(trees, names));
-        $("#bb").innerHTML =
-          "<p class=sub>اضغط على مفاتيح المداخل (المستطيلات السودا تحت اللوحة) وشوف الـLED والأسلاك بتتغيّر لحظيًا.</p>" +
-          bboard(trees, names);
+        $("#bb").innerHTML = bboard(trees, names);
         $("#cs").textContent =
           `عدد البوابات: ${st[0]} — عدد المداخل (Gate inputs): ${st[1]}` +
           (!cinv
@@ -2928,6 +4139,8 @@
           (sel
             ? ` — كل البوابات ${ct.toUpperCase()}، والعاكس = ${ct.toUpperCase()} موصّل مدخليه سوا.`
             : "");
+        if (typeof syncStudioAfterRender === "function")
+          syncStudioAfterRender();
       }
 
       const LIB = [
@@ -3416,6 +4629,19 @@
         });
         return v;
       }
+      const PAL_NAMES = [
+        "أخضر",
+        "أزرق",
+        "برتقالي ذهبي",
+        "بنفسجي",
+        "سماوي",
+        "وردي",
+        "أخضر ليموني",
+        "برتقالي ناري",
+        "فيروزي",
+        "أرجواني",
+      ];
+
       function bboard(trees, names) {
         names = names || ["F"];
         const { R, G, I } = dagM(trees);
@@ -3499,7 +4725,15 @@
           if (r.k) sn["n" + r.id] = names[k] || "F";
         });
         const id = BBS.length,
-          B = { P, ins: I.map((o) => "i" + o.id), in: {} };
+          B = {
+            P,
+            ins: I.map((o) => "i" + o.id),
+            inVars: I.map((o) => nm(o)),
+            in: {},
+            steps: [],
+            curStep: null,
+            timer: null,
+          };
         I.forEach((o) => (B.in["i" + o.id] = 0));
         BBS.push(B);
         const v0 = evalNet(B);
@@ -3551,8 +4785,63 @@
           },
           ks = Object.keys(S),
           SN = (k) => sn[k] || k;
+
+        // Helper to describe any endpoint in detail for the step-by-step guide & table
+        const epInfo = (it) => {
+          if (it.inp != null) {
+            const col = 1 + 2 * it.inp;
+            const vName = nm(I[it.inp]);
+            return {
+              title: `مفتاح المدخل (${vName})`,
+              pin: `مخرج المفتاح ${vName}`,
+              col,
+              row: `أسفل اللوحة — عمود ${col}`,
+              role: "input",
+              varName: vName,
+            };
+          }
+          if (it.led != null) {
+            const col = base + ch.length * 10 + 1 + 2 * it.led;
+            const outName = names[it.led] || "F";
+            return {
+              title: `مقاومة 330Ω ← ليد المخرج (${outName})`,
+              pin: `طرف المقاومة 330Ω (الأنود)`,
+              col,
+              row: `قسم الخرج — عمود ${col}`,
+              role: "led",
+              outName,
+            };
+          }
+          const chipLabel = nmI(it.c);
+          const cTy = ch[it.c].ty;
+          const pm = pinNames(cTy);
+          const pCode = pm[it.pin] || "";
+          const col =
+            it.pin <= 7
+              ? base + it.c * 10 + it.pin - 1
+              : base + it.c * 10 + 14 - it.pin;
+          const rowSide =
+            it.pin <= 7 ? "أسفل الفجوة الوسطى" : "أعلى الفجوة الوسطى";
+          const gateNum = pCode ? pCode[0] : "";
+          const isOut = pCode.endsWith("Y");
+          const gateName = cTy.replace(/[0-9]/g, "");
+          const pinRoleAr = isOut
+            ? `مخرج بوابة ${gateName} رقم ${gateNum} (${pCode})`
+            : `مدخل بوابة ${gateName} رقم ${gateNum} (${pCode})`;
+          return {
+            title: `شريحة IC ${chipLabel} (${PN[cTy]})`,
+            pin: `رجل رقم ${it.pin} — ${pinRoleAr}`,
+            col,
+            row: `${rowSide} — عمود ${col}`,
+            role: isOut ? "ic-out" : "ic-in",
+            chipLabel,
+            pinNum: it.pin,
+            pCode,
+          };
+        };
+
         let s =
-          `<svg viewBox='0 0 ${Wd} 360' width='${Wd}' height='360' role='img'><defs><linearGradient id='bg1' x1='0' y1='0' x2='0' y2='1'><stop offset='0' style='stop-color:var(--bbf)'/><stop offset='1' style='stop-color:var(--bbf2)'/></linearGradient><linearGradient id='ic1' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#3b4654'/><stop offset='1' stop-color='#1a2029'/></linearGradient><filter id='ledBloom' x='-50%' y='-50%' width='200%' height='200%'><feGaussianBlur stdDeviation='5.5' result='blur'/><feMerge><feMergeNode in='blur'/><feMergeNode in='SourceGraphic'/></feMerge></filter></defs>` +
+          `<svg data-bb-svg='${id}' viewBox='0 0 ${Wd} 360' width='${Wd}' height='360' role='img'><defs><linearGradient id='bg1' x1='0' y1='0' x2='0' y2='1'><stop offset='0' style='stop-color:var(--bbf)'/><stop offset='1' style='stop-color:var(--bbf2)'/></linearGradient><linearGradient id='ic1' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#3b4654'/><stop offset='1' stop-color='#1a2029'/></linearGradient><filter id='ledBloom' x='-50%' y='-50%' width='200%' height='200%'><feGaussianBlur stdDeviation='5.5' result='blur'/><feMerge><feMergeNode in='blur'/><feMergeNode in='SourceGraphic'/></feMerge></filter></defs>` +
           `<rect x='3' y='3' width='${Wd - 6}' height='292' rx='10' fill='url(#bg1)' stroke='var(--line)' stroke-width='1.5'/><rect x='3' y='148' width='${Wd - 6}' height='8' rx='2' fill='#d8d1be' stroke='#beb59f' stroke-width='0.8'/><line x1='3' y1='152' x2='${Wd - 3}' y2='152' stroke='#a89f8c' stroke-width='0.8' stroke-dasharray='4,4'/>` +
           `<path d='M24,14H${Wd - 14}' stroke='#dc2626' stroke-width='2' opacity='.7'/><path d='M24,26H${Wd - 14}' stroke='#2563eb' stroke-width='2' opacity='.7'/><path d='M24,270H${Wd - 14}' stroke='#dc2626' stroke-width='2' opacity='.7'/><path d='M24,282H${Wd - 14}' stroke='#2563eb' stroke-width='2' opacity='.7'/>` +
           `<text x='9' y='18' style='fill:#dc2626;font-size:12px'>+</text><text x='9' y='30' style='fill:#2563eb;font-size:12px'>−</text><text x='9' y='274' style='fill:#dc2626;font-size:12px'>+</text><text x='9' y='286' style='fill:#2563eb;font-size:12px'>−</text><path class=hd d='`;
@@ -3565,11 +4854,14 @@
         s += `'/>`;
         for (let c = 0; c <= tot; c += 5)
           s += `<text x='${cx(c)}' y='46' text-anchor='middle' style='fill:var(--mut);font-size:8px'>${c}</text>`;
+
+        // Draw IC chips & record VCC / GND power steps first
         ch.forEach((c, ci) => {
           const c0 = base + ci * 10,
             x0 = cx(c0) - 12,
             x1 = cx(c0 + 6) + 12,
-            pm = pinNames(c.ty);
+            pm = pinNames(c.ty),
+            chipLabel = nmI(ci);
           s += `<g><title>${IC[c.ty][0]} — ${PN[c.ty]}</title><rect x='${x0}' y='120' width='${x1 - x0}' height='64' rx='4' fill='url(#ic1)' stroke='#0b0f14'/><path d='M${x0},144a9,9 0 0 1 0,18' fill='#0b0f14'/><circle cx='${x0 + 11}' cy='176' r='2.5' fill='#9ca3af'/><text x='${(x0 + x1) / 2}' y='157' text-anchor='middle' style='fill:#fff;font-size:13px;font-weight:700'>${IC[c.ty][0]}</text>`;
           for (let p = 1; p <= 14; p++) {
             const px = cp(ci, p)[0],
@@ -3579,19 +4871,115 @@
           s += "</g>";
           const vx = cp(ci, 14)[0],
             gx = cp(ci, 7)[0];
-          s += `<g data-s='vcc'><title>+5V</title><path d='M${vx},104V14' stroke='#000' stroke-opacity='.25' stroke-width='6'/><path d='M${vx},104V14' stroke='#dc2626' stroke-width='3.4'/><circle cx='${vx}' cy='14' r='4' fill='#dc2626'/></g><g data-s='gnd'><title>GND</title><path d='M${gx},200V282' stroke='#000' stroke-opacity='.25' stroke-width='6'/><path d='M${gx},200V282' stroke='#374151' stroke-width='3.4'/><circle cx='${gx}' cy='282' r='4' fill='#374151'/></g>`;
+
+          // Step for VCC (+5V)
+          const stepVcc = B.steps.length + 1;
+          B.steps.push({
+            step: stepVcc,
+            cat: "تغذية الشريحة (+5V)",
+            sig: "+5V (VCC)",
+            expr: "جهد التغذية الموجب +5V",
+            color: "#dc2626",
+            colorName: "أحمر",
+            fromTitle: "خط التغذية الموجب العلوي (+5V Rail)",
+            fromPin: "خط الموجب (+)",
+            fromCol: c0,
+            fromRow: `الصف العلوي (+) — عمود ${c0}`,
+            toTitle: `شريحة IC ${chipLabel} (${PN[c.ty]})`,
+            toPin: "رجل رقم 14 — تغذية الشريحة (VCC)",
+            toCol: c0,
+            toRow: `أعلى الفجوة الوسطى — عمود ${c0}`,
+            purpose: `توصيل جهد التغذية (+5V) إلى رجل 14 لتشغيل شريحة ${chipLabel}`,
+            ax: vx,
+            ay: 14,
+            bx: vx,
+            by: 104,
+          });
+          s += `<g class='bb-wire-step' data-bb-id='${id}' data-step='${stepVcc}' data-s='vcc'><title>خطوة ${stepVcc}: +5V إلى شريحة ${chipLabel} رجل 14</title><path d='M${vx},104V14' stroke='#000' stroke-opacity='.25' stroke-width='6'/><path d='M${vx},104V14' stroke='#dc2626' stroke-width='3.4'/><circle cx='${vx}' cy='14' r='4' fill='#dc2626'/><circle cx='${vx}' cy='104' r='4' fill='#dc2626'/></g>`;
+
+          // Step for GND (0V)
+          const stepGnd = B.steps.length + 1;
+          B.steps.push({
+            step: stepGnd,
+            cat: "تأريض الشريحة (GND)",
+            sig: "GND (0V)",
+            expr: "الأرضي المشترك 0V",
+            color: "#374151",
+            colorName: "أسود / رمادي",
+            fromTitle: "خط الأرضي السالب السفلي (GND Rail)",
+            fromPin: "خط السالب (−)",
+            fromCol: c0 + 6,
+            fromRow: `الصف السفلي (−) — عمود ${c0 + 6}`,
+            toTitle: `شريحة IC ${chipLabel} (${PN[c.ty]})`,
+            toPin: "رجل رقم 7 — أرضي الشريحة (GND)",
+            toCol: c0 + 6,
+            toRow: `أسفل الفجوة الوسطى — عمود ${c0 + 6}`,
+            purpose: `توصيل الأرضي المشترك (0V) إلى رجل 7 في شريحة ${chipLabel} لإكمال مسار الدائرة`,
+            ax: gx,
+            ay: 282,
+            bx: gx,
+            by: 200,
+          });
+          s += `<g class='bb-wire-step' data-bb-id='${id}' data-step='${stepGnd}' data-s='gnd'><title>خطوة ${stepGnd}: GND إلى شريحة ${chipLabel} رجل 7</title><path d='M${gx},200V282' stroke='#000' stroke-opacity='.25' stroke-width='6'/><path d='M${gx},200V282' stroke='#374151' stroke-width='3.4'/><circle cx='${gx}' cy='282' r='4' fill='#374151'/><circle cx='${gx}' cy='200' r='4' fill='#374151'/></g>`;
         });
+
+        // Draw Signal Wires & record each segment as an interactive step
         let nt = 0,
           nb = 0;
         ks.forEach((k, i) => {
           const it = S[k],
-            cl = PAL[i % PAL.length];
+            cl = PAL[i % PAL.length],
+            clName = PAL_NAMES[i % PAL_NAMES.length];
           for (let q = 0; q + 1 < it.length; q++) {
             const a = pos(it[q]),
               b = pos(it[q + 1]),
               ly = a[1] < 150 ? 52 + (nt++ % 8) * 6 : 206 + (nb++ % 8) * 5.5,
               d = rp([a, [a[0], ly], [b[0], ly], b], 7);
-            s += `<g data-s='${k}' data-w='${k}' data-v='${v0[k]}'><title>${esc(SN(k) + " — " + (lab[k] || ""))}</title><path d='${d}' fill='none' stroke='#000' stroke-opacity='.25' stroke-width='6.4' stroke-linecap='round'/><path d='${d}' fill='none' stroke='${cl}' stroke-width='3.6' stroke-linecap='round'/><circle cx='${a[0]}' cy='${a[1]}' r='4.2' fill='${cl}' stroke='#0006'/><circle cx='${b[0]}' cy='${b[1]}' r='4.2' fill='${cl}' stroke='#0006'/>`;
+            const epA = epInfo(it[q]),
+              epB = epInfo(it[q + 1]);
+            const stepNum = B.steps.length + 1;
+
+            let cat = "توصيل إشارة منطقية",
+              purpose = "";
+            if (epA.role === "input" && epB.role === "ic-in") {
+              cat = "توصيل مدخل أساسي";
+              purpose = `تغذية ${epB.pin} في ${epB.title} بإشارة المدخل (${SN(k)}) من المفتاح`;
+            } else if (epA.role === "ic-in" && epB.role === "ic-in") {
+              cat = "توزيع مدخل مشترك";
+              purpose = `نقل نفس إشارة (${SN(k)}) بالتوازي من ${epA.pin} إلى ${epB.pin} في ${epB.title}`;
+            } else if (epB.role === "led") {
+              cat = "توصيل مخرج نهائي";
+              purpose = `إخراج الناتج النهائي (${SN(k)} = ${lab[k] || SN(k)}) من ${epA.pin} إلى مقاومة 330Ω وليد الخرج (${epB.outName})`;
+            } else if (epA.role === "ic-out" && epB.role === "ic-in") {
+              cat = "ربط بين البوابات";
+              purpose = `نقل الإشارة الوسيطة (${SN(k)} = ${lab[k] || SN(k)}) من ${epA.pin} إلى ${epB.pin}`;
+            } else {
+              purpose = `توصيل الإشارة (${SN(k)} = ${lab[k] || SN(k)}) من ${epA.title} إلى ${epB.title}`;
+            }
+
+            B.steps.push({
+              step: stepNum,
+              cat,
+              sig: SN(k),
+              expr: lab[k] || SN(k),
+              color: cl,
+              colorName: clName,
+              fromTitle: epA.title,
+              fromPin: epA.pin,
+              fromCol: epA.col,
+              fromRow: epA.row,
+              toTitle: epB.title,
+              toPin: epB.pin,
+              toCol: epB.col,
+              toRow: epB.row,
+              purpose,
+              ax: a[0],
+              ay: a[1],
+              bx: b[0],
+              by: b[1],
+            });
+
+            s += `<g class='bb-wire-step' data-bb-id='${id}' data-step='${stepNum}' data-s='${k}' data-w='${k}' data-v='${v0[k]}'><title>خطوة ${stepNum}: ${esc(SN(k) + " — " + (lab[k] || ""))}</title><path d='${d}' fill='none' stroke='#000' stroke-opacity='.25' stroke-width='6.4' stroke-linecap='round'/><path d='${d}' fill='none' stroke='${cl}' stroke-width='3.6' stroke-linecap='round'/><circle cx='${a[0]}' cy='${a[1]}' r='4.2' fill='${cl}' stroke='#0006'/><circle cx='${b[0]}' cy='${b[1]}' r='4.2' fill='${cl}' stroke='#0006'/>`;
             if (Math.abs(a[0] - b[0]) > 44) {
               const w = 22 + SN(k).length * 6.2,
                 mx = (a[0] + b[0]) / 2;
@@ -3600,6 +4988,9 @@
             s += "</g>";
           }
         });
+
+        B.curStep = B.steps.length;
+
         I.forEach((o, i) => {
           if (!S["i" + o.id]) return;
           const x = cx(1 + 2 * i);
@@ -3609,54 +5000,208 @@
           const x = cx(base + ch.length * 10 + 1 + 2 * k);
           const outSig = (r.k ? "n" : "i") + r.id;
           s += `<g data-w='${outSig}' data-v='${v0[outSig] != null ? v0[outSig] : 0}' style='cursor:crosshair'><title>المخرج ${esc(names[k] || "F")}: مقاومة 330Ω قياسية ثم LED ضوئي ثم GND</title>`;
-          // --- Realistic 330Ω Resistor with Standard Color Bands (Orange - Orange - Brown - Gold) ---
           s += `<line x1='${x}' y1='248' x2='${x}' y2='262' stroke='#94a3b8' stroke-width='2' stroke-linecap='round'/>`;
-          // Ceramic/Carbon film body
           s += `<rect x='${x - 5.5}' y='262' width='11' height='36' rx='3.5' fill='#e2d9c8' stroke='#9ca3af' stroke-width='0.7'/>`;
-          // End bulges
           s += `<rect x='${x - 6}' y='261' width='12' height='3' rx='1.5' fill='#d1c7b3'/>`;
           s += `<rect x='${x - 6}' y='296' width='12' height='3' rx='1.5' fill='#d1c7b3'/>`;
-          // 4 Color bands: Orange (3), Orange (3), Brown (x10), Gold (5%)
           s += `<rect x='${x - 5.5}' y='266' width='11' height='3' fill='#f97316'/><title>حلقة 1: برتقالي (3)</title>`;
           s += `<rect x='${x - 5.5}' y='272' width='11' height='3' fill='#f97316'/><title>حلقة 2: برتقالي (3)</title>`;
           s += `<rect x='${x - 5.5}' y='278' width='11' height='3' fill='#78350f'/><title>حلقة 3: بني (×10)</title>`;
           s += `<rect x='${x - 5.5}' y='288' width='11' height='2.5' fill='#d97706'/><title>حلقة 4: ذهبي (±5% تفاوت)</title>`;
-          // Bottom lead to LED anode
           s += `<line x1='${x}' y1='299' x2='${x}' y2='306' stroke='#94a3b8' stroke-width='2' stroke-linecap='round'/>`;
           s += `<text x='${x + 9}' y='282' style='font-size:9px;font-weight:700;fill:var(--acc-d);font-family:"IBM Plex Mono",monospace'>330Ω</text>`;
-
-          // --- Photorealistic LED with Bloom & Cathode Rim ---
           s += `<circle data-lg='${outSig}' cx='${x}' cy='316' r='20' fill='#fbbf24' opacity='0' filter='url(#ledBloom)'/>`;
           s += `<circle data-ld='${outSig}' cx='${x}' cy='316' r='9.5' fill='#4b5563' stroke='#1f2937' stroke-width='1.2'/>`;
           s += `<circle cx='${x}' cy='316' r='11' fill='none' stroke='#000' stroke-opacity='0.25' stroke-width='1' pointer-events='none'/>`;
           s += `<ellipse cx='${x - 3}' cy='313' rx='3' ry='1.8' fill='#ffffff' opacity='0.55' pointer-events='none'/>`;
           s += `<text x='${x}' y='352' text-anchor='middle' style='font-weight:700;font-size:14px;fill:var(--ink)'>${esc(names[k] || "F")}</text></g>`;
         });
-        s += "</svg>";
+
+        // Overlay group for animated target rings when stepping through wires
+        s += `<g class='bb-step-overlay' id='bb-ov-${id}' pointer-events='none'></g></svg>`;
+
         const parts = {};
         ch.forEach((c) => (parts[IC[c.ty][0]] = (parts[IC[c.ty][0]] || 0) + 1));
         const free = ch.reduce((a, c) => a + IC[c.ty][1].length - c.n, 0);
-        const rows = ks
+        const totalSteps = B.steps.length;
+
+        // 1. Unified All-in-One Control Bar + Fixed-Height HUD Info Strip
+        const unifiedTopHTML = `
+        <div class="zt bb-unified-bar" data-bb-stepper="${id}">
+          <div class="bb-bar-right">
+            <span style="font-weight:700;font-size:13.5px;color:var(--acc-d)">🛠️ التوصيل:</span>
+            <span class="bb-step-badge" id="bb-badge-${id}">الكل (${totalSteps} أسلاك)</span>
+            <button type="button" class="st-btn" data-bb-act="zero" data-bb="${id}" title="إخفاء كل الأسلاك والبدء من الصفر">🔄 صفر</button>
+            <button type="button" class="st-btn" data-bb-act="prev" data-bb="${id}" title="السلك السابق">⏮</button>
+            <button type="button" class="st-btn st-next" data-bb-act="next" data-bb="${id}" title="وصّل السلك التالي وشاهد مكانه في نفس المربع فوراً">🔌 وصّل السلك التالي (+1) ⏭</button>
+            <button type="button" class="st-btn st-play" id="bb-play-${id}" data-bb-act="play" data-bb="${id}" title="توصيل تلقائي متتابع">▶ تلقائي</button>
+            <button type="button" class="st-btn" data-bb-act="all" data-bb="${id}" title="إظهار كل التوصيلات">✔ الكل (${totalSteps})</button>
+          </div>
+          <div class="bb-bar-left">
+            <button type="button" data-z="in" title="تكبير اللوحة">＋</button>
+            <button type="button" data-z="out" title="تصغير اللوحة">－</button>
+            <button type="button" data-z="fit" title="ملائمة حجم اللوحة داخل المربع">ملائمة</button>
+            <details class="zt-drop"><summary>📥 حفظ ▾</summary><div class="zt-drop-menu"><button type="button" class="exp-btn" data-exp="png">🖼 صورة PNG</button><button type="button" class="exp-btn" data-exp="svg">📐 ملف SVG</button></div></details>
+            <button type="button" class="exp-btn" data-exp="fs" style="font-weight:700;background:var(--hl);border-color:var(--acc);color:var(--acc-d)" title="فتح استوديو البريدبورد بملء الشاشة">⛶ ملء الشاشة</button>
+            <button type="button" class="pb" data-pt="zw" style="margin:0">🖨 طباعة</button>
+          </div>
+        </div>
+        <div class="bb-progress-track">
+          <div class="bb-progress-fill" id="bb-prog-${id}" style="width: 100%"></div>
+        </div>
+        <div class="bb-step-info" id="bb-info-${id}">
+          <span>💡 اضغط <b>"🔌 وصّل السلك التالي (+1)"</b> لتركيب الأسلاك أمامك خطوة بخطوة في نفس المربع، أو اضغط على المفاتيح السوداء أسفل اللوحة لتجربة الدائرة.</span>
+        </div>`;
+
+        // 2. IC Pinout Reference Cards (showing all 14 pins of each chip used)
+        const icCardsHTML = `<div class="ic-pinout-grid">${ch
+          .map((c, ci) => {
+            const chipLabel = nmI(ci);
+            const pm = pinNames(c.ty);
+            const usedPins = new Map();
+            c.cn.forEach((q) => usedPins.set(q.pin, SN(q.s)));
+            let pinsHTML = "";
+            for (let p = 1; p <= 14; p++) {
+              const isPower = p === 14 || p === 7;
+              const sigUsed = usedPins.get(p);
+              const isUsed = isPower || sigUsed != null;
+              const colNum =
+                p <= 7 ? base + ci * 10 + p - 1 : base + ci * 10 + 14 - p;
+              const statusTxt =
+                p === 14
+                  ? "+5V (VCC)"
+                  : p === 7
+                    ? "GND (0V)"
+                    : sigUsed
+                      ? `إشارة ${esc(sigUsed)}`
+                      : "غير مستخدمة (NC)";
+              pinsHTML += `<div class="ic-pin-item ${isUsed ? "used" : ""}" title="رجل ${p} (${pm[p] || ""}) — عمود ${colNum}"><b>Pin ${p}</b> (${pm[p] || ""}): ${statusTxt} [عمود ${colNum}]</div>`;
+            }
+            return `<div class="ic-pin-card"><h4><span>🔲 شريحة IC ${esc(chipLabel)} — ${esc(PN[c.ty])}</span><span class="ic">تحتل الأعمدة ${base + ci * 10} إلى ${base + ci * 10 + 6}</span></h4><div class="ic-pin-list">${pinsHTML}</div></div>`;
+          })
+          .join("")}</div>`;
+
+        // 3. Ultra-Detailed 7-Column Engineering Wiring Schedule Table
+        const detailedRowsHTML = B.steps
           .map(
-            (k, i) =>
-              `<tr><td><span class=sw style='background:${PAL[i % PAL.length]}'></span><b>${esc(SN(k))}</b> — ${esc(lab[k] || "")}</td><td>${S[k].map((it) => (it.inp != null ? "المفتاح" : it.led != null ? "LED" : nmI(it.c) + " رجل " + it.pin)).join(" ← ")}</td></tr>`,
+            (st) => `
+          <tr data-step-row="${st.step}" data-bb-table="${id}">
+            <td style="text-align:center"><span class="step-pill">${st.step}</span></td>
+            <td style="text-align:center"><input type="checkbox" class="wire-check" data-bb="${id}" data-step="${st.step}" title="علّم هنا بعد توصيل هذا السلك عملياً"></td>
+            <td>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span class="sw" style="background:${st.color};width:18px;height:10px;border-radius:4px"></span>
+                <b>${esc(st.sig)}</b>
+                <span class="col-tag">${esc(st.colorName)}</span>
+              </div>
+              <div style="font-size:11.5px;color:var(--mut);margin-top:2px" class="mono">${esc(st.expr)}</div>
+            </td>
+            <td>
+              <b>${esc(st.fromTitle)}</b><br>
+              <span class="pin-tag">${esc(st.fromPin)}</span>
+              <span class="col-tag">📍 ${esc(st.fromRow)}</span>
+            </td>
+            <td>
+              <b>${esc(st.toTitle)}</b><br>
+              <span class="pin-tag">${esc(st.toPin)}</span>
+              <span class="col-tag">📍 ${esc(st.toRow)}</span>
+            </td>
+            <td style="font-size:13px;line-height:1.55">
+              <b style="color:var(--acc-d)">[${esc(st.cat)}]</b> ${esc(st.purpose)}
+            </td>
+            <td style="text-align:center">
+              <button type="button" class="wire-locate-btn" data-bb-loc="${id}:${st.step}">🔍 حدّد السلك</button>
+            </td>
+          </tr>`,
           )
           .join("");
+
+        const bomSummaryText = `${Object.keys(parts)
+          .map((k) => k + " ×" + parts[k])
+          .join(" ، ")} + ${I.length} مفاتيح + ${R.length} ليد`;
+
+        const quickGuideHTML = `
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;font-size:13.5px;line-height:1.65">
+            <div style="padding:10px 12px;background:var(--bg2);border-radius:var(--r-sm);border:1px solid var(--line2)">
+              <b>1️⃣ تركيب الشرايح (ICs):</b><br>
+              ضع كل شريحة فوق الفجوة الوسطى للبريدبورد بحيث تتجه نصف الدائرة (Notch) لليسار؛ الرجل 1 تكون أسفل يسار، والرجل 7 أسفل يمين، والرجل 14 أعلى يسار.
+            </div>
+            <div style="padding:10px 12px;background:var(--bg2);border-radius:var(--r-sm);border:1px solid var(--line2)">
+              <b>2️⃣ التغذية الأساسية (أسلاك حمراء وسوداء):</b><br>
+              وصّل دائماً <b>الرجل 14 (+VCC)</b> بالخط الموجب العلوي <b style="color:#c81d25">(+5V)</b>، و<b>الرجل 7 (GND)</b> بالخط السالب السفلي <b style="color:#334155">(0V)</b> قبل توصيل البوابات.
+            </div>
+            <div style="padding:10px 12px;background:var(--bg2);border-radius:var(--r-sm);border:1px solid var(--line2)">
+              <b>3️⃣ تجربة الدائرة عملياً:</b><br>
+              اضغط على مستطيلات المفاتيح السوداء أسفل اللوحة لتغيير قيمة كل مدخل بين <b>0</b> و <b>1</b>، أو استخدم أزرار <b>"وصّل السلك التالي (+1)"</b> لتركيب الدائرة سلكاً بسلك.
+            </div>
+          </div>`;
+
         return (
-          zw(s) +
-          `<div class=note>الشرايح المطلوبة: <b>${Object.keys(parts)
-            .map((k) => k + " ×" + parts[k])
-            .join(
-              " ، ",
-            )}</b>${free ? ` — فيه ${free} بوابة فاضية؛ وصّل مداخلها بالـGND.` : ""}</div><table class=bbt><tr><th>الإشارة (لون السلك)</th><th>بتتوصل بـ</th></tr>${rows}<tr><td><span class=sw style='background:#dc2626'></span>+5V</td><td>رجل 14 في كل شريحة</td></tr><tr><td><span class=sw style='background:#374151'></span>GND</td><td>رجل 7 في كل شريحة</td></tr></table><ol><li>ركّب الشرايح فوق الفجوة الوسطى، والشق ناحية الشمال.</li><li>وصّل +5V وGND (الأحمر والرمادي).</li><li>وصّل كل سلك بلونه من الجدول، والمفاتيح (0/1) هي المداخل.</li><li>كل مخرج بمقاومة 330Ω ثم LED ثم GND (الرجل القصيرة للأرضي).</li></ol>`
+          `<div class="zw bb-card">${unifiedTopHTML}<div class="zv">${s}</div></div>` +
+          `<div class="bb-sub-accordions" style="margin-top:12px">
+            <details class="bb-sub-acc" id="bb-acc-tbl-${id}">
+              <summary>
+                <span class="sub-acc-title">📋 جدول خطوات التوصيل الهندسي التفصيلي (سلكاً بسلك بالأرجل والأعمدة)</span>
+                <span class="sub-acc-badge">${totalSteps} توصيلة — اضغط للعرض</span>
+              </summary>
+              <div class="bb-sub-body">
+                <p class="sub" style="margin:0 0 8px">اضغط على أي صف في الجدول لتسليط الضوء على السلك الخاص به على البريدبورد أعلاه، وعلّم في خانة <b>(تم ✔)</b> أثناء تطبيقك العملي.</p>
+                <div class="scroll"><table class="bbt bbt-detailed" id="bb-tbl-${id}">
+                  <thead>
+                    <tr>
+                      <th style="width:52px;text-align:center">خطوة</th>
+                      <th style="width:52px;text-align:center">تم ✔</th>
+                      <th>الإشارة ولون السلك</th>
+                      <th>من (نقطة البداية — المكون والرجل والعمود)</th>
+                      <th>إلى (نقطة النهاية — المكون والرجل والعمود)</th>
+                      <th>وظيفة التوصيلة والشرح العملي</th>
+                      <th style="width:95px;text-align:center">معاينة</th>
+                    </tr>
+                  </thead>
+                  <tbody>${detailedRowsHTML}</tbody>
+                </table></div>
+              </div>
+            </details>
+
+            <details class="bb-sub-acc" id="bb-acc-ic-${id}">
+              <summary>
+                <span class="sub-acc-title">🔲 خريطة أرجل الشرايح والمكونات المطلوبة (IC Pinout & BOM)</span>
+                <span class="sub-acc-badge">${esc(bomSummaryText)} — اضغط للعرض</span>
+              </summary>
+              <div class="bb-sub-body">
+                <div class="note" style="margin-top:0"><b>📦 ملخص المكونات العملية (Bill of Materials):</b> الشرايح: <b>${Object.keys(
+                  parts,
+                )
+                  .map((k) => k + " ×" + parts[k])
+                  .join(
+                    " ، ",
+                  )}</b> — المفاتيح: <b>${I.length} مفاتيح إدخال</b> — المخرجات: <b>${R.length} مقاومة 330Ω + ${R.length} ليد ضوئي (LED)</b> — إجمالي الأسلاك: <b>${totalSteps} سلك توصيل</b>.${
+                  free
+                    ? ` (توجد ${free} بوابات فائضة غير مستخدمة في الشرايح؛ يُفضّل توصيل مداخلها بالأرضي GND لمنع التشويش).`
+                    : ""
+                }</div>
+                ${icCardsHTML}
+              </div>
+            </details>
+
+            <details class="bb-sub-acc">
+              <summary>
+                <span class="sub-acc-title">💡 إرشادات التركيب المعملي السريعة وقراءة البريدبورد</span>
+                <span class="sub-acc-badge">دليل مبسط — اضغط للعرض</span>
+              </summary>
+              <div class="bb-sub-body">
+                ${quickGuideHTML}
+              </div>
+            </details>
+          </div>`
         );
       }
 
       /* ============================================================
      ZOOM
      ============================================================ */
-      const zw = (s) =>
-        `<div class=zw><div class=zt><button data-z=in title='تكبير'>＋</button><button data-z=out title='تصغير'>－</button><button data-z=fit>ملائمة</button><button data-z=one>100%</button><button class="exp-btn" data-exp="svg" title="تصدير كملف متجهي SVG عالي الدقة">📥 SVG</button><button class="exp-btn" data-exp="png" title="تصدير كصورة PNG عالية الدقة (شفافة)">🖼 PNG</button><button class="exp-btn" data-exp="fs" title="عرض ملء الشاشة">⛶ ملء الشاشة</button><span class=cnt>🔍 فحص حي: مرّر الماوس على أي سلك أو بوابة</span><button class=pb data-pt=zw>🖨 طباعة</button></div><div class=zv>${s}</div></div>`;
+      const zw = (s, topExtra = "") =>
+        `<div class=zw>${topExtra}<div class=zt><button data-z=in title='تكبير'>＋</button><button data-z=out title='تصغير'>－</button><button data-z=fit>ملائمة</button><button data-z=one>100%</button><button class="exp-btn" data-exp="fs" title="عرض ملء الشاشة">⛶ ملء الشاشة</button><details class="zt-drop"><summary>📥 حفظ كصورة ▾</summary><div class="zt-drop-menu"><button type="button" class="exp-btn" data-exp="png">🖼 صورة PNG شفافة</button><button type="button" class="exp-btn" data-exp="svg">📐 ملف متجهي SVG</button></div></details><span class=cnt>🔍 مرّر الماوس للفحص</span><button class=pb data-pt=zw>🖨 طباعة</button></div><div class=zv>${s}</div></div>`;
       function zoom(v, f) {
         if (!v) return;
         const s = v.querySelector("svg");
@@ -3959,10 +5504,10 @@
 
         if (R) {
           if (n <= 5) {
-            h += `<div class=scroll><table><tr>${V.map((v) => `<th>${v}</th>`).join("")}${R.map((r) => `<th>${esc(r.nm)}</th>`).join("")}</tr>`;
+            h += `<details class="bb-sub-acc"><summary><span class="sub-acc-title">📋 جدول الحقيقة للدائرة (${V.join(" , ")})</span><span class="sub-acc-badge">${1 << n} صفوف — اضغط للعرض</span></summary><div class="bb-sub-body"><div class=scroll><table><tr>${V.map((v) => `<th>${v}</th>`).join("")}${R.map((r) => `<th>${esc(r.nm)}</th>`).join("")}</tr>`;
             for (let i = 0; i < 1 << n; i++)
               h += `<tr>${V.map((_, j) => `<td>${(i >> (n - 1 - j)) & 1}</td>`).join("")}${R.map((r) => `<td>${r.val(i)}</td>`).join("")}</tr>`;
-            h += "</table></div>";
+            h += "</table></div></div></details>";
           }
           R.forEach((r) => {
             let tr = prep(r.ast, { inv: 1 });
@@ -3981,12 +5526,12 @@
         }
         if (R && !it.buf)
           h +=
-            "<div class=oc><b>التوصيل على البريدبورد</b>" +
+            `<details class="bb-sub-acc"><summary><span class="sub-acc-title">🔌 التوصيل العملي التفاعلي على البريدبورد (${R.map((r) => esc(r.nm)).join(" ، ")})</span><span class="sub-acc-badge">توصيل خطوة بخطوة + الجداول — اضغط للعرض</span></summary><div class="bb-sub-body">` +
             bboard(
               R.map((r) => prep(r.ast, { inv: 1 })),
               R.map((r) => r.nm),
             ) +
-            "</div>";
+            "</div></details>";
         return h;
       }
 
@@ -4673,6 +6218,250 @@
           }, 40);
         }
       });
+      document.addEventListener("fullscreenchange", () => {
+        const fsEl = document.fullscreenElement;
+        if (!fsEl) {
+          if (
+            studioUsedNativeFs &&
+            document.body.classList.contains("bb-studio-fs")
+          ) {
+            closeBreadboardStudio();
+          }
+          document.querySelectorAll('button[data-exp="fs"]').forEach((b) => {
+            b.textContent = "⛶ ملء الشاشة";
+          });
+          if (probeTip && probeTip.parentElement !== document.body) {
+            document.body.appendChild(probeTip);
+          }
+        } else if (probeTip && fsEl !== document.documentElement) {
+          fsEl.appendChild(probeTip);
+        }
+      });
+
+      /* ============================================================
+         FULLSCREEN BREADBOARD LAB STUDIO CONTROLLER
+         ============================================================ */
+      let activeStudioDrawer = null; // "tt" | "kmap" | "gate" | "tbl" | null
+      let studioUsedNativeFs = false;
+
+      function applyStudioPanelVisibility() {
+        if (!document.body.classList.contains("bb-studio-fs")) return;
+        const bbSec = document.querySelector(
+          '#r details.sec[data-sec-idx="6"]',
+        );
+        if (bbSec) {
+          bbSec.open = true;
+          const fsBtn = bbSec.querySelector('button[data-exp="fs"]');
+          if (fsBtn) fsBtn.textContent = "✕ إغلاق ملء الشاشة";
+        }
+
+        const map = {
+          tt: [1, 3],
+          kmap: [2, 4],
+          gate: [5],
+        };
+        let hasSecDrawer = false;
+        Object.entries(map).forEach(([key, indices]) => {
+          const isOn = activeStudioDrawer === key;
+          if (isOn) hasSecDrawer = true;
+          indices.forEach((idx, i) => {
+            const sec = document.querySelector(
+              `#r details.sec[data-sec-idx="${idx}"]`,
+            );
+            if (sec) {
+              // Only show the primary section in the grid cell, or both stacked cleanly
+              sec.classList.toggle("fs-show-sec", isOn && i === 0);
+              if (isOn && i === 0) sec.open = true;
+            }
+          });
+        });
+
+        const isTblDrawer = activeStudioDrawer === "tbl";
+        document.body.classList.toggle("has-side-drawer", hasSecDrawer);
+        document.body.classList.toggle("has-bb-drawer", isTblDrawer);
+
+        const tblAcc = document.querySelector(
+          '#bb details.bb-sub-acc[id^="bb-acc-tbl-"]',
+        );
+        const icAcc = document.querySelector(
+          '#bb details.bb-sub-acc[id^="bb-acc-ic-"]',
+        );
+        if (isTblDrawer) {
+          if (tblAcc) tblAcc.open = true;
+          if (icAcc) icAcc.open = true;
+        }
+
+        document
+          .querySelectorAll("#bb-studio-bar [data-studio-panel]")
+          .forEach((btn) => {
+            btn.classList.toggle(
+              "active",
+              btn.dataset.studioPanel === activeStudioDrawer,
+            );
+          });
+
+        const ctSel = document.getElementById("fs-ct-sel");
+        if (ctSel) ctSel.value = ct;
+      }
+
+      function syncStudioAfterRender() {
+        if (!document.body.classList.contains("bb-studio-fs")) return;
+        applyStudioPanelVisibility();
+      }
+
+      function openBreadboardStudio() {
+        // Ensure we are on the Analysis tab (#r) and the current input is analyzed
+        const tabR = document.querySelector('.tabs button[data-t="r"]');
+        if (tabR && !tabR.classList.contains("on")) tabR.click();
+        if (
+          !cur ||
+          ($("#in") &&
+            $("#in").value.trim() &&
+            $("#in").value.trim() !== cur.src)
+        ) {
+          analyze();
+        }
+        if (!cur) return;
+
+        document.body.classList.add("bb-studio-fs");
+        applyStudioPanelVisibility();
+
+        if (
+          !document.fullscreenElement &&
+          document.documentElement.requestFullscreen
+        ) {
+          document.documentElement
+            .requestFullscreen()
+            .then(() => {
+              studioUsedNativeFs = true;
+            })
+            .catch(() => {
+              studioUsedNativeFs = false;
+            });
+        }
+        const wrapEl = document.querySelector(".wrap");
+        if (wrapEl) wrapEl.scrollTop = 0;
+      }
+
+      function closeBreadboardStudio() {
+        document.body.classList.remove(
+          "bb-studio-fs",
+          "has-side-drawer",
+          "has-bb-drawer",
+        );
+        document.querySelectorAll("#r details.sec.fs-show-sec").forEach((s) => {
+          s.classList.remove("fs-show-sec");
+        });
+        const bbSec = document.querySelector(
+          '#r details.sec[data-sec-idx="6"]',
+        );
+        if (bbSec) {
+          const fsBtn = bbSec.querySelector('button[data-exp="fs"]');
+          if (fsBtn) fsBtn.textContent = "⛶ ملء الشاشة";
+        }
+        if (document.fullscreenElement) {
+          document.exitFullscreen().catch(() => {});
+        }
+        studioUsedNativeFs = false;
+      }
+
+      function submitStudioEquation() {
+        const fsIn = document.getElementById("fs-in");
+        if (!fsIn) return;
+        const val = fsIn.value.trim();
+        if (!val) return;
+        $("#in").value = val;
+        analyze();
+        const errText = ($("#err") && $("#err").textContent) || "";
+        const fsErr = document.getElementById("fs-err-msg");
+        if (fsErr) fsErr.textContent = errText;
+      }
+
+      document.addEventListener("click", (e) => {
+        if (
+          e.target.closest("#go-bb-fs") ||
+          e.target.closest("[data-open-studio]")
+        ) {
+          openBreadboardStudio();
+          return;
+        }
+        if (e.target.closest("#fs-exit-studio")) {
+          closeBreadboardStudio();
+          return;
+        }
+        if (e.target.closest("#fs-go-btn")) {
+          submitStudioEquation();
+          return;
+        }
+        const insBtn = e.target.closest("[data-fs-ins]");
+        if (insBtn) {
+          const fsIn = document.getElementById("fs-in");
+          if (fsIn) {
+            const sym = insBtn.dataset.fsIns;
+            const start = fsIn.selectionStart ?? fsIn.value.length;
+            const end = fsIn.selectionEnd ?? fsIn.value.length;
+            fsIn.value =
+              fsIn.value.slice(0, start) + sym + fsIn.value.slice(end);
+            fsIn.focus();
+            const pos = sym === "()" ? start + 1 : start + sym.length;
+            fsIn.setSelectionRange(pos, pos);
+          }
+          return;
+        }
+        const panelBtn = e.target.closest("[data-studio-panel]");
+        if (panelBtn) {
+          const key = panelBtn.dataset.studioPanel;
+          activeStudioDrawer = activeStudioDrawer === key ? null : key;
+          applyStudioPanelVisibility();
+          return;
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.target && e.target.id === "fs-in" && e.key === "Enter") {
+          e.preventDefault();
+          submitStudioEquation();
+          return;
+        }
+        if (
+          e.key === "Escape" &&
+          document.body.classList.contains("bb-studio-fs")
+        ) {
+          closeBreadboardStudio();
+        }
+      });
+
+      document.addEventListener("change", (e) => {
+        if (e.target && e.target.id === "fs-ex-sel") {
+          const val = e.target.value;
+          e.target.value = "";
+          if (!val) return;
+          if (val === "__RAND__") {
+            const randBtn = document.getElementById("rand-eq");
+            if (randBtn) randBtn.click();
+          } else {
+            $("#in").value = val;
+            analyze();
+          }
+          return;
+        }
+        if (e.target && e.target.id === "fs-ct-sel") {
+          ct = e.target.value;
+          circ();
+          return;
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          document.querySelectorAll(".zw.pseudo-fs").forEach((zw) => {
+            zw.classList.remove("pseudo-fs");
+            const fsBtn = zw.querySelector('button[data-exp="fs"]');
+            if (fsBtn) fsBtn.textContent = "⛶ ملء الشاشة";
+          });
+        }
+      });
+
       document.addEventListener("change", (e) => {
         if (e.target.id === "cs2") {
           csrc = e.target.value;
@@ -4859,12 +6648,39 @@
         if (!zw) return;
 
         if (type === "fs") {
-          if (!document.fullscreenElement) {
-            zw.requestFullscreen().catch(() => {});
-            btn.textContent = "⛶ خروج";
-          } else {
-            document.exitFullscreen().catch(() => {});
+          if (zw.closest("#bb")) {
+            if (document.body.classList.contains("bb-studio-fs")) {
+              closeBreadboardStudio();
+            } else {
+              openBreadboardStudio();
+            }
+            return;
+          }
+          const isPseudo = zw.classList.contains("pseudo-fs");
+          if (document.fullscreenElement || isPseudo) {
+            if (document.fullscreenElement) {
+              document.exitFullscreen().catch(() => {});
+            }
+            zw.classList.remove("pseudo-fs");
             btn.textContent = "⛶ ملء الشاشة";
+            if (probeTip && probeTip.parentElement !== document.body) {
+              document.body.appendChild(probeTip);
+            }
+          } else {
+            if (zw.requestFullscreen) {
+              zw.requestFullscreen()
+                .then(() => {
+                  btn.textContent = "✕ خروج من ملء الشاشة";
+                  if (probeTip) zw.appendChild(probeTip);
+                })
+                .catch(() => {
+                  zw.classList.add("pseudo-fs");
+                  btn.textContent = "✕ خروج من ملء الشاشة";
+                });
+            } else {
+              zw.classList.add("pseudo-fs");
+              btn.textContent = "✕ خروج من ملء الشاشة";
+            }
           }
           return;
         }
@@ -4994,6 +6810,402 @@
       });
 
       /* ============================================================
+         STEP-BY-STEP BREADBOARD WIRING CONTROLLER & LAB SYNC
+         ============================================================ */
+      function renderStepInfoHTML(st, total, bbId) {
+        return `
+          <div class="hud-step-row">
+            <div style="display:inline-flex;align-items:center;gap:6px">
+              <span class="bb-step-badge" style="background:${st.color}">سلك ${st.step} / ${total}</span>
+              <b class="mono">${esc(st.sig)}</b>
+              <span style="color:${st.color};font-weight:700;font-size:12px">(${esc(st.colorName)})</span>
+            </div>
+            <div class="hud-endpoints">
+              <span class="hud-ep-pill ep-from">
+                <span>🟢 <b>من:</b> ${esc(st.fromTitle)}</span>
+                <b class="ep-loc">[${esc(st.fromPin)} — ${esc(st.fromRow)}]</b>
+              </span>
+              <span class="hud-arrow">⬅</span>
+              <span class="hud-ep-pill ep-to">
+                <span>🔴 <b>إلى:</b> ${esc(st.toTitle)}</span>
+                <b class="ep-loc">[${esc(st.toPin)} — ${esc(st.toRow)}]</b>
+              </span>
+            </div>
+            <div style="display:inline-flex;align-items:center;gap:6px">
+              <span style="font-size:12px;color:var(--mut)">${esc(st.cat)}</span>
+              ${bbId != null ? `<button type="button" class="wire-locate-btn" data-open-tbl="${bbId}:${st.step}" title="إظهار هذا السلك في جدول الخطوات">📋 الجدول</button>` : ""}
+            </div>
+          </div>
+        `;
+      }
+
+      function setBreadboardStep(bbId, targetStep, isolateSingle = false) {
+        const B = BBS[bbId];
+        if (!B || !B.steps || !B.steps.length) return;
+        const total = B.steps.length;
+        const step = Math.max(0, Math.min(total, targetStep));
+        B.curStep = step;
+
+        const svg = document.querySelector(`svg[data-bb-svg="${bbId}"]`);
+        const badge = document.getElementById(`bb-badge-${bbId}`);
+        const prog = document.getElementById(`bb-prog-${bbId}`);
+        const info = document.getElementById(`bb-info-${bbId}`);
+        const ov = document.getElementById(`bb-ov-${bbId}`);
+        const tbl = document.getElementById(`bb-tbl-${bbId}`);
+
+        if (svg) {
+          svg.querySelectorAll(".bb-wire-step").forEach((g) => {
+            const s = +g.dataset.step;
+            g.classList.remove("wire-current");
+            if (step === 0) {
+              g.style.display = "none";
+            } else if (isolateSingle) {
+              g.style.display = "";
+              g.style.opacity = s === step ? "1" : "0.14";
+              if (s === step) g.classList.add("wire-current");
+            } else {
+              if (s <= step) {
+                g.style.display = "";
+                g.style.opacity = "";
+                if (s === step && step < total) g.classList.add("wire-current");
+                else if (s === step && step === total && B._stepping)
+                  g.classList.add("wire-current");
+              } else {
+                g.style.display = "none";
+              }
+            }
+          });
+        }
+
+        if (prog) {
+          prog.style.width = `${total ? Math.round((step / total) * 100) : 100}%`;
+        }
+
+        if (tbl) {
+          tbl.querySelectorAll("tr[data-step-row]").forEach((tr) => {
+            const s = +tr.dataset.stepRow;
+            tr.classList.toggle(
+              "active-wire-row",
+              s === step && (step < total || B._stepping || isolateSingle),
+            );
+          });
+        }
+
+        if (step === 0) {
+          if (badge) badge.textContent = `البداية (0 / ${total} سلك)`;
+          if (ov) ov.innerHTML = "";
+          if (info) {
+            info.innerHTML = `<span>🔌 <b>اللوحة جاهزة بدون أسلاك (0 / ${total}):</b> اضغط الآن على <b>"🔌 وصّل السلك التالي (+1)"</b> لتوصيل أول سلك أمامك مباشرة!</span>`;
+          }
+          return;
+        }
+
+        const st = B.steps[step - 1];
+        if (badge) {
+          badge.textContent =
+            step === total && !B._stepping && !isolateSingle
+              ? `الوضع الكامل (${total} / ${total} سلك)`
+              : `خطوة ${step} من ${total}`;
+        }
+
+        if (info && st) {
+          info.innerHTML = renderStepInfoHTML(st, total, bbId);
+        }
+
+        // Draw pulsing endpoint rings on the SVG overlay for the current active wire
+        if (ov && st && (step < total || B._stepping || isolateSingle)) {
+          const { ax, ay, bx, by, color, fromCol, toCol } = st;
+          const tagY1 = ay < 60 ? ay + 20 : ay - 14;
+          const tagY2 = by < 60 ? by + 20 : by - 14;
+          ov.innerHTML = `
+            <circle class="pin-pulse-ring" cx="${ax}" cy="${ay}" r="8" fill="none" stroke="${color}"/>
+            <circle cx="${ax}" cy="${ay}" r="6.5" fill="none" stroke="#facc15" stroke-width="2.5"/>
+            <rect x="${ax - 32}" y="${tagY1 - 10}" width="64" height="16" rx="5" fill="#0f172a" stroke="#facc15" stroke-width="1"/>
+            <text x="${ax}" y="${tagY1 + 1.5}" text-anchor="middle" style="fill:#facc15;font-size:9.5px;font-weight:700">من: عمود ${fromCol}</text>
+
+            <circle class="pin-pulse-ring" cx="${bx}" cy="${by}" r="8" fill="none" stroke="${color}"/>
+            <circle cx="${bx}" cy="${by}" r="6.5" fill="none" stroke="#22c55e" stroke-width="2.5"/>
+            <rect x="${bx - 32}" y="${tagY2 - 10}" width="64" height="16" rx="5" fill="#0f172a" stroke="#22c55e" stroke-width="1"/>
+            <text x="${bx}" y="${tagY2 + 1.5}" text-anchor="middle" style="fill:#4ade80;font-size:9.5px;font-weight:700">إلى: عمود ${toCol}</text>
+          `;
+        } else if (ov) {
+          ov.innerHTML = "";
+        }
+      }
+
+      function stopAutoPlay(bbId) {
+        const B = BBS[bbId];
+        if (!B) return;
+        if (B.timer) {
+          clearInterval(B.timer);
+          B.timer = null;
+        }
+        const playBtn = document.getElementById(`bb-play-${bbId}`);
+        if (playBtn) {
+          playBtn.classList.remove("playing");
+          playBtn.textContent = "▶ توصيل تلقائي";
+        }
+      }
+
+      document.addEventListener("change", (e) => {
+        if (e.target && e.target.id === "calm-sec-jump") {
+          const idx = e.target.value;
+          if (idx !== "") {
+            const sec = document.querySelector(
+              `#r details.sec[data-sec-idx="${idx}"]`,
+            );
+            if (sec) {
+              sec.open = true;
+              sec.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+            e.target.value = "";
+          }
+        }
+      });
+
+      // Click listener for Step-by-Step controls & Table wire locator
+      document.addEventListener("click", (e) => {
+        const actBtn = e.target.closest("[data-bb-act]");
+        if (actBtn) {
+          const bbId = +actBtn.dataset.bb;
+          const act = actBtn.dataset.bbAct;
+          const B = BBS[bbId];
+          if (!B || !B.steps.length) return;
+          const total = B.steps.length;
+
+          if (act === "play") {
+            if (B.timer) {
+              stopAutoPlay(bbId);
+              return;
+            }
+            B._stepping = true;
+            if (B.curStep >= total) setBreadboardStep(bbId, 0);
+            actBtn.classList.add("playing");
+            actBtn.textContent = "⏸ إيقاف مؤقت";
+            B.timer = setInterval(() => {
+              if (B.curStep < total) {
+                playSwitchSound(1);
+                setBreadboardStep(bbId, B.curStep + 1);
+              } else {
+                stopAutoPlay(bbId);
+              }
+            }, 1150);
+            return;
+          }
+
+          stopAutoPlay(bbId);
+
+          if (act === "zero") {
+            B._stepping = true;
+            playSwitchSound(0);
+            setBreadboardStep(bbId, 0);
+          } else if (act === "prev") {
+            B._stepping = true;
+            playSwitchSound(0);
+            setBreadboardStep(bbId, (B.curStep || 1) - 1);
+          } else if (act === "next") {
+            // If all wires are currently displayed and user clicks Next for the first time, start from wire 1!
+            if (!B._stepping && B.curStep === total) {
+              B._stepping = true;
+              playSwitchSound(1);
+              setBreadboardStep(bbId, 1);
+            } else {
+              B._stepping = true;
+              playSwitchSound(1);
+              setBreadboardStep(bbId, (B.curStep || 0) + 1);
+            }
+          } else if (act === "all") {
+            B._stepping = false;
+            playSwitchSound(1);
+            setBreadboardStep(bbId, total, false);
+          }
+          return;
+        }
+
+        // Locate specific wire button in table
+        const locBtn = e.target.closest("[data-bb-loc]");
+        if (locBtn) {
+          const [bbIdStr, stepStr] = locBtn.dataset.bbLoc.split(":");
+          const bbId = +bbIdStr,
+            step = +stepStr;
+          stopAutoPlay(bbId);
+          playSwitchSound(1);
+          setBreadboardStep(bbId, step, true);
+          const svg = document.querySelector(`svg[data-bb-svg="${bbId}"]`);
+          if (svg) svg.scrollIntoView({ behavior: "smooth", block: "center" });
+          return;
+        }
+
+        // Clicking a row in the detailed wiring table (except checkbox)
+        const stepRow = e.target.closest("tr[data-step-row]");
+        if (stepRow && !e.target.closest("input.wire-check")) {
+          const bbId = +stepRow.dataset.bbTable;
+          const step = +stepRow.dataset.stepRow;
+          stopAutoPlay(bbId);
+          playSwitchSound(1);
+          setBreadboardStep(bbId, step, true);
+          return;
+        }
+
+        // Apply Truth Table row state directly to Breadboard switches
+        const simBtn = e.target.closest("[data-sim-row]");
+        if (simBtn && cur) {
+          const rowIdx = +simBtn.dataset.simRow;
+          const n = cur.n;
+          const V = cur.vars;
+          // Find the active breadboard in #bb
+          const bbSvg = document.querySelector("#bb svg[data-bb-svg]");
+          if (!bbSvg) return;
+          const bbId = +bbSvg.dataset.bbSvg;
+          const B = BBS[bbId];
+          if (!B) return;
+
+          const valMap = {};
+          V.forEach((vName, j) => {
+            valMap[vName] = (rowIdx >> (n - 1 - j)) & 1;
+          });
+
+          B.inVars.forEach((inName, idx) => {
+            const k = B.ins[idx];
+            if (inName.endsWith("'")) {
+              const baseVar = inName.slice(0, -1);
+              B.in[k] = valMap[baseVar] != null ? 1 - valMap[baseVar] : 0;
+            } else {
+              B.in[k] = valMap[inName] != null ? valMap[inName] : 0;
+            }
+            const swRect = bbSvg.querySelector(
+              `rect[data-sw="${bbId}:${idx}"]`,
+            );
+            if (swRect) {
+              const g = swRect.parentNode;
+              g.querySelector(".sl").setAttribute("y", B.in[k] ? 304 : 319);
+              g.querySelector(".sv").textContent = B.in[k];
+            }
+          });
+
+          const v = evalNet(B);
+          bbSvg
+            .querySelectorAll("[data-w]")
+            .forEach((g) => g.setAttribute("data-v", v[g.dataset.w]));
+          bbSvg
+            .querySelectorAll("[data-tg]")
+            .forEach(
+              (t) => (t.textContent = t.dataset.n + "=" + v[t.dataset.tg]),
+            );
+          bbSvg
+            .querySelectorAll("[data-ld]")
+            .forEach((c) =>
+              c.setAttribute("fill", v[c.dataset.ld] ? "#fbbf24" : "#4b5563"),
+            );
+          bbSvg
+            .querySelectorAll("[data-lg]")
+            .forEach((c) =>
+              c.setAttribute("opacity", v[c.dataset.lg] ? 0.55 : 0),
+            );
+
+          document.querySelectorAll("#r tr[data-tt-r]").forEach((tr) => {
+            tr.classList.toggle("tt-active-sim", +tr.dataset.ttR === rowIdx);
+          });
+
+          playSwitchSound(1);
+          const bbSec = document.querySelector("#bb");
+          if (bbSec) {
+            const det = bbSec.closest("details");
+            if (det) det.open = true;
+            bbSec.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+          return;
+        }
+
+        // Quick section navigation buttons
+        const qnBtn = e.target.closest("[data-qn]");
+        if (qnBtn) {
+          const idx = +qnBtn.dataset.qn;
+          const targetDet = document.querySelector(
+            `#r details.sec[data-sec-idx="${idx}"]`,
+          );
+          if (targetDet) {
+            targetDet.open = true;
+            targetDet.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+          return;
+        }
+
+        // Open wiring table sub-accordion and scroll to current wire row
+        const openTblBtn = e.target.closest("[data-open-tbl]");
+        if (openTblBtn) {
+          const [bbIdStr, stepStr] = openTblBtn.dataset.openTbl.split(":");
+          const fsZw = openTblBtn.closest(".zw");
+          if (fsZw && fsZw.classList.contains("pseudo-fs")) {
+            fsZw.classList.remove("pseudo-fs");
+            const fsBtn = fsZw.querySelector('button[data-exp="fs"]');
+            if (fsBtn) fsBtn.textContent = "⛶ ملء الشاشة";
+          }
+          const finishScroll = () => {
+            activeStudioDrawer = "tbl";
+            applyStudioPanelVisibility();
+            const acc = document.getElementById(`bb-acc-tbl-${bbIdStr}`);
+            if (acc) acc.open = true;
+            const row = document.querySelector(
+              `#bb-tbl-${bbIdStr} tr[data-step-row="${stepStr}"]`,
+            );
+            if (row)
+              row.scrollIntoView({ behavior: "smooth", block: "center" });
+          };
+          if (
+            document.fullscreenElement &&
+            !document.body.classList.contains("bb-studio-fs")
+          ) {
+            document.exitFullscreen().then(finishScroll).catch(finishScroll);
+          } else {
+            finishScroll();
+          }
+          return;
+        }
+
+        // Open all / Close all sections in #r
+        const qnAll = e.target.closest("[data-qn-all]");
+        if (qnAll) {
+          const openState = qnAll.dataset.qnAll === "open";
+          document
+            .querySelectorAll("#r details.sec")
+            .forEach((d) => (d.open = openState));
+          return;
+        }
+
+        // Input helper buttons: Copy, Random, Clear
+        if (e.target.closest("#copy-eq")) {
+          const btn = e.target.closest("#copy-eq");
+          navigator.clipboard?.writeText(inp.value).catch(() => {});
+          const oldTxt = btn.textContent;
+          btn.textContent = "✔ تم النسخ!";
+          setTimeout(() => (btn.textContent = oldTxt), 1200);
+          return;
+        }
+        if (e.target.closest("#rand-eq")) {
+          const pick = EXAMPLES[Math.floor(Math.random() * EXAMPLES.length)];
+          inp.value = pick.val;
+          playSwitchSound(1);
+          analyze();
+          return;
+        }
+        if (e.target.closest("#clear-eq")) {
+          inp.value = "";
+          inp.focus();
+          return;
+        }
+      });
+
+      // Checkbox change in detailed wiring table
+      document.addEventListener("change", (e) => {
+        if (e.target.classList && e.target.classList.contains("wire-check")) {
+          const tr = e.target.closest("tr[data-step-row]");
+          if (tr) tr.classList.toggle("checked-wire-row", e.target.checked);
+          playSwitchSound(e.target.checked ? 1 : 0);
+        }
+      });
+
+      /* ============================================================
      PROFESSIONAL PRINT REPORT
      ============================================================ */
       const STAMP_SVG = `
@@ -5073,6 +7285,20 @@
         const temp = document.createElement("div");
         temp.innerHTML = htmlStr;
 
+        // 0. Replace lab wiring checkboxes with printable square checkboxes ☐ for pen use in lab
+        temp.querySelectorAll("input.wire-check").forEach((chk) => {
+          const span = document.createElement("span");
+          span.textContent = chk.checked ? "☑" : "☐";
+          span.style.fontSize = "13pt";
+          chk.replaceWith(span);
+        });
+        // Remove preview column in detailed table and simulation column in truth table for print
+        temp
+          .querySelectorAll(
+            ".bbt-detailed th:last-child, .bbt-detailed td:last-child, .sim-col, .bb-stepper, .bb-unified-bar, .bb-progress-track, .bb-step-info, .quick-nav, .bb-step-overlay",
+          )
+          .forEach((el) => el.remove());
+
         // 1. Remove all interactive buttons, toolbars, inputs, sound toggles, and probe elements
         temp
           .querySelectorAll(
@@ -5080,25 +7306,35 @@
           )
           .forEach((el) => el.remove());
 
-        // 2. Unpack any <details> tags (like algebra steps or sub-circuits) into clean academic boxes
-        temp.querySelectorAll("details").forEach((d) => {
+        // Remove calm summary bar & export dropdowns before unpacking details
+        temp
+          .querySelectorAll(".fs-studio-bar, .calm-summary-bar, .zt-drop")
+          .forEach((el) => el.remove());
+
+        // 2. Unpack all nested <details> tags iteratively from outermost to innermost into clean academic boxes
+        let detNode;
+        while ((detNode = temp.querySelector("details"))) {
           const wrapper = document.createElement("div");
           wrapper.className = "academic-sub-box";
-          const summary = d.querySelector("summary");
-          if (summary) {
+          const summary =
+            detNode.querySelector(":scope > summary") ||
+            detNode.querySelector("summary");
+          if (summary && summary.parentElement === detNode) {
             const h = document.createElement("h4");
             h.className = "academic-sub-h";
+            const badgeEl = summary.querySelector(".sub-acc-badge, .cnt");
+            if (badgeEl) badgeEl.remove();
             h.textContent = summary.textContent
-              .replace(/✎|▾|🖨.*$/g, "")
+              .replace(/✎|▾|🖨.*$|— اضغط.*$/g, "")
               .trim();
             wrapper.appendChild(h);
             summary.remove();
           }
-          while (d.firstChild) {
-            wrapper.appendChild(d.firstChild);
+          while (detNode.firstChild) {
+            wrapper.appendChild(detNode.firstChild);
           }
-          d.replaceWith(wrapper);
-        });
+          detNode.replaceWith(wrapper);
+        }
 
         // 3. Clean up interactive markers (pencil icons, tt-cell class, tooltips)
         // 3. نظّف العلامات التفاعلية (قلم ✎ والـ tooltips) من غير ما نمسح محتوى الخلية
